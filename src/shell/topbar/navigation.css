@@ -5,20 +5,19 @@
   min-width: 0;
   flex: 0 1 auto;
   align-items: center;
-  gap: 5px;
+  gap: 9px;
   white-space: nowrap;
   border: 0;
   border-radius: 6px;
   background: transparent;
   padding: 0 7px;
   color: #667085;
-  font-size: calc(10.8px + var(--crm-font-offset));
-  font-weight: 500;
+  font-size: max(12px,calc(13px + var(--crm-font-offset)));
+  font-weight: 400;
   cursor: pointer;
   transition: background-color 120ms ease, color 120ms ease;
 }
 .crm-topnav button:hover { background: #EEF2F6; color: #344054; }
 .crm-topnav button.active { background: var(--crm-accent-soft); color: var(--crm-accent-strong); }
 
-/* iPhoneLink visible navigation typography */
-.crm-topnav button {font-size:calc(13px + var(--crm-font-offset));font-weight:400;gap:9px;}
+

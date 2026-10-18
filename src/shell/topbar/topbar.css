@@ -30,7 +30,7 @@
   cursor: pointer;
 }
 
-.crm-topbar-tools { display: flex; min-width: 0; flex: 1 1 auto; align-items: center; justify-content: flex-end; gap: 23px; }
+.crm-topbar-tools { display: flex; min-width: 0; flex: 1 1 auto; align-items: center; justify-content: flex-end; gap: 25px; }
 
 /* Small visible release identifier; no changes to page layouts. */
 .crm-version { font-size: 12px; font-weight: 400; letter-spacing: 0; color: var(--crm-faint); }
