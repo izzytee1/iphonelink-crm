@@ -1,128 +1,84 @@
-
-import {useEffect,useMemo,useRef,useState} from 'react';
-import CrmIcon from '../components/CrmIcons.jsx';
+import React,{useEffect,useMemo,useRef,useState} from 'react';
+import {Avatar,NativeIcon,NativeButton,StatusBar,formatStamp,digits} from './Native.jsx';
+import Messages from './Messages.jsx';
+import Calls from './Calls.jsx';
+import WhatsApp from './WhatsApp.jsx';
 import {calls} from '../data/communications.js';
 import {mailAccounts} from '../data/mail.js';
-import {digitsOf,formatPhone,leadByNumber} from '../hooks/usePhoneController.js';
-import {leadPhones,leadEmails} from '../utils/leadUtils.js';
+import {formatPhone} from '../hooks/usePhoneController.js';
+import {leadPhones} from '../utils/leadUtils.js';
 
-const sections=[['all','All','activity'],['messages','Messages','sms'],['calls','Calls','phone'],['email','Email','email']];
-const pad=n=>String(n).padStart(2,'0');
-const time=t=>{const d=new Date(t);return d.toDateString()===new Date().toDateString()?d.toLocaleTimeString([],{hour:'numeric',minute:'2-digit'}):d.toLocaleDateString([],{month:'short',day:'numeric'});};
-const messageKey=m=>m.channel+':'+digitsOf(m.number);
+const rootPages=[['all','All','all'],['messages','Messages','message'],['calls','Calls','phone'],['email','Email','email']];
 const last=t=>t.msgs?.at(-1)||{};
-function IconButton({icon,title,onClick,kind=''}) {return <button type="button" className={'nc-icon '+kind} onClick={onClick} aria-label={title} title={title}><CrmIcon name={icon} size={18}/></button>;}
-function UserRow({icon,name,detail,date,onClick,unread=0}) {return <button type="button" className="nc-row" onClick={onClick}><span className="nc-row-mark"><CrmIcon name={icon} size={18}/></span><span className="nc-row-copy"><strong>{name}</strong><small>{detail}</small></span><span className="nc-row-end">{date}{unread>0&&<b>{unread}</b>}</span></button>;}
-export default function Comms({open,onToggle,leads,onSelectLead,phoneController,messages,setMessages,mailbox,setMailbox,onEmail,commRequest,onConsumeCommRequest}) {
- const [tab,setTab]=useState('all');
- const [selectedThread,setSelectedThread]=useState('');
- const [text,setText]=useState('');
- const [selectedMail,setSelectedMail]=useState('');
- const [callsMode,setCallsMode]=useState('recents');
- const [callFilter,setCallFilter]=useState('all');
- const [selectedCall,setSelectedCall]=useState(null);
+function ScreenHeader({title,subtitle,action}){return <div className="np-workspace-heading"><h1>{title}</h1>{subtitle&&<small>{subtitle}</small>}{action}</div>}
+function AllActivity({messages,mailbox,leads,onMessage,onCall,onMail}){
+ const feed=useMemo(()=>{
+  const latest=new Map();messages.forEach(m=>{const key=m.channel+':'+digits(m.number);if(!latest.has(key)||m.at>latest.get(key).at)latest.set(key,m)});
+  return [...[...latest.values()].map(m=>({type:'message',id:m.channel+':'+digits(m.number),channel:m.channel,number:m.number,at:m.at,preview:m.text})),...calls.map(c=>({type:'call',id:c.id,number:c.number,at:c.at,call:c,preview:c.dir==='missed'?'Missed call':'Phone call'})),...mailbox.filter(t=>t.folder==='inbox').map(t=>({type:'mail',id:t.id,at:last(t).at||0,preview:last(t).subject||'No subject',peer:last(t).peer}))].sort((a,b)=>b.at-a.at);
+ },[messages,mailbox]);
+ const nameFor=n=>leads.find(l=>leadPhones(l).some(p=>digits(p)===digits(n)))?.name||formatPhone(n);
+ return <div className="np-screen np-all"><ScreenHeader title="All" subtitle="Recent activity"/><div className="np-scroll np-native-list">{feed.map(item=><button type="button" key={item.type+item.id} className="np-list-row" onClick={()=>item.type==='call'?onCall(item.call):item.type==='mail'?onMail(item.id):onMessage(item.channel,item.number)}><Avatar name={item.type==='mail'?item.peer:nameFor(item.number)} size={43} initial={item.type==='mail'||Boolean(leads.find(l=>leadPhones(l).some(p=>digits(p)===digits(item.number))))}/><span className="np-list-copy"><span className="np-list-top"><strong>{item.type==='mail'?item.peer||'Email':nameFor(item.number)}</strong><span className="np-meta">{formatStamp(item.at)}</span></span><span className="np-preview">{item.type==='message'?(item.channel==='wa'?'WhatsApp · ':'SMS · '):item.type==='call'?'Call · ':'Email · '}{item.preview}</span></span><NativeIcon name="chevron" size={13}/></button>)}{!feed.length&&<p className="np-empty">No recent activity</p>}</div></div>;
+}
+function EmbeddedEmail({view,mailId,mailbox,setMailbox,onEmail,onBack,onOpen}){
  const [search,setSearch]=useState('');
+ const inbox=useMemo(()=>mailbox.filter(t=>t.folder==='inbox').sort((a,b)=>(last(b).at||0)-(last(a).at||0)),[mailbox]);
+ const thread=mailbox.find(t=>t.id===mailId);
+ if(view==='reader'&&thread)return <div className="np-screen np-mail-screen"><div className="np-simple-nav"><NativeButton name="back" label="Inbox" onClick={onBack}/><strong>Mail</strong><NativeButton name="email" label="Reply in Gmail" onClick={()=>onEmail?.([last(thread).peer])}/></div><div className="np-email-reader np-scroll"><h2>{last(thread).subject||'No subject'}</h2>{thread.msgs.map((m,i)=><article key={m.id||i}><div><strong>{m.out?mailAccounts[thread.account]?.name:m.peer}</strong><span>{formatStamp(m.at)}</span></div><small>{m.out?'To':'From'}: {m.peer}</small><p>{String(m.body||'').replace(/<[^>]*>/g,' ').trim()}</p></article>)}<button type="button" className="np-email-reply" onClick={()=>onEmail?.([last(thread).peer])}>Reply in Email</button></div></div>;
+ return <div className="np-screen np-mail-screen"><ScreenHeader title="Inbox" subtitle="Email"/><label className="np-search-pill np-mail-search"><NativeIcon name="search"/><input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Search mail"/></label><div className="np-native-list np-scroll">{inbox.filter(t=>(last(t).peer+' '+last(t).subject+' '+last(t).body).toLowerCase().includes(search.toLowerCase())).map(t=><button type="button" key={t.id} className="np-list-row" onClick={()=>onOpen(t.id)}><Avatar name={last(t).peer} size={43} initial/><span className="np-list-copy"><span className="np-list-top"><strong>{last(t).peer||mailAccounts[t.account]?.name||'Email'}</strong><span className="np-meta">{formatStamp(last(t).at)}</span></span><span className="np-preview">{last(t).subject||'No subject'} · {String(last(t).body||'').replace(/<[^>]*>/g,' ').slice(0,80)}</span></span></button>)}{!inbox.length&&<p className="np-empty">Inbox empty</p>}</div><button className="np-email-compose" type="button" onClick={()=>onEmail?.([])}><NativeIcon name="compose"/> Compose</button></div>;
+}
+export default function Comms({open,onToggle,leads,onSelectLead,phoneController,messages,setMessages,mailbox,setMailbox,onEmail,commRequest,onConsumeCommRequest}){
+ const [screen,setScreen]=useState({id:'all',view:'list'});
+ const [origin,setOrigin]=useState('messages');
  const [notice,setNotice]=useState('');
- const [left,setLeft]=useState(()=>{try{return Math.max(8,Number(localStorage.getItem('iphonelink.comms.x'))||18)}catch{return 18}});
- const drag=useRef(null),ignoreClick=useRef(false),bottom=useRef(null);
- const match=v=>String(v||'').toLowerCase().includes(search.toLowerCase().trim());
- const findLead=number=>leadByNumber(leads,number);
- const display=number=>findLead(number)?.name||formatPhone(number);
- const threads=useMemo(()=>{
-  const map=new Map();
-  messages.forEach(m=>{const key=messageKey(m),value=map.get(key)||{key,number:digitsOf(m.number),channel:m.channel,latest:m,unread:0};
-   if(m.at>value.latest.at)value.latest=m;
-   if(m.dir==='in'&&m.unread)value.unread++;
-   map.set(key,value);
-  });
-  return [...map.values()].sort((a,b)=>b.latest.at-a.latest.at);
- },[messages]);
- const activeThread=threads.find(t=>t.key===selectedThread);
- const conversation=messages.filter(m=>messageKey(m)===selectedThread).sort((a,b)=>a.at-b.at);
- const mail=useMemo(()=>mailbox.filter(t=>t.folder==='inbox').sort((a,b)=>(last(b).at||0)-(last(a).at||0)),[mailbox]);
- const currentMail=mailbox.find(t=>t.id===selectedMail);
- const feed=useMemo(()=>[
-   ...threads.map(t=>({type:'message',id:t.key,at:t.latest.at,number:t.number,channel:t.channel,text:t.latest.text})),
-   ...calls.map(c=>({type:'call',id:c.id,at:c.at,number:c.number,text:c.dir==='missed'?'Missed call':'Phone call'})),
-   ...mail.map(t=>({type:'email',id:t.id,at:last(t).at||0,address:last(t).peer,text:last(t).subject}))
- ].sort((a,b)=>b.at-a.at),[threads,mail]);
- const state=phoneController.activeCall;
- const dialed=state.phase==='idle'?phoneController.dialInput:formatPhone(state.number);
- const seconds=phoneController.seconds;
- function openThread(channel,number) {
-  setSelectedThread(channel+':'+digitsOf(number));setTab('messages');setText('');
-  const lead=findLead(number);if(lead)onSelectLead?.(lead.id);
-  setMessages(current=>current.map(m=>m.channel===channel&&digitsOf(m.number)===digitsOf(number)?{...m,unread:false,read:true}:m));
+ const [position,setPosition]=useState(()=>{try{return Math.max(8,Number(localStorage.getItem('iphonelink.comms.x'))||18)}catch{return 18}});
+ const drag=useRef(null),cancelClick=useRef(false);
+ const root=screen.view==='list'&&rootPages.some(([id])=>id===screen.id);
+ const showNav=root;
+ const nameFor=n=>leads.find(l=>leadPhones(l).some(p=>digits(p)===digits(n)))?.name||formatPhone(n);
+ const navigate=id=>{setScreen({id,view:'list'});setNotice('')};
+ const identify=n=>{const lead=leads.find(l=>leadPhones(l).some(p=>digits(p)===digits(n)));if(lead)onSelectLead?.(lead.id)};
+ const thread=(channel,number)=>{
+  identify(number);setOrigin(channel==='wa'?'whatsapp':'messages');
+  setScreen({id:channel==='wa'?'whatsapp':'messages',view:'thread',number});
+  setMessages(current=>current.map(m=>m.channel===channel&&digits(m.number)===digits(number)&&m.unread?{...m,unread:false,read:true}:m));
+ };
+ const callDetail=(call)=>{identify(call.number);setScreen({id:'calls',view:'detail',call})};
+ const keypad=number=>{if(number)phoneController.loadNumber(number);setScreen({id:'calls',view:'keypad'})};
+ const emailDetail=id=>{setScreen({id:'email',view:'reader',mailId:id});setMailbox(current=>current.map(t=>t.id===id?{...t,msgs:t.msgs.map(m=>m.unread?{...m,unread:false}:m)}:t))};
+ function back(){
+  if(screen.id==='whatsapp'&&screen.view!=='list'){setScreen({id:'whatsapp',view:'list'});return}
+  if(screen.id==='calls'&&screen.view==='detail'){setScreen({id:'calls',view:screen.call?.contact?'contacts':'list'});return}
+  if(screen.id==='messages'&&screen.view!=='list'){navigate('messages');return}
+  if(screen.id==='email'&&screen.view!=='list'){navigate('email');return}
+  if(screen.id==='calls'&&screen.view!=='list'){navigate('calls');return}
+  navigate(origin==='whatsapp'?'messages':'all');
  }
- function openCall(call) {setTab('calls');setCallsMode('detail');setSelectedCall(call);const lead=findLead(call.number);if(lead)onSelectLead?.(lead.id);}
- function openEmail(id) {
-  setTab('email');setSelectedMail(id);
-  setMailbox(current=>current.map(t=>t.id===id?{...t,msgs:t.msgs.map(m=>({...m,unread:false}))}:t));
- }
- function sendLocal(e) {
-  e.preventDefault();
-  if(!activeThread||!text.trim())return;
-  setMessages(current=>[...current,{id:'local-'+Date.now(),channel:activeThread.channel,number:activeThread.number,text:text.trim(),dir:'out',at:Date.now(),status:'local',unread:false,files:[]}]);
-  setText('');setNotice('Saved locally · not delivered');
- }
+ function saveLocal(channel,number,value){const text=String(value||'').trim();if(!text)return;setMessages(current=>[...current,{id:'local-'+Date.now()+'-'+current.length,channel,number:digits(number),dir:'out',text,at:Date.now(),status:'local',unread:false,files:[]}]);setNotice('Saved locally · not delivered');}
  useEffect(()=>{
   if(!commRequest)return;
-  if(commRequest.type==='sms'||commRequest.type==='wa')openThread(commRequest.type==='wa'?'wa':'text',commRequest.number);
-  else if(commRequest.type==='calls'){setTab('calls');setCallsMode('recents');}
-  else if(commRequest.type==='email')setTab('email');
+  if(['sms','text','wa'].includes(commRequest.type)){const c=commRequest.type==='wa'?'wa':'text',n=commRequest.number;if(n){setScreen({id:c==='wa'?'whatsapp':'messages',view:'thread',number:n});setMessages(current=>current.map(m=>m.channel===c&&digits(m.number)===digits(n)&&m.unread?{...m,unread:false,read:true}:m));}}
+  else if(commRequest.type==='calls')setScreen({id:'calls',view:'list'});
+  else if(commRequest.type==='email')setScreen({id:'email',view:'list'});
   onConsumeCommRequest?.();
  },[commRequest]);
- useEffect(()=>bottom.current?.scrollIntoView?.({block:'end'}),[selectedThread,conversation.length]);
- function toKeypad(number) {if(number)phoneController.loadNumber(number);setCallsMode('keypad');setTab('calls');}
- function openFeed(item) {
-  if(item.type==='message')openThread(item.channel,item.number);
-  if(item.type==='call'){const call=calls.find(c=>c.id===item.id);if(call)openCall(call);}
-  if(item.type==='email')openEmail(item.id);
- }
- function back() {if(tab==='messages')setSelectedThread('');if(tab==='calls')setCallsMode('recents');if(tab==='email')setSelectedMail('');}
- function down(e){if(e.button!==undefined&&e.button!==0)return;drag.current={x:e.clientX,origin:left,moved:false};e.currentTarget.setPointerCapture?.(e.pointerId);}
- function move(e){if(!drag.current)return;const dx=e.clientX-drag.current.x;if(Math.abs(dx)>5)drag.current.moved=true;if(drag.current.moved)setLeft(Math.max(8,Math.min(innerWidth-140,drag.current.origin+dx)));}
- function up(){if(!drag.current)return;ignoreClick.current=drag.current.moved;if(drag.current.moved)try{localStorage.setItem('iphonelink.comms.x',String(Math.round(left)))}catch{}drag.current=null;}
- const detail=tab==='messages'?!!activeThread:tab==='email'?!!currentMail:tab==='calls'&&callsMode!=='recents';
- const headline=tab==='all'?'All activity':tab==='messages'?(activeThread?display(activeThread.number):'Messages'):tab==='calls'?(callsMode==='recents'?'Recents':callsMode==='contacts'?'Contacts':callsMode==='keypad'?'Keypad':'Call details'):(currentMail?'Conversation':'Inbox');
- const nav=(section)=>{setTab(section);setSearch('');setNotice('');};
- return <div className="nc-root">
-  <section className={'nc-panel '+(open?'is-open':'')} style={{left:'clamp(8px, '+left+'px, calc(100vw - min(540px, 100vw - 16px) - 8px))'}} aria-label="Communications" aria-hidden={!open}>
-   <div className="nc-header">
-    <div><small>iPhoneLink</small><h2>{headline}</h2></div>
-    <div className="nc-header-right">{detail&&<IconButton icon="back" title="Back" onClick={back}/>}<IconButton icon="close" title="Close" onClick={()=>onToggle(false)}/></div>
-   </div>
-   <main className="nc-body">
-    {tab==='all'&&<><div className="nc-context"><b>Recent activity</b><small>Messages, calls and email</small></div><div className="nc-scroll">
-     {feed.map(item=><UserRow key={item.type+item.id} icon={item.type==='call'?'phone':item.type==='email'?'email':item.channel==='wa'?'whatsapp':'sms'} name={item.type==='email'?item.address||'Email':display(item.number)} detail={item.text} date={time(item.at)} onClick={()=>openFeed(item)}/>)}
-    </div></>}
-    {tab==='messages'&&(!activeThread?<><label className="nc-search"><CrmIcon name="search" size={17}/><input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Search messages"/></label><div className="nc-scroll">
-     {threads.filter(t=>match(display(t.number))||match(t.latest.text)).map(t=><UserRow key={t.key} icon={t.channel==='wa'?'whatsapp':'sms'} name={display(t.number)} detail={t.latest.text} date={time(t.latest.at)} unread={t.unread} onClick={()=>openThread(t.channel,t.number)}/>)}
-     {!threads.length&&<div className="nc-empty">No conversations</div>}
-    </div></>:<div className="nc-conversation">
-     <div className="nc-thread-meta"><span>{formatPhone(activeThread.number)}</span><div><IconButton icon="phone" title="Call" onClick={()=>toKeypad(activeThread.number)}/><IconButton icon="email" title="Email" onClick={()=>{const address=leadEmails(findLead(activeThread.number)||{})[0];if(address)onEmail?.([address]);}}/></div></div>
-     <div className="nc-chat-scroll">{conversation.map(m=><div key={m.id} className={'nc-bubble-line '+(m.dir==='out'?'out':'in')}><div className={'nc-bubble '+(activeThread.channel==='wa'?'wa':'')}><p>{m.text}</p><small>{time(m.at)}{m.status==='local'?' · Local only':''}</small></div></div>)}<div ref={bottom}/></div>
-     <form className="nc-send" onSubmit={sendLocal}><input value={text} onChange={e=>setText(e.target.value)} placeholder={activeThread.channel==='wa'?'WhatsApp message':'Text message'} aria-label="Message"/><button type="submit" aria-label="Save message"><CrmIcon name="send" size={18}/></button></form>
-    </div>)}
-    {tab==='calls'&&<>
-     {callsMode==='recents'&&<><div className="nc-call-tools"><div className="nc-segment"><button className={callFilter==='all'?'selected':''} onClick={()=>setCallFilter('all')} type="button">All</button><button className={callFilter==='missed'?'selected':''} onClick={()=>setCallFilter('missed')} type="button">Missed</button></div><div className="nc-header-right"><IconButton icon="contacts" title="Contacts" onClick={()=>setCallsMode('contacts')}/><IconButton icon="keypad" title="Keypad" onClick={()=>toKeypad('')}/></div></div>
-      <div className="nc-scroll">{calls.filter(c=>callFilter!=='missed'||c.dir==='missed').map(c=><UserRow key={c.id} icon="phone" name={display(c.number)} detail={(c.dir==='missed'?'Missed':c.dir==='out'?'Outgoing':'Incoming')+' · '+formatPhone(c.number)} date={time(c.at)} onClick={()=>openCall(c)}/>)}
-       <p className="nc-sample">Sample call history · Real history needs a phone provider</p></div></>}
-     {callsMode==='contacts'&&<div className="nc-scroll">{leads.map(lead=><UserRow key={lead.id} icon="contacts" name={lead.name} detail={lead.company} date="" onClick={()=>{onSelectLead?.(lead.id);toKeypad(leadPhones(lead)[0]||'');}}/>)}</div>}
-     {callsMode==='detail'&&selectedCall&&<div className="nc-call-detail"><div className="nc-detail-icon"><CrmIcon name="phone" size={27}/></div><h3>{display(selectedCall.number)}</h3><p>{formatPhone(selectedCall.number)}</p><small>{selectedCall.dir==='missed'?'Missed':selectedCall.dir==='out'?'Outgoing':'Incoming'} · {new Date(selectedCall.at).toLocaleString()}</small><div className="nc-detail-actions"><IconButton icon="phone" title="Call" onClick={()=>toKeypad(selectedCall.number)}/><IconButton icon="sms" title="Message" onClick={()=>openThread('text',selectedCall.number)}/><IconButton icon="whatsapp" title="WhatsApp" onClick={()=>openThread('wa',selectedCall.number)}/><IconButton icon="email" title="Email" onClick={()=>{const address=leadEmails(findLead(selectedCall.number)||{})[0];if(address)onEmail?.([address]);}}/></div></div>}
-     {callsMode==='keypad'&&<div className="nc-phone">
-      <div className="nc-number"><CrmIcon name="phone" size={17}/><input type="tel" inputMode="tel" placeholder="Enter number" value={dialed} onChange={e=>phoneController.setDialInput(e.target.value)} readOnly={state.phase!=='idle'} aria-label="Number"/></div>
-      <small className="nc-call-status">{state.phase!=='idle'?phoneController.dialerStatus+' · '+pad(Math.floor(seconds/60))+':'+pad(seconds%60):' '}</small>
-      <div className="nc-keygrid">{['1','2','3','4','5','6','7','8','9','*','0','#'].map((key,i)=><button type="button" key={key} data-dtmf="true" onClick={()=>phoneController.sendTone(key)}><strong>{key}</strong><small>{['','ABC','DEF','GHI','JKL','MNO','PQRS','TUV','WXYZ','','+',''][i]||'\u00a0'}</small></button>)}</div>
-      <div className="nc-key-actions"><IconButton icon="mute" title="Mute" onClick={()=>phoneController.toggleControl('muted')}/><IconButton icon="speaker" title="Speaker" onClick={()=>phoneController.toggleControl('speaker')}/><button className="nc-answer" type="button" aria-label="Call" onClick={phoneController.requestCall}><CrmIcon name="phone" size={22}/></button><button className="nc-hangup" type="button" aria-label="End call" onClick={state.phase==='incoming'?phoneController.decline:state.phase!=='idle'?phoneController.requestCall:()=>{}}><CrmIcon name="endcall" size={22}/></button><IconButton icon="hold" title="Hold" onClick={()=>phoneController.toggleControl('held')}/><IconButton icon="x" title="Clear" onClick={phoneController.clearDialInput}/></div>
-     </div>}
-    </>}
-    {tab==='email'&&(!currentMail?<><div className="nc-mailbar"><span>Primary</span><button type="button" onClick={()=>onEmail?.([])}><CrmIcon name="add" size={15}/> Compose</button></div><label className="nc-search"><CrmIcon name="search" size={17}/><input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Search inbox"/></label>
-     <div className="nc-scroll">{mail.filter(t=>match(last(t).subject)||match(last(t).body)||match(last(t).peer)).map(t=><UserRow key={t.id} icon="email" name={last(t).peer||mailAccounts[t.account]?.name||'Email'} detail={(last(t).subject||'No subject')+' · '+String(last(t).body||'').replace(/<[^>]*>/g,' ').slice(0,64)} date={time(last(t).at)} unread={t.msgs.some(m=>m.unread)?1:0} onClick={()=>openEmail(t.id)}/>)}</div></>:<div className="nc-mail-reader"><h3>{last(currentMail).subject||'No subject'}</h3>{currentMail.msgs.map(m=><article key={m.id||m.at}><div><strong>{m.out?mailAccounts[currentMail.account]?.name:m.peer}</strong><small>{time(m.at)}</small></div><small>{m.out?'To: ':'From: '}{m.peer}</small><p>{String(m.body||'').replace(/<[^>]*>/g,' ').trim()}</p></article>)}<button type="button" onClick={()=>onEmail?.([last(currentMail).peer])}>Reply in Email</button></div>)}
+ function pointerDown(e){if(e.button!==undefined&&e.button!==0)return;drag.current={x:e.clientX,old:position,moved:false};e.currentTarget.setPointerCapture?.(e.pointerId)}
+ function pointerMove(e){if(!drag.current)return;const dx=e.clientX-drag.current.x;if(Math.abs(dx)>5)drag.current.moved=true;if(drag.current.moved)setPosition(Math.max(8,Math.min(window.innerWidth-110,drag.current.old+dx)))}
+ function pointerUp(){if(!drag.current)return;cancelClick.current=drag.current.moved;if(drag.current.moved)try{localStorage.setItem('iphonelink.comms.x',String(Math.round(position)))}catch{}drag.current=null}
+ return <div className="np-root">
+  <section className={'np-device '+(open?'np-is-open':'')} style={{left:'clamp(8px, '+position+'px, calc(100vw - min(414px, 46.25vh) - 8px))'}} aria-label="iPhone Communications" aria-hidden={!open}>
+   <StatusBar/>
+   <main className="np-device-main">
+    {screen.id==='all'&&<AllActivity messages={messages} mailbox={mailbox} leads={leads} onMessage={thread} onCall={callDetail} onMail={emailDetail}/>}
+    {screen.id==='messages'&&<Messages page={screen.view} number={screen.number} messages={messages} leads={leads} onBack={back} onThread={n=>thread('text',n)} onCompose={()=>setScreen({id:'messages',view:'new'})} onWhatsApp={()=>{setOrigin('messages');setScreen({id:'whatsapp',view:'list'})}} onSave={saveLocal} onCall={keypad}/>}
+    {screen.id==='whatsapp'&&<WhatsApp page={screen.view} number={screen.number} messages={messages} leads={leads} onBack={back} onThread={n=>thread('wa',n)} onCompose={()=>setScreen({id:'whatsapp',view:'new'})} onSave={saveLocal} onCall={n=>phoneController.callNumber(n)} onCalls={()=>navigate('calls')}/>}
+    {screen.id==='calls'&&<Calls view={screen.view} call={screen.call} leads={leads} calls={calls} phoneController={phoneController} onBack={back} onDetail={callDetail} onMessage={n=>thread('text',n)} onWhatsApp={n=>thread('wa',n)} onContacts={()=>setScreen({id:'calls',view:'contacts'})} onKeypad={()=>keypad('')}/>}
+    {screen.id==='email'&&<EmbeddedEmail view={screen.view} mailId={screen.mailId} mailbox={mailbox} setMailbox={setMailbox} onEmail={onEmail} onBack={back} onOpen={emailDetail}/>}
    </main>
-   {notice&&<div className="nc-notice" role="status">{notice}<button type="button" onClick={()=>setNotice('')} aria-label="Dismiss">×</button></div>}
-   <nav className="nc-tabs">{sections.map(([id,label,icon])=><button type="button" key={id} className={tab===id?'current':''} onClick={()=>nav(id)}><CrmIcon name={icon} size={20}/><span>{label}</span></button>)}</nav>
+   {notice&&<div className="np-status-note" role="status">{notice}<NativeButton name="close" label="Dismiss" onClick={()=>setNotice('')} size={16}/></div>}
+   {showNav&&<nav className="np-root-tabs" aria-label="Communications sections">{rootPages.map(([id,title,icon])=><button type="button" key={id} className={screen.id===id?'np-active':''} onClick={()=>navigate(id)}><NativeIcon name={icon} size={22}/><span>{title}</span></button>)}</nav>}
+   <div className="np-home-indicator" aria-hidden="true"/>
   </section>
-  <button type="button" className="nc-launch" style={{left:'clamp(8px, '+left+'px, calc(100vw - 140px))'}} aria-expanded={open} onPointerDown={down} onPointerMove={move} onPointerUp={up} onPointerCancel={up} onClick={()=>{if(ignoreClick.current){ignoreClick.current=false;return;}onToggle(!open);}}><CrmIcon name="sms" size={17}/> Comms</button>
+  {open&&<button className="np-device-close" type="button" onClick={()=>onToggle(false)} aria-label="Close Communications"><NativeIcon name="close" size={19}/></button>}
+  <button type="button" className="np-launch" style={{left:'clamp(8px, '+position+'px, calc(100vw - 140px))'}} onPointerDown={pointerDown} onPointerMove={pointerMove} onPointerUp={pointerUp} onPointerCancel={pointerUp} onClick={()=>{if(cancelClick.current){cancelClick.current=false;return}onToggle(!open)}} aria-expanded={open}><NativeIcon name="message" size={18}/> Comms</button>
  </div>;
 }
