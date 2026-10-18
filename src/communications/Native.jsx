@@ -21,9 +21,7 @@ const art={
  mute:<><path d="M8 3v9c0 5 8 5 8 0V3"/><path d="m3 3 18 18M5 10v2c0 4 3 7 7 7s7-3 7-7v-2M12 19v3"/></>,
  speaker:<><path d="M4 9h4l5-5v16l-5-5H4zM17 8c2 2 2 6 0 8m3-11c4 4 4 10 0 14"/></>,
  hold:<path d="M8 4v16M16 4v16"/>, delete:<><path d="m10 5-7 7 7 7h11V5z"/><path d="m14 9 4 6m0-6-4 6"/></>,
- check:<path d="m4 12 5 5L20 6"/>,
  list:<><path d="M9 6h12M9 12h12M9 18h12M3 6h2M3 12h2M3 18h2"/></>,
- refresh:<><path d="M20 11a8 8 0 1 0-2 5"/><path d="M20 5v6h-6"/></>,
 };
 export function NativeIcon({name,size=21,className='',strokeWidth=1.8}){return <svg className={className} width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{art[name]||art.more}</svg>}
 export function Avatar({name='',size=48,initial=false}){const n=String(name||'').trim();const letter=n&&!/^\+?[\d(\s-]+$/.test(n)?n[0]?.toUpperCase():'';return <span className={'np-avatar'+(initial&&letter?' np-initial':'')} style={{width:size,height:size,fontSize:Math.round(size*.46)}} aria-hidden="true">{initial&&letter?letter:<svg viewBox="0 0 64 64" width="100%" height="100%" aria-hidden="true"><circle cx="32" cy="24" r="11" fill="#fff"/><path d="M6 57c2-12 11-18 26-18s24 6 26 18a31 31 0 0 1-52 0" fill="#fff"/></svg>}</span>}

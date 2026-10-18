@@ -85,7 +85,7 @@ export default function usePhoneController({
     const number = String(phone || '').replace(/[^+\d]/g, '');
     if (!number) return undefined;
     const device = activePhone || null;
-    if (device && !device.connected) return undefined;
+    if (device && !device.connected && getPhoneProvider()) return undefined;
     const lead = leadByNumber(leads, number);
     const { handled, result, error } = dialPhone({ number, device });
     if (error || !handled) return undefined;
@@ -114,7 +114,7 @@ export default function usePhoneController({
       if (providerInvoke(['end', 'hangup'])) setActiveCall(idleCall());
       return;
     }
-    if (!validNumber(dialInput) || !activePhone?.connected) return;
+    if (!validNumber(dialInput) || (getPhoneProvider() && !activePhone?.connected)) return;
     callPhone(toDial(dialInput));
   }, [activeCall.phase, activePhone, callPhone, dialInput, providerInvoke, setActiveCall]);
 
@@ -210,7 +210,7 @@ export default function usePhoneController({
   const dialerStatus = activeCall.phase === 'dialing' ? 'Calling…'
     : activeCall.phase === 'incoming' ? 'Incoming call'
       : activeCall.phase === 'active' ? (activeCall.held ? 'On hold' : activeCall.muted ? 'Muted' : 'Connected')
-        : activePhone?.connected ? `${platformLabel(activePhone)} connected` : 'Not connected';
+        : getPhoneProvider() && activePhone?.connected ? `${platformLabel(activePhone)} connected` : 'No call provider';
 
   return {
     activePhone,

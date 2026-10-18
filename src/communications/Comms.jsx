@@ -77,7 +77,7 @@ export default function Comms({open,onToggle,leads,onSelectLead,phoneController,
    {showNav&&<nav className="np-root-tabs" aria-label="Communications sections">{rootPages.map(([id,title,icon])=><button type="button" key={id} className={screen.id===id?'np-active':''} onClick={()=>navigate(id)}><NativeIcon name={icon} size={22}/><span>{title}</span></button>)}</nav>}
    <div className="np-home-indicator" aria-hidden="true"/>
   </section>
-  {open&&<button className="np-device-close" type="button" onClick={()=>onToggle(false)} aria-label="Close Communications"><NativeIcon name="close" size={19}/></button>}
+  {open&&<button className="np-device-close" style={{left:'calc(clamp(8px, '+position+'px, calc(100vw - min(414px, 46.25vh) - 8px)) + min(414px, 46.25vh) - 8px)'}} type="button" onClick={()=>onToggle(false)} aria-label="Close Communications"><NativeIcon name="close" size={19}/></button>}
   <button type="button" className="np-launch" style={{left:'clamp(8px, '+position+'px, calc(100vw - 140px))'}} onPointerDown={pointerDown} onPointerMove={pointerMove} onPointerUp={pointerUp} onPointerCancel={pointerUp} onClick={()=>{if(cancelClick.current){cancelClick.current=false;return}onToggle(!open)}} aria-expanded={open}><NativeIcon name="message" size={18}/> Comms</button>
  </div>;
 }

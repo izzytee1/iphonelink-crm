@@ -42,7 +42,7 @@ const callSeed = [
   ['3125587712','out',21000,540,1],
 ];
 
-export const initialMessages = messageSeed.map(([channel, number, dir, text, mins, phone, unread = false, receipt = 'delivered'], i) => ({
+export const initialMessages = messageSeed.map(([channel, number, dir, text, mins, phone, unread = false, receipt = 'sample'], i) => ({
   id: `m${i + 1}`,
   channel,
   number,
@@ -51,9 +51,9 @@ export const initialMessages = messageSeed.map(([channel, number, dir, text, min
   at: Date.now() - Number(mins || 0) * 60000,
   phone,
   unread,
-  receipt,
+  receipt: 'sample',
   read: !unread,
-  status: dir === 'out' ? (receipt === 'delivered' ? 'delivered' : 'read') : 'received',
+  status: 'sample',
   files: [],
 }));
 
