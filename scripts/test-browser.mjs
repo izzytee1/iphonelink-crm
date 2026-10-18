@@ -21,8 +21,6 @@ async function run(type,mobile){
   const page=await context.newPage(),errors=[];
   page.on('pageerror',e=>errors.push(e.message));
   await page.goto(host,{waitUntil:'networkidle'});
-  await page.waitForTimeout(500);
-  console.log('Page diagnostics',type.name,mobile,'root length',await page.locator('#root').evaluate(n=>n.innerHTML.length),'errors',errors,'buttons',(await page.locator('button').allTextContents()).slice(0,12));
   await page.getByRole('button',{name:'Comms'}).click({timeout:8000});
   await page.locator('.np-device.np-is-open').waitFor();
   const radius=await page.locator('.np-device').evaluate(n=>getComputedStyle(n).borderTopLeftRadius);
@@ -46,7 +44,7 @@ async function run(type,mobile){
   await page.getByRole('heading',{name:'Messages'}).waitFor();
   await page.locator('.np-root-tabs button').filter({hasText:'Calls'}).click();
   await page.getByRole('heading',{name:'Calls'}).waitFor();
-  await page.getByRole('button',{name:'Missed'}).click();
+  await page.getByRole('button',{name:'Missed',exact:true}).click();
   await page.getByRole('button',{name:'All',exact:true}).first().click();
   await page.getByRole('button',{name:'Keypad'}).click();
   assert.equal(await page.locator('.np-dial-key').count(),12,'Missing DTMF digits');
@@ -61,7 +59,7 @@ async function run(type,mobile){
   assert.ok(overflow.height>350,'Phone shell too short');
   assert.ok(overflow.content<=overflow.width+2,'Phone content horizontal overflow');
   assert.deepEqual(errors,[],'Browser JavaScript errors');
-  console.log(type.name+' '+(mobile?'mobile':'desktop')+': PASS, device '+radius+', keypad '+input);
+  console.log((type===chromium?'Chromium':'WebKit')+' '+(mobile?'mobile':'desktop')+': PASS, radius '+radius+', keypad '+input);
   await context.close();
  }finally{await browser.close()}
 }
