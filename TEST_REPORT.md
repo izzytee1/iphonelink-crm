@@ -1,5 +1,7 @@
-# v04 Test Report
+# v05 regression test report
 
-GitHub Actions workflow: `.github/workflows/verify.yml`.
+The GitHub Actions `Verify React Build` workflow runs `npm run build` (source verification and v05 regression assertions) and `npm run test:ui` (desktop Chromium, mobile Chromium, mobile WebKit).
 
-`npm run build` runs source resolution checks and the v04 regression suite before the Vite production compilation. Visual screenshot comparison, iOS Safari gestures, provider calling and real external delivery require separate practical browser/provider testing.
+The browser test checks a >1400 CSS-pixel mobile document, horizontal browser panning, avatar settings access, Light/Dark toggling, density and font setting changes, UI scale, switcher, DTMF keypad, Gmail sidebar, Communications screen navigation and the resize handle. See the latest GitHub Actions run for the actual pass/fail result.
+
+Real provider actions and visual pixel-by-pixel comparison require separate integration/device testing.

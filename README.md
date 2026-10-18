@@ -1,19 +1,24 @@
-# iPhoneLink React v04
+# iPhoneLink React v05
 
-Vite + React frontend with preserved Leads and Gmail-style Email workspaces.
+React/Vite CRM with desktop-sized Leads and Gmail-style Email workspaces, plus the iPhone-shaped Communications window.
 
-## Communications
-One iPhone-shaped Communications shell. Root sections are All, Messages, Calls, and Email. Full-screen native-style Messages list, New Message and thread views; separate WhatsApp Chats, new-chat picker and thread. Calls includes Recents, Contacts, detail and keypad, using one shared call controller.
+## Mobile desktop mode
+On phones the CRM remains a 1440 × 900 CSS-pixel desktop workspace. Swipe horizontally/vertically to reach offscreen columns and use native two-finger browser pinch zoom. It does not collapse to a miniature mobile layout.
 
-## Run
+## Communications and calling
+The Communications shell includes All, Messages, Calls, Email and independent WhatsApp conversations. Drag the bottom-right resize handle with a finger to change its size; dimensions persist in the browser. The main topbar includes a phone switcher and compact shared-controller dialer with DTMF keypad, call/end, mute, hold and speaker.
+
+## Settings
+Use the top-right **user avatar → Display settings**. Appearance defaults to Light, with Dark available. UI scale, lead row density, font size, accent color and reset all update persisted settings. The old topbar Settings icon has been removed.
+
+## Build
 ```sh
 npm install
 npm run verify
 npm run build
+npm run test:ui
 ```
-Output: `dist/`. CI verifies the production build.
+The browser suite uses Playwright Chromium and WebKit. Output goes to `dist/`.
 
-## Provider and storage limits
-Phone provider: `window.CRMPhoneProvider`. A browser `tel:` handoff does not confirm an active browser call. Sample calls, sample phones and mock messages are not real provider records. DTMF audio does not reach the network unless an attached provider implements `sendTone`.
-
-New SMS and WhatsApp messages remain in local browser storage, visibly marked **not delivered**. Email sending is local only. Data does not sync across browsers. The mobile shell resembles iOS but is not a native iPhone application.
+## Integration limits
+No live SMS/WhatsApp delivery provider is configured; new drafts are **saved locally, not delivered**. `window.CRMPhoneProvider` is needed for actual in-browser calls. `tel:` handoff does not confirm connection. Sample calls and phone names are examples. Gmail-style mailbox actions remain local demo behavior. Browser storage does not sync across devices.

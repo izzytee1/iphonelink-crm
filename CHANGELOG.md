@@ -1,13 +1,12 @@
-# iPhoneLink React v04
+# v05
+- Removed the forced mobile auto-scale, retaining a true 1440 × 900 desktop CRM canvas.
+- Enabled browser-native touch panning and pinch zoom on narrow phones.
+- Restored the topbar phone switcher and keypad/dialer with shared phone-controller state.
+- Removed obsolete topbar clock files and moved Settings into the user avatar menu.
+- Added working, persisted appearance, UI scale, row density, font and accent settings.
+- Light is now the default Communications theme, not the OS-preferred dark setting.
+- Added one touch-resize control with saved Communications dimensions.
+- Reduced oversized Communications headings; preserved desktop Gmail layout on phones.
+- Replaced v04 regression tests with v05 functional and viewport checks.
 
-- Replaced rejected v03 generic Communications UI with an iPhone-shaped shell.
-- Added Messages.jsx, Calls.jsx, WhatsApp.jsx and Native.jsx.
-- Separated WhatsApp navigation and styling from SMS.
-- Removed extra generic header inside phone and root tabs from opened threads.
-- Reused phone provider hook and added native-style status and contact avatar art.
-- Corrected unverified phone provider connectivity and sample receipt presentation.
-- Deleted obsolete v02 ZIP import and v03 regression script.
-- Added 30+ v04 checks and GitHub Actions build verification.
-- Updated visible version from v03 to v04.
-
-Real SMS/WhatsApp sending and actual browser telephony still require providers.
+No provider-connected calling, actual messaging delivery or cross-device persistence is claimed.
