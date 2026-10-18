@@ -7,7 +7,6 @@ import './shell/topbar/navigation.css';
 import './shell/topbar/search.css';
 import './shell/topbar/actions.css';
 import './shell/notifications/notifications.css';
-import './shell/topbar/clock.css';
 import './shell/settings/settings.css';
 import './pages/leads/leads.css';
 import './pages/leads/iphone.css';

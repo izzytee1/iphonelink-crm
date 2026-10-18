@@ -1,14 +1,22 @@
-.crm-settings-range { width: 100%; accent-color: var(--crm-accent); cursor: pointer; }
-.crm-font-stepper { display: grid; grid-template-columns: 38px minmax(0, 1fr) 38px; min-height: 36px; overflow: hidden; border: 1px solid #DDE3EB; border-radius: 7px; background: #fff; }
-.crm-font-stepper button { border: 0; background: #F8FAFC; color: #475467; cursor: pointer; font-size: calc(16px + var(--crm-font-offset)); }
-.crm-font-stepper button:first-child { border-right: 1px solid #E5E9EF; }
-.crm-font-stepper button:last-child { border-left: 1px solid #E5E9EF; }
-.crm-font-stepper button:hover:not(:disabled) { background: var(--crm-accent-soft); color: var(--crm-accent-strong); }
-.crm-font-stepper button:disabled { cursor: default; opacity: .35; }
-.crm-font-stepper output { display: grid; place-items: center; color: #475467; font-size: calc(11px + var(--crm-font-offset)); font-variant-numeric: tabular-nums; }
-.crm-accent-picker { display: flex; min-height: 38px; align-items: center; gap: 10px; border: 1px solid #DDE3EB; border-radius: 7px; background: #fff; padding: 5px 9px; color: #667085; font-variant-numeric: tabular-nums; }
-.crm-accent-picker input[type='color'] { width: 46px; height: 26px; flex: 0 0 auto; border: 0; background: transparent; padding: 0; cursor: pointer; }
-.crm-accent-picker input[type='color']::-webkit-color-swatch-wrapper { padding: 0; }
-.crm-accent-picker input[type='color']::-webkit-color-swatch { border: 1px solid color-mix(in srgb, var(--crm-accent) 28%, #DDE3EB); border-radius: 5px; }
-.crm-accent-picker input[type='color']::-moz-color-swatch { border: 1px solid color-mix(in srgb, var(--crm-accent) 28%, #DDE3EB); border-radius: 5px; }
-
+.crm-settings-overlay{position:fixed;inset:0;z-index:110;display:grid;place-items:center;background:#0b17274a;padding:20px}
+.crm-settings-panel{width:min(440px,calc(100vw - 26px));max-height:min(800px,calc(100dvh - 25px));overflow:auto;border:1px solid var(--crm-border);border-radius:12px;background:var(--crm-surface);color:var(--crm-text);box-shadow:0 20px 65px #05112745;font-family:Inter,Arial,sans-serif}
+.crm-settings-panel header{height:55px;display:flex;justify-content:space-between;align-items:center;padding:0 19px;border-bottom:1px solid var(--crm-border)}
+.crm-settings-panel header strong{font-size:15px;font-weight:600}
+.crm-settings-panel header button{border:0;background:transparent;color:var(--crm-muted);font-size:23px;width:35px;height:35px}
+.crm-settings-content{display:grid;gap:21px;padding:19px}
+.crm-setting-field{display:grid;gap:10px;font-size:13px;color:var(--crm-muted)}
+.crm-setting-field>span{display:flex;align-items:center;justify-content:space-between;font-size:13px;color:var(--crm-text)}
+.crm-setting-field output{font-size:12px;color:var(--crm-muted)}
+.crm-setting-field input[type=range]{width:100%;accent-color:var(--crm-accent)}
+.crm-setting-field input[type=color]{width:50px;height:30px;padding:2px;background:var(--crm-bg);border:1px solid var(--crm-border);border-radius:5px}
+.crm-setting-field select{width:100%;height:36px;background:var(--crm-surface);color:var(--crm-text);border:1px solid var(--crm-border);border-radius:6px;padding:0 9px}
+.crm-setting-field small{color:var(--crm-muted);font-size:12px}
+.crm-theme-choice{border:0;padding:0;margin:0}
+.crm-theme-choice legend{font-size:13px;color:var(--crm-text);margin-bottom:9px}
+.crm-theme-choice>div{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}
+.crm-theme-choice button{height:35px;background:var(--crm-bg);color:var(--crm-text);border:1px solid var(--crm-border);border-radius:6px;font-size:13px}
+.crm-theme-choice button[aria-pressed=true]{border-color:var(--crm-accent);background:var(--crm-accent-soft);color:var(--crm-accent-strong)}
+.crm-font-stepper{display:grid;grid-template-columns:41px 1fr 41px;height:36px;border:1px solid var(--crm-border);border-radius:6px;overflow:hidden}
+.crm-font-stepper button{border:0;background:var(--crm-bg);color:var(--crm-text);font-size:18px}
+.crm-font-stepper span{display:grid;place-items:center;font-size:12px;border-inline:1px solid var(--crm-border)}
+.crm-settings-reset{border:1px solid var(--crm-border);border-radius:6px;background:var(--crm-bg);height:35px;color:var(--crm-text);font-size:13px}
