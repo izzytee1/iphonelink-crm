@@ -21,6 +21,45 @@ async function run(type,mobile){
   const page=await context.newPage(),errors=[];
   page.on('pageerror',e=>errors.push(e.message));
   await page.goto(host,{waitUntil:'networkidle'});
+  if(mobile){
+   const dimensions=await page.evaluate(()=>({scroll:document.documentElement.scrollWidth,canvas:document.querySelector('.crm-app').getBoundingClientRect().width,view:window.innerWidth}));
+   assert.ok(dimensions.scroll>=1400,'Desktop CRM must extend beyond phone viewport');
+   assert.ok(dimensions.canvas>=1400,'CRM must initially be full desktop width');
+   assert.ok(dimensions.view<500,'Browser must remain phone-sized');
+   await page.evaluate(()=>window.scrollTo({left:550,top:0,behavior:'instant'}));
+   await page.waitForTimeout(200);
+   assert.ok((await page.evaluate(()=>window.scrollX))>100,'One-finger horizontal page panning must be possible');
+   await page.evaluate(()=>window.scrollTo(0,0));
+  }
+  await page.getByRole('button',{name:'User menu'}).click();
+  await page.getByRole('menuitem',{name:'Display settings'}).click();
+  await page.getByRole('dialog',{name:'Display settings'}).waitFor();
+  await page.getByRole('button',{name:'Dark',exact:true}).click();
+  assert.equal(await page.locator('.crm-app').getAttribute('data-theme'),'dark','Dark theme must apply');
+  await page.getByRole('button',{name:'Light',exact:true}).click();
+  assert.equal(await page.locator('.crm-app').getAttribute('data-theme'),'light','Light theme must apply');
+  await page.locator('#crmCellDensity').selectOption('compact');
+  assert.ok(await page.locator('.crm-app.crm-density-compact').count(),'Row density must change');
+  await page.getByRole('button',{name:'Increase font size'}).click();
+  assert.ok(Number(await page.locator('.crm-app').evaluate(n=>getComputedStyle(n).getPropertyValue('--crm-font-offset').trim().replace('px','')))>0,'Font size must change');
+  await page.locator('#crmScreenScale').focus();
+  await page.locator('#crmScreenScale').press('ArrowRight');
+  assert.ok(Number(await page.locator('.crm-app').evaluate(n=>getComputedStyle(n).getPropertyValue('--crm-scale').trim()))>0.99,'Scale setting must change');
+  await page.getByRole('button',{name:'Restore display defaults'}).click();
+  await page.getByRole('button',{name:'Close settings'}).click();
+  await page.getByRole('button',{name:'Select phone'}).click();
+  await page.getByRole('group',{name:'Available phones'}).getByRole('button',{name:/Phone 2/}).click();
+  await page.getByRole('button',{name:'Select phone'}).click();
+  await page.getByRole('group',{name:'Available phones'}).getByRole('button',{name:/Phone 1/}).click();
+  await page.getByRole('button',{name:'Open keypad'}).click();
+  assert.equal(await page.locator('.crm-topbar-keypad button[data-dtmf]').count(),12);
+  await page.locator('.crm-topbar-keypad button[data-dtmf]').first().click();
+  assert.ok((await page.getByRole('textbox',{name:'Topbar phone number'}).inputValue()).includes('1'),'Topbar DTMF must fill dialer');
+  await page.getByRole('button',{name:'Open keypad'}).click();
+  await page.getByRole('button',{name:'Email',exact:true}).first().click();
+  await page.locator('.gm-mail-app .gm-sidebar').waitFor();
+  assert.ok((await page.locator('.gm-mail-app .gm-sidebar').evaluate(n=>n.getBoundingClientRect().width))>=230,'Gmail must retain desktop folder sidebar on phone');
+  await page.getByRole('button',{name:'Leads',exact:true}).first().click();
   await page.getByRole('button',{name:'Comms'}).click({timeout:8000});
   await page.locator('.np-device.np-is-open').waitFor();
   const radius=await page.locator('.np-device').evaluate(n=>getComputedStyle(n).borderTopLeftRadius);
@@ -55,6 +94,16 @@ async function run(type,mobile){
   await page.getByRole('button',{name:'Back to calls'}).click();
   await page.locator('.np-root-tabs button').filter({hasText:'Email'}).click();
   await page.getByRole('heading',{name:'Inbox'}).waitFor();
+  const oldBounds=await page.locator('.np-device').boundingBox();
+  const grip=await page.getByRole('button',{name:'Resize Communications'}).boundingBox();
+  assert.ok(grip,'Resize handle must be available');
+  await page.mouse.move(grip.x+grip.width/2,grip.y+grip.height/2);
+  await page.mouse.down();
+  await page.mouse.move(grip.x+grip.width/2-35,grip.y+grip.height/2-42,{steps:5});
+  await page.mouse.up();
+  const resized=await page.locator('.np-device').boundingBox();
+  assert.ok(resized.width<oldBounds.width-15,'Communications finger drag must resize the panel');
+  assert.ok(await page.evaluate(()=>Boolean(localStorage.getItem('iphonelink.comms.size'))),'Communications size must persist');
   const overflow=await page.locator('.np-device').evaluate(n=>({height:n.clientHeight,scroll:n.scrollHeight,width:n.clientWidth,content:n.scrollWidth}));
   assert.ok(overflow.height>350,'Phone shell too short');
   assert.ok(overflow.content<=overflow.width+2,'Phone content horizontal overflow');
@@ -68,6 +117,6 @@ try{
  await run(chromium,false);
  await run(chromium,true);
  await run(webkit,true);
- console.log('3 browser/viewport smoke tests passed');
+ console.log('3 browser/viewport tests passed including desktop canvas, settings, Gmail, topbar dialer, phone resize');
 }catch(error){console.error(error);process.exitCode=1}
 finally{server.kill('SIGTERM')}
