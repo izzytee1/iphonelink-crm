@@ -35,6 +35,7 @@ export default function App() {
   const [leadNotes, setLeadNotes] = useState(() => ({ ...Object.fromEntries(Object.entries(leadExtrasSeed).map(([id, value]) => [id, value.notes || ''])), ...readSavedLeadNotes() }));
 
   useEffect(()=>{document.documentElement.dataset.theme=settings.theme==='dark'?'dark':'light';},[settings.theme]);
+  useEffect(()=>{const vp=window.visualViewport;const update=()=>{document.documentElement.style.setProperty('--crm-visual-width',`${vp?.width||window.innerWidth}px`);document.documentElement.style.setProperty('--crm-visual-height',`${vp?.height||window.innerHeight}px`)};update();window.addEventListener('resize',update);vp?.addEventListener('resize',update);return()=>{window.removeEventListener('resize',update);vp?.removeEventListener('resize',update)}},[]);
 
   useEffect(() => {
     let live = true;

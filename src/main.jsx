@@ -15,5 +15,5 @@ import './shell/responsive.css';
 import './pages/email/email.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode><App /></React.StrictMode>,
+  <React.StrictMode><div className="crm-scroll-viewport"><App /></div></React.StrictMode>,
 );

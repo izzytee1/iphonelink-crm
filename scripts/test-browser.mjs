@@ -22,23 +22,27 @@ async function run(type,mobile){
   page.on('pageerror',e=>errors.push(e.message));
   await page.goto(host,{waitUntil:'networkidle'});
   if(mobile){
-   const dimensions=await page.evaluate(()=>({scroll:document.documentElement.scrollWidth,canvas:document.querySelector('.crm-app').getBoundingClientRect().width,view:window.visualViewport?.width||window.innerWidth,layout:window.innerWidth,small:matchMedia('(max-width:767px)').matches}));
+   const dimensions=await page.evaluate(()=>({scroll:document.querySelector('.crm-scroll-viewport').scrollWidth,viewport:document.querySelector('.crm-scroll-viewport').clientWidth,canvas:document.querySelector('.crm-app').getBoundingClientRect().width,view:window.visualViewport?.width||window.innerWidth,layout:window.innerWidth,small:matchMedia('(max-width:767px)').matches}));
    assert.ok(dimensions.scroll>=1400,'Desktop CRM must extend beyond phone viewport');
    assert.ok(dimensions.canvas>=1400,'CRM must initially be full desktop width');
    console.log('Mobile viewport:',JSON.stringify(dimensions));
-   assert.ok(dimensions.view<500,'Browser must remain phone-sized');
+   assert.ok(dimensions.view<500&&dimensions.viewport<500,'Browser must remain phone-sized');
+   await page.locator('.crm-scroll-viewport').evaluate(n=>n.scrollLeft=550);
+   assert.ok((await page.locator('.crm-scroll-viewport').evaluate(n=>n.scrollLeft))>100,'Desktop viewport must pan horizontally');
+   await page.locator('.crm-scroll-viewport').evaluate(n=>n.scrollLeft=0);
    assert.ok(dimensions.view<dimensions.layout,'Visual viewport must show only part of full desktop workspace');
    if(type===chromium){
-     const before=await page.evaluate(()=>({visual:window.visualViewport?.offsetLeft||0,grid:document.querySelector('.il-grid-scroll')?.scrollLeft||0,scroll:window.scrollX}));
+     const before=await page.evaluate(()=>({visual:window.visualViewport?.offsetLeft||0,grid:document.querySelector('.il-grid-scroll')?.scrollLeft||0,workspace:document.querySelector('.crm-scroll-viewport')?.scrollLeft||0}));
      const cdp=await context.newCDPSession(page);
      await cdp.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x:320,y:520}]});
      for(let i=1;i<=8;i++)await cdp.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:320-i*25,y:520}]});
      await cdp.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
      await page.waitForTimeout(350);
-     const after=await page.evaluate(()=>({visual:window.visualViewport?.offsetLeft||0,grid:document.querySelector('.il-grid-scroll')?.scrollLeft||0,scroll:window.scrollX}));
+     const after=await page.evaluate(()=>({visual:window.visualViewport?.offsetLeft||0,grid:document.querySelector('.il-grid-scroll')?.scrollLeft||0,workspace:document.querySelector('.crm-scroll-viewport')?.scrollLeft||0}));
      console.log('Finger swipe',JSON.stringify({before,after}));
-     assert.ok(after.visual>before.visual+30||after.grid>before.grid+30||after.scroll>before.scroll+30,'Finger swipe must pan the oversized CRM');
-     await page.reload({waitUntil:'networkidle'});
+     assert.ok(after.visual>before.visual+30||after.grid>before.grid+30||after.workspace>before.workspace+30,'Finger swipe must pan the oversized CRM');
+     await page.locator('.crm-scroll-viewport').evaluate(n=>n.scrollLeft=0);
+   await page.reload({waitUntil:'networkidle'});
    }
   }
   await page.getByRole('button',{name:'User menu'}).click();
