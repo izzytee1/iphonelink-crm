@@ -1,4 +1,4 @@
-import React,{useMemo,useRef,useState} from 'react';
+import {useMemo,useRef,useState} from 'react';
 import {Avatar,NativeIcon,NativeButton,formatStamp,digits} from './Native.jsx';
 import {leadPhones} from '../utils/leadUtils.js';
 

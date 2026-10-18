@@ -63,7 +63,7 @@ export default function Comms({open,onToggle,leads,onSelectLead,phoneController,
  function pointerDown(e){if(e.button!==undefined&&e.button!==0)return;drag.current={x:e.clientX,old:position,moved:false};e.currentTarget.setPointerCapture?.(e.pointerId)}
  function pointerMove(e){if(!drag.current)return;const dx=e.clientX-drag.current.x;if(Math.abs(dx)>5)drag.current.moved=true;if(drag.current.moved)setPosition(Math.max(8,Math.min(window.innerWidth-110,drag.current.old+dx)))}
  function pointerUp(){if(!drag.current)return;cancelClick.current=drag.current.moved;if(drag.current.moved)try{localStorage.setItem('iphonelink.comms.x',String(Math.round(position)))}catch{}drag.current=null}
- return <div className="np-root">
+ return <div className="np-root" style={{'--np-close-x':position+'px'}}>
   <section className={'np-device '+(open?'np-is-open':'')} style={{left:'clamp(8px, '+position+'px, calc(100vw - min(414px, 46.25vh) - 8px))'}} aria-label="iPhone Communications" aria-hidden={!open}>
    <StatusBar/>
    <main className="np-device-main">
@@ -77,7 +77,7 @@ export default function Comms({open,onToggle,leads,onSelectLead,phoneController,
    {showNav&&<nav className="np-root-tabs" aria-label="Communications sections">{rootPages.map(([id,title,icon])=><button type="button" key={id} className={screen.id===id?'np-active':''} onClick={()=>navigate(id)}><NativeIcon name={icon} size={22}/><span>{title}</span></button>)}</nav>}
    <div className="np-home-indicator" aria-hidden="true"/>
   </section>
-  {open&&<button className="np-device-close" style={{left:'calc(clamp(8px, '+position+'px, calc(100vw - min(414px, 46.25vh) - 8px)) + min(414px, 46.25vh) - 8px)'}} type="button" onClick={()=>onToggle(false)} aria-label="Close Communications"><NativeIcon name="close" size={19}/></button>}
+  {open&&<button className="np-device-close" type="button" onClick={()=>onToggle(false)} aria-label="Close Communications"><NativeIcon name="close" size={19}/></button>}
   <button type="button" className="np-launch" style={{left:'clamp(8px, '+position+'px, calc(100vw - 140px))'}} onPointerDown={pointerDown} onPointerMove={pointerMove} onPointerUp={pointerUp} onPointerCancel={pointerUp} onClick={()=>{if(cancelClick.current){cancelClick.current=false;return}onToggle(!open)}} aria-expanded={open}><NativeIcon name="message" size={18}/> Comms</button>
  </div>;
 }
