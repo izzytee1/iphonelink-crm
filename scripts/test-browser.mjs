@@ -27,10 +27,19 @@ async function run(type,mobile){
    assert.ok(dimensions.canvas>=1400,'CRM must initially be full desktop width');
    console.log('Mobile viewport:',JSON.stringify(dimensions));
    assert.ok(dimensions.view<500,'Browser must remain phone-sized');
-   await page.evaluate(()=>window.scrollTo({left:550,top:0,behavior:'instant'}));
-   await page.waitForTimeout(200);
-   assert.ok((await page.evaluate(()=>window.scrollX))>100,'One-finger horizontal page panning must be possible');
-   await page.evaluate(()=>window.scrollTo(0,0));
+   assert.ok(dimensions.view<dimensions.layout,'Visual viewport must show only part of full desktop workspace');
+   if(type===chromium){
+     const before=await page.evaluate(()=>({visual:window.visualViewport?.offsetLeft||0,grid:document.querySelector('.il-grid-scroll')?.scrollLeft||0,scroll:window.scrollX}));
+     const cdp=await context.newCDPSession(page);
+     await cdp.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x:320,y:520}]});
+     for(let i=1;i<=8;i++)await cdp.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:320-i*25,y:520}]});
+     await cdp.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
+     await page.waitForTimeout(350);
+     const after=await page.evaluate(()=>({visual:window.visualViewport?.offsetLeft||0,grid:document.querySelector('.il-grid-scroll')?.scrollLeft||0,scroll:window.scrollX}));
+     console.log('Finger swipe',JSON.stringify({before,after}));
+     assert.ok(after.visual>before.visual+30||after.grid>before.grid+30||after.scroll>before.scroll+30,'Finger swipe must pan the oversized CRM');
+     await page.reload({waitUntil:'networkidle'});
+   }
   }
   await page.getByRole('button',{name:'User menu'}).click();
   await page.getByRole('menuitem',{name:'Display settings'}).click();
