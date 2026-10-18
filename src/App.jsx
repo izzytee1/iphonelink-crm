@@ -2,7 +2,8 @@ import Topbar from './shell/topbar/Topbar.jsx';
 import Workspace from './pages/Workspace.jsx';
 import { useEffect, useMemo, useState } from 'react';
 import { iphoneLeadsSeed } from './data/iphoneLeadsSeed.js';
-import DockedComms from './communications/panel/DockedComms.jsx';
+import Comms from './communications/Comms.jsx';
+import { playClick } from './communications/sounds.js';
 import { leadExtrasSeed, readSavedLeadNotes } from './pages/leads/LeadDetails.jsx';
 import { crmPhones, initialMessages } from './data/communications.js';
 import { initialMailbox } from './data/mail.js';
@@ -48,6 +49,15 @@ export default function App() {
       return same ? current : next;
     });
   }, [setSettings]);
+
+  useEffect(() => {
+    const soundOnPress = event => {
+      const target = event.target.closest?.('button');
+      if (target && target.dataset.dtmf !== 'true') playClick();
+    };
+    document.addEventListener('click', soundOnPress, true);
+    return () => document.removeEventListener('click', soundOnPress, true);
+  }, []);
 
   const unreadMail = useMemo(() => mailbox.filter((thread) => (thread.msgs || []).some((message) => message.unread)).length, [mailbox]);
 
@@ -129,7 +139,7 @@ export default function App() {
       <main className="crm-main">
         <Workspace leads={leads} onAddLead={lead => setLeads(current => [...current, {...lead, id:Math.max(0,...current.map(l=>Number(l.id)||0))+1}])} workspace={workspace} mailbox={mailbox} setMailbox={setMailbox} composeRequest={composeRequest} setComposeRequest={setComposeRequest} selectLead={selectLead} communicationsOpen={communicationsOpen} selectedLeadId={selectedLeadId} expandedLeadId={expandedLeadId} toggleLeadDetails={toggleLeadDetails} globalSearch={globalSearch} leadNotes={leadNotes} saveLeadNotes={saveLeadNotes} setCallRequest={setCallRequest} openMessage={openMessage} requestEmail={requestEmail} phoneController={phoneController} messages={messages} setMessages={setMessages} commRequest={commRequest} setCommRequest={setCommRequest} setCommunicationsOpen={setCommunicationsOpen} setWorkspace={setWorkspace} />
       </main>
-      <DockedComms open={communicationsOpen} onToggle={setCommunicationsOpen} leads={leads} selectedLeadId={selectedLeadId} onSelectLead={selectLead} phones={crmPhones} phoneController={phoneController} messages={messages} setMessages={setMessages} onEmail={requestEmail} onOpenEmail={() => setWorkspace('email')} commRequest={commRequest} onConsumeCommRequest={() => setCommRequest(null)} mailbox={mailbox} setMailbox={setMailbox} />
+      <Comms open={communicationsOpen} onToggle={setCommunicationsOpen} leads={leads} selectedLeadId={selectedLeadId} onSelectLead={selectLead} phones={crmPhones} phoneController={phoneController} messages={messages} setMessages={setMessages} onEmail={requestEmail} onOpenEmail={() => setWorkspace('email')} commRequest={commRequest} onConsumeCommRequest={() => setCommRequest(null)} mailbox={mailbox} setMailbox={setMailbox} />
       {settingsOpen ? <DisplaySettings settings={settings} setSettings={setSettings} autoScale={autoScale} effectiveScale={effectiveScale} onClose={() => setSettingsOpen(false)} /> : null}
     </div>
   );

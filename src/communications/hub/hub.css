@@ -1,6 +1,0 @@
-.comm-hub-row { display: flex; width: 100%; min-height: 49px; align-items: center; gap: 9px; border: 0; border-bottom: 1px solid #EEF1F4; background: #fff; padding: 7px 11px; text-align: left; cursor: pointer; }
-.comm-hub-row:hover { background: #F8FAFC; }
-.comm-hub-icon { display: grid; width: 26px; height: 26px; flex: 0 0 auto; place-items: center; color: #667085; }
-.comm-hub-row strong, .comm-hub-row small { display: block; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.comm-hub-row strong { color: #475467; font-size: calc(11px + var(--crm-font-offset)); font-weight: 600; }
-.comm-hub-row small { margin-top: 2px; color: #98A2B3; font-size: calc(9.5px + var(--crm-font-offset)); font-weight: 400; }

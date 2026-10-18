@@ -71,3 +71,8 @@ button { touch-action: manipulation; }
 .crm-app .text-xl { font-size: calc(1.25rem + var(--crm-font-offset)); }
 
 
+
+/* One button feedback rule across the CRM; inactive actions retain their normal visuals. */
+.crm-app button { -webkit-tap-highlight-color:transparent;transition:transform .11s ease }
+.crm-app button:active {transform:scale(.96)}
+.crm-app button:disabled {opacity:1;filter:none}

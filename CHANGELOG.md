@@ -1,9 +1,15 @@
-# iPhoneLink React v02
+# iPhoneLink React v03
 
-- Migrated the iPhoneLink.01 HTML lead dataset and 14-column visual layout into React.
-- Preserved the CRM v59 React supporting shell, phone dialer and communication sources.
-- Added a horizontally draggable, docked bottom-edge Comms popup and shared Email mailbox.
-- Upgraded both Email surfaces to Gmail-proportioned mailbox UI, full reader, improved fonts/spacing, Compose controls and auto-drafts.
-- Added local bulk mailbox actions, advanced search, email formatting, image insertion, attachment storage, and local send undo.
-- Omitted Snoozed, Important, custom labels, Print, Schedule Send and Star/Important row icons as requested.
-- Updated the source-level regression test; removed obsolete v59 Leads-specific test and unused older lead seed.
+- Removed obsolete Communications UI components and their CSS from source.
+- Deleted the old topbar dialer component and CSS rather than hiding them.
+- Built a new Communications component and stylesheet from scratch.
+- Kept existing lead data, mail store and phone-provider controller.
+- Added a shared Web Audio engine for DTMF and quiet button clicks.
+- Kept controls visibly styled at all times, with press feedback.
+- Prevented `tel:` fallback from claiming an active in-app call.
+- Added new v03 static regression tests and removed outdated v02 tests.
+- Incremented the visible brand version to v03.
+
+## Limitations
+
+Real provider-connected calling and SMS/WhatsApp transmission are not supplied by the current frontend and require integrations. The local demo never asserts messages were delivered.

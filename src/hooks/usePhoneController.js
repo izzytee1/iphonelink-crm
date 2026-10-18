@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { dialPhone, getPhoneProvider, invokePhoneProvider, subscribePhoneProvider } from '../services/phoneService.js';
 import { leadPhones } from '../utils/leadUtils.js';
+import { playDtmf } from '../communications/sounds.js';
 
 export function digitsOf(value) {
   return String(value || '').replace(/\D/g, '').slice(-10);
@@ -86,9 +87,9 @@ export default function usePhoneController({
     const device = activePhone || null;
     if (device && !device.connected) return undefined;
     const lead = leadByNumber(leads, number);
+    const { handled, result, error } = dialPhone({ number, device });
+    if (error || !handled) return undefined;
     setActiveCall({ phase: 'dialing', number, name: lead?.name || '', startedAt: 0, muted: false, held: false, speaker: false });
-    const { result, error } = dialPhone({ number, device });
-    if (error) return undefined;
     adoptProviderResult(result, number);
     return result;
   }, [activePhone, adoptProviderResult, leads, setActiveCall]);
@@ -137,6 +138,7 @@ export default function usePhoneController({
   }, [activeCall, providerInvoke, setActiveCall]);
 
   const sendTone = useCallback((key) => {
+    playDtmf(key);
     if (activeCall.phase === 'active') {
       providerInvoke(['sendTone'], [key]);
       return;

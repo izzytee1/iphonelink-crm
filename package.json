@@ -1,13 +1,13 @@
 {
-  "name": "iphonelink-react-v02",
+  "name": "iphonelink-react-v03",
   "private": true,
-  "version": "0.2.0",
+  "version": "0.3.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "verify": "node scripts/verify-source.mjs && node scripts/test-iphonelink-v02.mjs",
+    "verify": "node scripts/verify-source.mjs && node scripts/test-iphonelink-v03.mjs",
     "test": "npm run verify && npm run build"
   },
   "dependencies": {

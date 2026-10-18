@@ -1,13 +1,9 @@
-
-@media (max-width: 1320px) {
-  .crm-topbar { gap: 6px; padding-inline: 7px; }
-  .crm-topnav button { padding-inline: 5px; font-size: calc(10px + var(--crm-font-offset)); }
-  .topbar-dialer { width: clamp(350px, 30vw, 430px); min-width: 350px; }
-  .topbar-dialer-status { max-width: 78px; }
-  .crm-search-wrap { width: 110px; }
-  .crm-topbar-time { display: none; }
+@media (max-width:1320px) {
+ .crm-topbar {gap:8px;padding-inline:9px}
+ .crm-topnav button {padding-inline:7px;font-size:calc(12px + var(--crm-font-offset))}
+ .crm-search-wrap {width:110px}
+ .crm-topbar-time {display:none}
 }
-
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
+@media (prefers-reduced-motion:reduce) {
+ *,*::before,*::after {scroll-behavior:auto!important;transition-duration:.01ms!important;animation-duration:.01ms!important;animation-iteration-count:1!important}
 }
