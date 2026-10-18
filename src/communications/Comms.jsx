@@ -27,7 +27,6 @@ function EmbeddedEmail({view,mailId,mailbox,onEmail,onBack,onOpen}){
 }
 export default function Comms({open,onToggle,leads,onSelectLead,phoneController,messages,setMessages,mailbox,setMailbox,onEmail,commRequest,onConsumeCommRequest}){
  const [screen,setScreen]=useState({id:'all',view:'list'});
- const [origin,setOrigin]=useState('messages');
  const [notice,setNotice]=useState('');
  const [position,setPosition]=useState(()=>{try{return Math.max(8,Number(localStorage.getItem('iphonelink.comms.x'))||18)}catch{return 18}});
  const drag=useRef(null),cancelClick=useRef(false);
@@ -37,7 +36,7 @@ export default function Comms({open,onToggle,leads,onSelectLead,phoneController,
  const navigate=id=>{setScreen({id,view:'list'});setNotice('')};
  const identify=n=>{const lead=leads.find(l=>leadPhones(l).some(p=>digits(p)===digits(n)));if(lead)onSelectLead?.(lead.id)};
  const thread=(channel,number)=>{
-  identify(number);setOrigin(channel==='wa'?'whatsapp':'messages');
+  identify(number);
   setScreen({id:channel==='wa'?'whatsapp':'messages',view:'thread',number});
   setMessages(current=>current.map(m=>m.channel===channel&&digits(m.number)===digits(number)&&m.unread?{...m,unread:false,read:true}:m));
  };
@@ -50,7 +49,7 @@ export default function Comms({open,onToggle,leads,onSelectLead,phoneController,
   if(screen.id==='messages'&&screen.view!=='list'){navigate('messages');return}
   if(screen.id==='email'&&screen.view!=='list'){navigate('email');return}
   if(screen.id==='calls'&&screen.view!=='list'){navigate('calls');return}
-  navigate(origin==='whatsapp'?'messages':'all');
+  navigate(screen.id==='whatsapp'?'messages':'all');
  }
  function saveLocal(channel,number,value){const text=String(value||'').trim();if(!text)return;setMessages(current=>[...current,{id:'local-'+Date.now()+'-'+current.length,channel,number:digits(number),dir:'out',text,at:Date.now(),status:'local',unread:false,files:[]}]);setNotice('Saved locally · not delivered');}
  useEffect(()=>{
@@ -68,7 +67,7 @@ export default function Comms({open,onToggle,leads,onSelectLead,phoneController,
    <StatusBar/>
    <main className="np-device-main">
     {screen.id==='all'&&<AllActivity messages={messages} mailbox={mailbox} leads={leads} onMessage={thread} onCall={callDetail} onMail={emailDetail}/>}
-    {screen.id==='messages'&&<Messages page={screen.view} number={screen.number} messages={messages} leads={leads} onBack={back} onThread={n=>thread('text',n)} onCompose={()=>setScreen({id:'messages',view:'new'})} onWhatsApp={()=>{setOrigin('messages');setScreen({id:'whatsapp',view:'list'})}} onSave={saveLocal} onCall={keypad}/>}
+    {screen.id==='messages'&&<Messages page={screen.view} number={screen.number} messages={messages} leads={leads} onBack={back} onThread={n=>thread('text',n)} onCompose={()=>setScreen({id:'messages',view:'new'})} onWhatsApp={()=>setScreen({id:'whatsapp',view:'list'})} onSave={saveLocal} onCall={keypad}/>}
     {screen.id==='whatsapp'&&<WhatsApp page={screen.view} number={screen.number} messages={messages} leads={leads} onBack={back} onThread={n=>thread('wa',n)} onCompose={()=>setScreen({id:'whatsapp',view:'new'})} onSave={saveLocal} onCall={n=>phoneController.callNumber(n)} onCalls={()=>navigate('calls')}/>}
     {screen.id==='calls'&&<Calls view={screen.view} call={screen.call} leads={leads} calls={calls} phoneController={phoneController} onBack={back} onDetail={callDetail} onMessage={n=>thread('text',n)} onWhatsApp={n=>thread('wa',n)} onContacts={()=>setScreen({id:'calls',view:'contacts'})} onKeypad={()=>keypad('')}/>}
     {screen.id==='email'&&<EmbeddedEmail view={screen.view} mailId={screen.mailId} mailbox={mailbox} onEmail={onEmail} onBack={back} onOpen={emailDetail}/>}
