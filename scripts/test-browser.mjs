@@ -107,6 +107,7 @@ async function run(type,mobile){
   assert.ok(await page.evaluate(()=>Boolean(localStorage.getItem('iphonelink.comms.size'))),'Communications size must persist');
   const overflow=await page.locator('.np-device').evaluate(n=>({height:n.clientHeight,scroll:n.scrollHeight,width:n.clientWidth,content:n.scrollWidth}));
   assert.ok(overflow.height>350,'Phone shell too short');
+  console.log('Device geometry',JSON.stringify(overflow));
   assert.ok(overflow.content<=overflow.width+2,'Phone content horizontal overflow');
   assert.deepEqual(errors,[],'Browser JavaScript errors');
   console.log((type===chromium?'Chromium':'WebKit')+' '+(mobile?'mobile':'desktop')+': PASS, radius '+radius+', keypad '+input);
