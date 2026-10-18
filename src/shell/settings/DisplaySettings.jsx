@@ -1,3 +1,4 @@
+import {createPortal} from 'react-dom';
 const FONT_MIN=-2;
 const FONT_MAX=5;
 const FONT_STEP=.5;
@@ -6,7 +7,7 @@ export default function DisplaySettings({settings,setSettings,effectiveScale,onC
  const update=(key,value)=>setSettings(current=>({...current,[key]:value}));
  const percent=Math.round(Number(settings.scale??1)*100);
  const offset=Number(settings.fontOffset||0);
- return <div className="crm-settings-overlay" onPointerDown={e=>{if(e.target===e.currentTarget)onClose()}}>
+ return createPortal(<div className="crm-settings-overlay" onPointerDown={e=>{if(e.target===e.currentTarget)onClose()}}>
   <section id="crmDisplaySettings" className="crm-settings-panel" role="dialog" aria-modal="true" aria-label="Display settings">
    <header><strong>Display & layout</strong><button type="button" aria-label="Close settings" onClick={onClose}>×</button></header>
    <div className="crm-settings-content">
@@ -18,5 +19,5 @@ export default function DisplaySettings({settings,setSettings,effectiveScale,onC
     <button type="button" className="crm-settings-reset" onClick={()=>setSettings({scale:1,density:'comfortable',fontOffset:0,accent:'#4669A8',theme:'light'})}>Restore display defaults</button>
    </div>
   </section>
- </div>;
+ </div>,document.body);
 }

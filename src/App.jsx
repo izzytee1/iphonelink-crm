@@ -34,6 +34,8 @@ export default function App() {
   const { autoScale, effectiveScale } = useViewportScale(settings.scale ?? 1);
   const [leadNotes, setLeadNotes] = useState(() => ({ ...Object.fromEntries(Object.entries(leadExtrasSeed).map(([id, value]) => [id, value.notes || ''])), ...readSavedLeadNotes() }));
 
+  useEffect(()=>{document.documentElement.dataset.theme=settings.theme==='dark'?'dark':'light';},[settings.theme]);
+
   useEffect(() => {
     let live = true;
     loadMailbox().then((saved) => { if (live && Array.isArray(saved) && saved.length) setMailbox(saved); }).catch(() => {}).finally(() => { if (live) setMailHydrated(true); });
