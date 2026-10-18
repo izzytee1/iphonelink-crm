@@ -21,7 +21,9 @@ async function run(type,mobile){
   const page=await context.newPage(),errors=[];
   page.on('pageerror',e=>errors.push(e.message));
   await page.goto(host,{waitUntil:'networkidle'});
-  await page.getByRole('button',{name:'Comms'}).click();
+  await page.waitForTimeout(500);
+  console.log('Page diagnostics',type.name,mobile,'root length',await page.locator('#root').evaluate(n=>n.innerHTML.length),'errors',errors,'buttons',(await page.locator('button').allTextContents()).slice(0,12));
+  await page.getByRole('button',{name:'Comms'}).click({timeout:8000});
   await page.locator('.np-device.np-is-open').waitFor();
   const radius=await page.locator('.np-device').evaluate(n=>getComputedStyle(n).borderTopLeftRadius);
   assert.ok(parseFloat(radius)>=35,'Missing iPhone rounded shell');
