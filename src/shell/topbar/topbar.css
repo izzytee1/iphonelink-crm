@@ -1,0 +1,36 @@
+/* Topbar */
+.crm-topbar {
+  position: relative;
+  z-index: 50;
+  display: flex;
+  height: 58px;
+  min-height: 58px;
+  align-items: center;
+  gap: 9px;
+  margin: 10px 10px 0;
+  padding: 0 10px;
+  border: 1px solid var(--crm-border);
+  border-radius: 10px;
+  background: var(--crm-topbar);
+  box-shadow: 0 3px 12px rgba(25, 35, 50, .045);
+}
+
+.crm-brand {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 7px;
+  border: 0;
+  background: transparent;
+  padding: 6px 5px;
+  color: var(--crm-accent-strong);
+  font-size: calc(15px + var(--crm-font-offset));
+  font-weight: 700;
+  letter-spacing: -.4px;
+  cursor: pointer;
+}
+
+.crm-topbar-tools { display: flex; min-width: 0; flex: 1 1 auto; align-items: center; justify-content: flex-end; gap: 5px; }
+
+/* Small visible release identifier; no changes to page layouts. */
+.crm-version { font-size: 12px; font-weight: 400; letter-spacing: 0; color: var(--crm-faint); }

@@ -1,0 +1,4 @@
+.crm-topbar-time { display: flex; min-width: 54px; flex: 0 0 auto; flex-direction: column; line-height: 1.05; color: #667085; font-variant-numeric: tabular-nums; }
+.crm-topbar-time span { font-size: calc(10px + var(--crm-font-offset)); }
+.crm-topbar-time small { margin-top: 3px; color: #98A2B3; font-size: calc(9px + var(--crm-font-offset)); }
+

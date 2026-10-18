@@ -1,0 +1,53 @@
+/* iPhoneLink.01 lead grid visual baseline, adapted into React components. */
+.il-leads { display:flex; flex:1;flex-direction:column;min-width:0;min-height:0;border-radius:8px;background:#fff;font-family:Inter,sans-serif;}
+.il-lead-toolbar {flex:0 0 auto;min-height:48px;padding:7px 11px;display:flex;align-items:center;justify-content:space-between;gap:12px;background:#fff;border-bottom:1px solid #e8eaed;}
+.il-stats {display:flex;align-items:center;min-width:0;flex-wrap:wrap;row-gap:7px;color:#858d97;}
+.il-stats>span {display:flex;gap:6px;align-items:center;padding:0 9px;border-left:1px solid #e4e8ee;white-space:nowrap;}
+.il-stats>span:first-child {border-left:0;padding-left:0;}
+.il-stats small {font-size:12px;font-weight:400;color:#85909a;}
+.il-stats strong {font-size:13px;font-weight:400;color:#79838e;}
+.il-lead-actions {display:flex;align-items:center;flex-shrink:0;gap:8px;}
+.il-lead-search {height:34px;width:200px;display:flex;align-items:center;gap:7px;padding:0 10px;border:1px solid #dce1e6;border-radius:5px;background:#fff;color:#7d8793;}
+.il-lead-search input {width:100%;border:0;outline:none;font-size:13px;font-weight:400;color:#34383d;}
+.il-filter-wrap {position:relative;}
+.il-filter-btn,.il-add-btn {height:34px;display:flex;align-items:center;justify-content:center;gap:7px;border:1px solid #dce1e6;border-radius:5px;padding:0 12px;background:white;color:#64748b;font-size:13px;font-weight:400;white-space:nowrap;}
+.il-filter-btn:hover {background:#f8fafc;}
+.il-add-btn {border-color:#2563eb;background:#2563eb;color:white;}
+.il-add-btn:hover {background:#1d4ed8;}
+.il-filter-menu {position:absolute;top:calc(100% + 4px);right:0;width:155px;border:1px solid #dce1e6;border-radius:6px;background:#fff;box-shadow:0 8px 25px #0002;padding:5px;z-index:36;}
+.il-filter-menu button {display:block;width:100%;text-align:left;padding:7px 10px;border:0;border-radius:4px;background:white;font-size:13px;font-weight:400;color:#48515e;}
+.il-filter-menu button:hover,.il-filter-menu button.active{background:#eff6ff;color:#2563eb;}
+.il-grid-scroll {width:100%;min-height:0;flex:1;overflow:auto;}
+.il-grid-table {table-layout:fixed;border-collapse:separate;border-spacing:0;background:#fff;color:#34383d;font:400 14px Inter,sans-serif;}
+.il-grid-table th,.il-grid-table td {height:40px;line-height:1.2;padding:0 12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:left;vertical-align:middle;border-right:1px solid #e8eaed;border-bottom:1px solid #eceef0;background:#fff;}
+.il-grid-table thead th {height:36px;position:sticky;top:0;z-index:12;background:#f6f7f8;color:#76818d;font-size:12px;font-weight:500;letter-spacing:0;text-transform:none;user-select:none;}
+.il-grid-table th:last-child,.il-grid-table td:last-child {border-right:0;}
+.il-grid-table th {overflow:visible;position:sticky;}
+.il-grid-table .il-resizer {position:absolute;right:-4px;top:0;width:9px;height:100%;cursor:col-resize;touch-action:none;z-index:13;}
+.il-grid-table tbody tr:hover td {background:#f8fafc;}
+.il-grid-table tbody tr.selected>td {background:#eff6ff;}
+.il-grid-table td.il-company {font-size:14px;font-weight:600;color:#2f3337;}
+.il-grid-table .il-number {text-align:center;padding:0;}
+.il-grid-table td.il-state-new {background:#f3f4f5;color:#4b525b;}
+.il-grid-table td.il-state-engaged {background:#edf3ff;color:#4b525b;}
+.il-grid-table td.il-state-contract {background:#fff8dc;color:#4b525b;}
+.il-grid-table td.il-state-closed {background:#fff0e8;color:#4b525b;}
+.il-statement-month {color:#9aa1aa;font-weight:400;}
+.il-grid-table tbody .lead-expanded-row td {height:auto;padding:0;background:#fbfcfd;overflow:visible;white-space:normal;}
+.il-no-leads {text-align:center!important;height:220px!important;color:#858d97;}
+.il-add-overlay {position:fixed;inset:0;background:#0f172a4d;z-index:110;display:flex;align-items:center;justify-content:center;padding:18px;}
+.il-add-modal {width:min(480px,100%);max-height:90vh;overflow-y:auto;border:1px solid #dbe1e8;border-radius:10px;background:#fff;box-shadow:0 12px 40px #0002;padding:18px;display:grid;gap:12px;}
+.il-add-modal header {display:flex;align-items:center;justify-content:space-between;font-size:17px;font-weight:500;}
+.il-add-modal header button {border:0;background:none;color:#64748b;}
+.il-add-modal label {font-size:13px;display:grid;gap:5px;color:#475569;}
+.il-add-modal label input {border:1px solid #cbd5e1;border-radius:5px;padding:10px;color:#334155;}
+.il-add-modal footer {display:flex;justify-content:flex-end;gap:8px;padding-top:8px;}
+.il-add-modal footer button {padding:9px 16px;border-radius:5px;border:1px solid #cbd5e1;background:white;}
+.il-add-modal footer button[type=submit] {background:#2563eb;color:white;border-color:#2563eb;}
+@media(max-width:1100px){.il-lead-toolbar{align-items:flex-start;flex-wrap:wrap;}.il-lead-actions{margin-left:auto;}}
+
+.il-leads-workspace {padding-bottom:51px;}
+.il-brand {font-size:22px;font-weight:700;letter-spacing:-.03em;gap:0;white-space:nowrap;}
+.il-brand>span:first-child {color:#0f172a;}
+.il-brand>span:nth-child(2) {color:#2563eb;}
+.il-brand .crm-version {font-size:12px;font-weight:400;letter-spacing:0;margin-left:7px;color:#8692a0;}

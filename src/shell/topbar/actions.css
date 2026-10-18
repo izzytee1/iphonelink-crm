@@ -1,0 +1,14 @@
+.crm-topbar-icon {
+  position: relative;
+  display: grid;
+  width: 31px;
+  height: 31px;
+  flex: 0 0 auto;
+  place-items: center;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: #667085;
+  cursor: pointer;
+}
+.crm-topbar-icon:hover, .crm-topbar-icon.active { background: #E9EEF4; color: #344054; }

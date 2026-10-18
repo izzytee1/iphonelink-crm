@@ -1,0 +1,7 @@
+.comm-calls-mode { display: grid; height: 39px; flex: 0 0 auto; grid-template-columns: 1fr 1fr; gap: 3px; border-bottom: 1px solid #EEF1F4; padding: 6px 8px; }
+.comm-call-row { display: flex; width: 100%; min-height: 53px; align-items: center; gap: 8px; border: 0; border-bottom: 1px solid #EEF1F4; background: #fff; padding: 8px 10px; text-align: left; cursor: pointer; }
+.comm-call-row:hover, .comm-call-row.selected { background: #F5F8FB; }
+.comm-call-row strong, .comm-call-row small { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.comm-call-row strong { color: #475467; font-size: calc(10.5px + var(--crm-font-offset)); font-weight: 600; }
+.comm-call-row small { margin-top: 2px; color: #98A2B3; font-size: calc(9px + var(--crm-font-offset)); font-weight: 400; }
+.comm-call-row time { flex: 0 0 auto; color: #98A2B3; font-size: calc(8.5px + var(--crm-font-offset)); }

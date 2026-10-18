@@ -1,0 +1,5 @@
+.comm-contact-row { display: flex; min-height: 52px; align-items: center; gap: 8px; border-bottom: 1px solid #EEF1F4; padding: 8px 10px; }
+.comm-contact-row > button { border: 0; background: transparent; padding: 0; cursor: pointer; }
+.comm-contact-row strong, .comm-contact-row small { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.comm-contact-row strong { color: #475467; font-size: calc(10.5px + var(--crm-font-offset)); font-weight: 600; }
+.comm-contact-row small { margin-top: 2px; color: #98A2B3; font-size: calc(9px + var(--crm-font-offset)); font-weight: 400; }

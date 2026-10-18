@@ -1,0 +1,6 @@
+import LeadsList from './leads/LeadsList.jsx';
+import EmailClient from './email/EmailClient.jsx';
+export default function Workspace({workspace,leads,onAddLead,mailbox,setMailbox,composeRequest,setComposeRequest,selectLead,selectedLeadId,expandedLeadId,toggleLeadDetails,globalSearch,leadNotes,saveLeadNotes,setCallRequest,openMessage,requestEmail,messages}){
+ if(workspace==='email')return <EmailClient leads={leads} mailbox={mailbox} setMailbox={setMailbox} composeRequest={composeRequest} onConsumeComposeRequest={()=>setComposeRequest(null)} onSelectLead={selectLead}/>;
+ return <div className="leads-workspace il-leads-workspace"><LeadsList leads={leads} onAddLead={onAddLead} selectedLeadId={selectedLeadId} expandedLeadId={expandedLeadId} onSelectLead={selectLead} onToggleLead={toggleLeadDetails} searchQuery={globalSearch} notesByLead={leadNotes} onNotesChange={saveLeadNotes} onCall={phone=>{const number=String(phone||'').replace(/[^+\d]/g,'');if(number)setCallRequest({id:Date.now(),phone:number});}} onSMS={phone=>openMessage('sms',phone)} onWhatsApp={phone=>openMessage('wa',phone)} onEmail={email=>requestEmail([email])} onEmailAll={emails=>requestEmail(emails)} messages={messages} mailbox={mailbox}/></div>;
+}

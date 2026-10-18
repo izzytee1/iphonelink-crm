@@ -1,0 +1,15 @@
+.crm-notification-count {
+  position: absolute;
+  top: 1px;
+  right: 0;
+  min-width: 13px;
+  height: 13px;
+  padding: 0 3px;
+  border-radius: 4px;
+  background: #B54747;
+  color: #fff;
+  font-size: calc(8px + var(--crm-font-offset));
+  font-weight: 600;
+  line-height: 13px;
+  text-align: center;
+}
