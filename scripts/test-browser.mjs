@@ -30,12 +30,12 @@ async function run(type,mobile){
    await page.locator('.crm-scroll-viewport').evaluate(n=>n.scrollLeft=550);
    assert.ok((await page.locator('.crm-scroll-viewport').evaluate(n=>n.scrollLeft))>100,'Desktop viewport must pan horizontally');
    await page.locator('.crm-scroll-viewport').evaluate(n=>n.scrollLeft=0);
-   assert.ok(dimensions.view<dimensions.layout,'Visual viewport must show only part of full desktop workspace');
+   assert.ok(dimensions.view<dimensions.canvas,'Visual viewport must show only part of full desktop workspace');
    if(type===chromium){
      const before=await page.evaluate(()=>({visual:window.visualViewport?.offsetLeft||0,grid:document.querySelector('.il-grid-scroll')?.scrollLeft||0,workspace:document.querySelector('.crm-scroll-viewport')?.scrollLeft||0}));
      const cdp=await context.newCDPSession(page);
-     await cdp.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x:320,y:520}]});
-     for(let i=1;i<=8;i++)await cdp.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:320-i*25,y:520}]});
+     await cdp.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x:320,y:52}]});
+     for(let i=1;i<=8;i++)await cdp.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:320-i*25,y:52}]});
      await cdp.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
      await page.waitForTimeout(350);
      const after=await page.evaluate(()=>({visual:window.visualViewport?.offsetLeft||0,grid:document.querySelector('.il-grid-scroll')?.scrollLeft||0,workspace:document.querySelector('.crm-scroll-viewport')?.scrollLeft||0}));
