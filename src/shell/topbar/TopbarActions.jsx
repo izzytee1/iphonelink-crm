@@ -3,7 +3,7 @@ import PhoneToolbar from './PhoneToolbar.jsx';
 import Notifications from '../notifications/Notifications.jsx';
 import CrmIcon from '../../components/CrmIcons.jsx';
 
-export default function TopbarActions({setWorkspace,unreadMail,settingsOpen,onSettings,phoneController}){
+export default function TopbarActions({setWorkspace,unreadMail,onSettings,phoneController}){
  const [menuOpen,setMenuOpen]=useState(false);
  const menu=useRef(null);
  useEffect(()=>{const close=e=>{if(!menu.current?.contains(e.target))setMenuOpen(false)};document.addEventListener('pointerdown',close);return()=>document.removeEventListener('pointerdown',close)},[]);
