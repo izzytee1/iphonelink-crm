@@ -63,7 +63,7 @@ export default function Comms({open,onToggle,leads,onSelectLead,phoneController,
  function pointerMove(e){if(!drag.current)return;const dx=e.clientX-drag.current.x;if(Math.abs(dx)>5)drag.current.moved=true;if(drag.current.moved)setPosition(Math.max(8,Math.min(window.innerWidth-110,drag.current.old+dx)))}
  function pointerUp(){if(!drag.current)return;cancelClick.current=drag.current.moved;if(drag.current.moved)try{localStorage.setItem('iphonelink.comms.x',String(Math.round(position)))}catch{}drag.current=null}
  return <div className="np-root" style={{'--np-close-x':position+'px'}}>
-  <section className={'np-device '+(open?'np-is-open':'')} style={{left:'clamp(8px, '+position+'px, calc(100vw - min(414px, 46.25vh) - 8px))'}} aria-label="iPhone Communications" aria-hidden={!open}>
+  <section className={'np-device '+(open?'np-is-open':'')}  aria-label="iPhone Communications" aria-hidden={!open}>
    <StatusBar/>
    <main className="np-device-main">
     {screen.id==='all'&&<AllActivity messages={messages} mailbox={mailbox} leads={leads} onMessage={thread} onCall={callDetail} onMail={emailDetail}/>}
