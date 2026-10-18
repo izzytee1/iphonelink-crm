@@ -26,10 +26,12 @@ function EmbeddedEmail({view,mailId,mailbox,onEmail,onBack,onOpen}){
  if(view==='reader'&&thread)return <div className="np-screen np-mail-screen"><div className="np-simple-nav"><NativeButton name="back" label="Inbox" onClick={onBack}/><strong>Mail</strong><NativeButton name="email" label="Reply in Gmail" onClick={()=>onEmail?.([last(thread).peer])}/></div><div className="np-email-reader np-scroll"><h2>{last(thread).subject||'No subject'}</h2>{thread.msgs.map((m,i)=><article key={m.id||i}><div><strong>{m.out?mailAccounts[thread.account]?.name:m.peer}</strong><span>{formatStamp(m.at)}</span></div><small>{m.out?'To':'From'}: {m.peer}</small><p>{String(m.body||'').replace(/<[^>]*>/g,' ').trim()}</p></article>)}<button type="button" className="np-email-reply" onClick={()=>onEmail?.([last(thread).peer])}>Reply in Email</button></div></div>;
  return <div className="np-screen np-mail-screen"><ScreenHeader title="Inbox" subtitle="Email"/><label className="np-search-pill np-mail-search"><NativeIcon name="search"/><input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Search mail"/></label><div className="np-native-list np-scroll">{inbox.filter(t=>(last(t).peer+' '+last(t).subject+' '+last(t).body).toLowerCase().includes(search.toLowerCase())).map(t=><button type="button" key={t.id} className="np-list-row" onClick={()=>onOpen(t.id)}><Avatar name={last(t).peer} size={43} initial/><span className="np-list-copy"><span className="np-list-top"><strong>{last(t).peer||mailAccounts[t.account]?.name||'Email'}</strong><span className="np-meta">{formatStamp(last(t).at)}</span></span><span className="np-preview">{last(t).subject||'No subject'} · {String(last(t).body||'').replace(/<[^>]*>/g,' ').slice(0,80)}</span></span></button>)}{!inbox.length&&<p className="np-empty">Inbox empty</p>}</div><button className="np-email-compose" type="button" onClick={()=>onEmail?.([])}><NativeIcon name="compose"/> Compose</button></div>;
 }
-export default function Comms({open,onToggle,leads,onSelectLead,phoneController,messages,setMessages,mailbox,setMailbox,onEmail,commRequest,onConsumeCommRequest}){
+export default function Comms({theme='light',open,onToggle,leads,onSelectLead,phoneController,messages,setMessages,mailbox,setMailbox,onEmail,commRequest,onConsumeCommRequest}){
  const [screen,setScreen]=useState({id:'all',view:'list'});
  const [notice,setNotice]=useState('');
  const [position,setPosition]=useState(()=>{try{return Math.max(8,Number(localStorage.getItem('iphonelink.comms.x'))||18)}catch{return 18}});
+ const [size,setSize]=useState(()=>{try{const v=JSON.parse(localStorage.getItem('iphonelink.comms.size'));return v&&Number(v.width)>=255&&Number(v.height)>=380?v:null}catch{return null}});
+ const resizing=useRef(null);
  const drag=useRef(null),cancelClick=useRef(false);
  const root=screen.view==='list'&&rootPages.some(([id])=>id===screen.id);
  const showNav=root;
@@ -59,10 +61,13 @@ export default function Comms({open,onToggle,leads,onSelectLead,phoneController,
   else if(commRequest.type==='email')setScreen({id:'email',view:'list'});
   onConsumeCommRequest?.();
  },[commRequest]);
+ function resizeStart(e){if(e.button!==undefined&&e.button!==0)return;const rect=e.currentTarget.closest('.np-device').getBoundingClientRect();resizing.current={x:e.clientX,y:e.clientY,width:rect.width,height:rect.height};e.currentTarget.setPointerCapture?.(e.pointerId);e.preventDefault()}
+ function resizeMove(e){if(!resizing.current)return;const r=resizing.current;const width=Math.round(Math.max(255,Math.min(window.innerWidth-12,r.width+e.clientX-r.x)));const height=Math.round(Math.max(380,Math.min(window.innerHeight-60,r.height+e.clientY-r.y)));setSize({width,height})}
+ function resizeEnd(){if(!resizing.current)return;resizing.current=null;setSize(current=>{if(current)try{localStorage.setItem('iphonelink.comms.size',JSON.stringify(current))}catch{}return current})}
  function pointerDown(e){if(e.button!==undefined&&e.button!==0)return;drag.current={x:e.clientX,old:position,moved:false};e.currentTarget.setPointerCapture?.(e.pointerId)}
  function pointerMove(e){if(!drag.current)return;const dx=e.clientX-drag.current.x;if(Math.abs(dx)>5)drag.current.moved=true;if(drag.current.moved)setPosition(Math.max(8,Math.min(window.innerWidth-110,drag.current.old+dx)))}
  function pointerUp(){if(!drag.current)return;cancelClick.current=drag.current.moved;if(drag.current.moved)try{localStorage.setItem('iphonelink.comms.x',String(Math.round(position)))}catch{}drag.current=null}
- return <div className="np-root" style={{'--np-close-x':position+'px'}}>
+ return <div className="np-root" data-theme={theme} style={{'--np-close-x':position+'px',...(size?{'--np-width':size.width+'px','--np-height':size.height+'px'}:{})}}>
   <section className={'np-device '+(open?'np-is-open':'')}  aria-label="iPhone Communications" aria-hidden={!open}>
    <StatusBar/>
    <main className="np-device-main">
@@ -75,6 +80,7 @@ export default function Comms({open,onToggle,leads,onSelectLead,phoneController,
    {notice&&<div className="np-status-note" role="status">{notice}<NativeButton name="close" label="Dismiss" onClick={()=>setNotice('')} size={16}/></div>}
    {showNav&&<nav className="np-root-tabs" aria-label="Communications sections">{rootPages.map(([id,title,icon])=><button type="button" key={id} className={screen.id===id?'np-active':''} onClick={()=>navigate(id)}><NativeIcon name={icon} size={22}/><span>{title}</span></button>)}</nav>}
    <div className="np-home-indicator" aria-hidden="true"/>
+   <button className="np-resize-handle" type="button" aria-label="Resize Communications" title="Drag to resize Communications" onPointerDown={resizeStart} onPointerMove={resizeMove} onPointerUp={resizeEnd} onPointerCancel={resizeEnd}><NativeIcon name="more" size={18}/></button>
   </section>
   {open&&<button className="np-device-close" type="button" onClick={()=>onToggle(false)} aria-label="Close Communications"><NativeIcon name="close" size={19}/></button>}
   <button type="button" className="np-launch" style={{left:'clamp(8px, '+position+'px, calc(100vw - 140px))'}} onPointerDown={pointerDown} onPointerMove={pointerMove} onPointerUp={pointerUp} onPointerCancel={pointerUp} onClick={()=>{if(cancelClick.current){cancelClick.current=false;return}onToggle(!open)}} aria-expanded={open}><NativeIcon name="message" size={18}/> Comms</button>

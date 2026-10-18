@@ -12,14 +12,14 @@ import usePersistentState from './hooks/usePersistentState.js';
 import usePhoneController from './hooks/usePhoneController.js';
 import useViewportScale from './hooks/useViewportScale.js';
 import { loadMailbox, saveMailbox } from './services/mailStore.js';
-const defaultDisplaySettings = { scale: 1, density: 'comfortable', fontOffset: 0, accent: '#4669A8' };
+const defaultDisplaySettings = { scale: 1, density: 'comfortable', fontOffset: 0, accent: '#4669A8', theme: 'light' };
 
 export default function App() {
   const [leads, setLeads] = usePersistentState('crm.iphonelink.leads.v02', iphoneLeadsSeed);
   const [selectedLeadId, setSelectedLeadId] = useState(1);
   const [expandedLeadId, setExpandedLeadId] = useState(null);
   const [activeCall, setActiveCall] = useState({ phase: 'idle', number: '', name: '', startedAt: 0, muted: false, held: false, speaker: false });
-  const [activePhoneIndex, setActivePhoneIndex] = useState(0);
+  const [activePhoneIndex, setActivePhoneIndex] = usePersistentState('crm.iphonelink.phone.index', 0);
   const [messages, setMessages] = usePersistentState('crm.react.messages', initialMessages);
   const [mailbox, setMailbox] = useState(initialMailbox);
   const [mailHydrated, setMailHydrated] = useState(false);
@@ -116,6 +116,7 @@ export default function App() {
   return (
     <div
       className={`crm-app crm-density-${settings.density || 'comfortable'}`}
+      data-theme={settings.theme === 'dark' ? 'dark' : 'light'}
       style={{
         '--crm-scale': effectiveScale,
         '--crm-layout-width': `${100 / effectiveScale}vw`,
@@ -139,7 +140,7 @@ export default function App() {
       <main className="crm-main">
         <Workspace leads={leads} onAddLead={lead => setLeads(current => [...current, {...lead, id:Math.max(0,...current.map(l=>Number(l.id)||0))+1}])} workspace={workspace} mailbox={mailbox} setMailbox={setMailbox} composeRequest={composeRequest} setComposeRequest={setComposeRequest} selectLead={selectLead} communicationsOpen={communicationsOpen} selectedLeadId={selectedLeadId} expandedLeadId={expandedLeadId} toggleLeadDetails={toggleLeadDetails} globalSearch={globalSearch} leadNotes={leadNotes} saveLeadNotes={saveLeadNotes} setCallRequest={setCallRequest} openMessage={openMessage} requestEmail={requestEmail} phoneController={phoneController} messages={messages} setMessages={setMessages} commRequest={commRequest} setCommRequest={setCommRequest} setCommunicationsOpen={setCommunicationsOpen} setWorkspace={setWorkspace} />
       </main>
-      <Comms open={communicationsOpen} onToggle={setCommunicationsOpen} leads={leads} selectedLeadId={selectedLeadId} onSelectLead={selectLead} phones={crmPhones} phoneController={phoneController} messages={messages} setMessages={setMessages} onEmail={requestEmail} onOpenEmail={() => setWorkspace('email')} commRequest={commRequest} onConsumeCommRequest={() => setCommRequest(null)} mailbox={mailbox} setMailbox={setMailbox} />
+      <Comms theme={settings.theme === 'dark' ? 'dark' : 'light'} open={communicationsOpen} onToggle={setCommunicationsOpen} leads={leads} selectedLeadId={selectedLeadId} onSelectLead={selectLead} phones={crmPhones} phoneController={phoneController} messages={messages} setMessages={setMessages} onEmail={requestEmail} onOpenEmail={() => setWorkspace('email')} commRequest={commRequest} onConsumeCommRequest={() => setCommRequest(null)} mailbox={mailbox} setMailbox={setMailbox} />
       {settingsOpen ? <DisplaySettings settings={settings} setSettings={setSettings} autoScale={autoScale} effectiveScale={effectiveScale} onClose={() => setSettingsOpen(false)} /> : null}
     </div>
   );
