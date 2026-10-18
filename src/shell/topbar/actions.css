@@ -1,14 +1,30 @@
-.crm-topbar-icon {
-  position: relative;
-  display: grid;
-  width: 31px;
-  height: 31px;
-  flex: 0 0 auto;
-  place-items: center;
-  border: 0;
-  border-radius: 6px;
-  background: transparent;
-  color: #667085;
-  cursor: pointer;
-}
-.crm-topbar-icon:hover, .crm-topbar-icon.active { background: #E9EEF4; color: #344054; }
+.crm-topbar-icon{position:relative;display:grid;width:35px;height:35px;flex:0 0 auto;place-items:center;border:0;border-radius:50%;background:transparent;color:var(--crm-muted);cursor:pointer}
+.crm-topbar-icon:hover{background:var(--crm-accent-soft)}
+.crm-phone-toolbar{display:flex;align-items:center;gap:11px;position:relative;min-width:0;flex:0 0 auto}
+.crm-phone-select{position:relative}
+.crm-phone-choice{height:36px;min-width:111px;display:flex;align-items:center;justify-content:center;gap:7px;padding:0 9px;border:1px solid var(--crm-border);background:var(--crm-surface);color:var(--crm-text);border-radius:7px;font-size:12px}
+.crm-phone-dot{display:inline-block;width:7px;height:7px;flex:0 0 7px;border-radius:50%;background:#b9c2cf}
+.crm-phone-online{background:#30a46c}
+.crm-choice-arrow{font-size:16px;color:var(--crm-muted);line-height:1}
+.crm-phone-options{position:absolute;top:calc(100% + 8px);left:0;z-index:70;min-width:230px;padding:5px;border:1px solid var(--crm-border);border-radius:9px;background:var(--crm-surface);box-shadow:0 10px 35px #131d3438}
+.crm-phone-options button{width:100%;display:flex;align-items:center;gap:9px;border:0;background:transparent;padding:11px 9px;border-radius:5px;color:var(--crm-text);font-size:13px;text-align:left}
+.crm-phone-options button:hover{background:var(--crm-accent-soft)}
+.crm-phone-options small{margin-left:auto;font-size:12px;color:var(--crm-muted);white-space:nowrap}
+.crm-selected-mark{font-size:14px;color:var(--crm-accent)}
+.crm-dial-display{display:flex;align-items:center;gap:8px;min-width:0;width:193px;height:36px;padding:0 10px;background:var(--crm-bg);color:var(--crm-muted);border:1px solid var(--crm-border);border-radius:8px}
+.crm-dial-display input{width:100%;min-width:0;border:0;outline:none;background:transparent;color:var(--crm-text);font-family:ui-monospace,'SFMono-Regular',SFMono-Regular,Menlo,monospace;font-size:14px;font-variant-numeric:tabular-nums;letter-spacing:-.5px;font-weight:500}
+.crm-dial-display input::placeholder{font-size:12px;color:var(--crm-faint);letter-spacing:-.3px}
+.crm-phone-buttons{display:flex;align-items:center;gap:5px}
+.crm-phone-buttons button{display:grid;place-items:center;width:30px;height:32px;border:0;border-radius:50%;background:transparent;color:var(--crm-muted)}
+.crm-phone-buttons button:hover{background:var(--crm-accent-soft)}
+.crm-phone-buttons .crm-call-green,.crm-phone-buttons .crm-call-red{width:34px;height:34px;color:#fff}
+.crm-phone-buttons .crm-call-green{background:#30a46c}
+.crm-phone-buttons .crm-call-red{background:#e34b4b}
+.crm-topbar-keypad{position:absolute;right:0;top:calc(100% + 12px);z-index:75;display:grid;grid-template-columns:repeat(3,58px);gap:9px;padding:15px;border-radius:13px;border:1px solid var(--crm-border);background:var(--crm-surface);box-shadow:0 12px 40px #0003}
+.crm-topbar-keypad button{height:48px;border:0;border-radius:50%;background:var(--crm-bg);color:var(--crm-text);font-size:19px;font-weight:400}
+.crm-topbar-keypad .crm-keypad-dismiss{grid-column:1/-1;border-radius:7px;height:31px;font-size:12px;color:var(--crm-muted)}
+.crm-account{position:relative;flex:0 0 auto}
+.crm-avatar-button{display:grid;place-items:center;width:35px;height:35px;border:1px solid var(--crm-border);border-radius:50%;background:var(--crm-accent-soft);color:var(--crm-accent);cursor:pointer}
+.crm-user-menu{position:absolute;top:calc(100% + 13px);right:0;z-index:75;width:208px;padding:6px;background:var(--crm-surface);border:1px solid var(--crm-border);border-radius:8px;box-shadow:0 10px 30px #10182830}
+.crm-user-menu button{width:100%;min-height:38px;display:flex;align-items:center;gap:12px;padding:0 10px;border:0;border-radius:5px;background:transparent;color:var(--crm-text);font-size:13px;text-align:left;white-space:nowrap}
+.crm-user-menu button:hover{background:var(--crm-accent-soft)}
