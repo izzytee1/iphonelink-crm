@@ -85,7 +85,7 @@ async function run(type,mobile){
   await page.getByRole('heading',{name:'Calls'}).waitFor();
   await page.getByRole('button',{name:'Missed',exact:true}).click();
   await page.getByRole('button',{name:'All',exact:true}).first().click();
-  await page.getByRole('button',{name:'Keypad'}).click();
+  await page.getByRole('button',{name:'Keypad',exact:true}).click();
   assert.equal(await page.locator('.np-dial-key').count(),12,'Missing DTMF digits');
   assert.equal(await page.locator('.np-in-call button').count(),6,'Call control positions moved');
   for(const d of '2225555555')await page.locator('.np-dial-key').filter({hasText:new RegExp('^'+d)}).first().click();
