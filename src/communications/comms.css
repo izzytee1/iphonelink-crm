@@ -19,7 +19,8 @@
 .np-launch{pointer-events:auto;position:absolute;bottom:0;width:132px;height:43px;display:flex;align-items:center;justify-content:center;gap:10px;background:#162840;color:white;border:1px solid #263a55;border-bottom:0;border-radius:11px 11px 0 0;font-size:13px;font-weight:500;touch-action:none;user-select:none;cursor:grab}
 .np-icon-button{flex:0 0 auto;display:inline-grid;place-items:center;min-width:28px;min-height:30px;border:0;background:transparent;color:var(--np-blue);padding:2px}
 .np-quiet-round{width:34px;height:34px;border-radius:50%;background:var(--np-raised);color:var(--np-text)}
-.np-round-compose{width:42px;height:42px;border-radius:50%;background:var(--np-blue);color:white}
+.np-compose-entry{color:var(--np-blue)}
+.np-whatsapp-entry{color:#25d366}
 .np-text-action{border:0;background:none;color:var(--np-blue);font-size:15px}
 .np-top-action,.np-wa-top-actions{height:42px;display:flex;align-items:center;justify-content:space-between;gap:6px;padding:2px 18px}
 .np-top-action>div{display:flex;align-items:center;gap:8px}
@@ -115,7 +116,6 @@
 .np-dial-key{aspect-ratio:1;border:0;border-radius:50%;background:#303034;color:#fff;display:flex;align-items:center;justify-content:center;flex-direction:column}
 .np-dial-key strong{font-size:29px;font-weight:400;line-height:1.1}
 .np-dial-key span{font-size:12px;letter-spacing:1.5px}
-.np-keypad-hidden{visibility:hidden}
 .np-in-call{margin-top:auto;display:grid;grid-template-columns:repeat(6,1fr);gap:6px;padding:7px 3px 14px}
 .np-in-call button{grid-column:span 1;display:flex;align-items:center;flex-direction:column;justify-content:center;gap:4px;border:0;border-radius:50%;width:44px;height:44px;background:#343437;color:#fff;margin:auto;font-size:12px}
 .np-in-call button:nth-child(-n+4){grid-column:span 1}

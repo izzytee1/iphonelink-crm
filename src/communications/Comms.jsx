@@ -16,10 +16,9 @@ function AllActivity({messages,mailbox,leads,onMessage,onCall,onMail}){
   const latest=new Map();messages.forEach(m=>{const key=m.channel+':'+digits(m.number);if(!latest.has(key)||m.at>latest.get(key).at)latest.set(key,m)});
   return [...[...latest.values()].map(m=>({type:'message',id:m.channel+':'+digits(m.number),channel:m.channel,number:m.number,at:m.at,preview:m.text})),...calls.map(c=>({type:'call',id:c.id,number:c.number,at:c.at,call:c,preview:c.dir==='missed'?'Missed call':'Phone call'})),...mailbox.filter(t=>t.folder==='inbox').map(t=>({type:'mail',id:t.id,at:last(t).at||0,preview:last(t).subject||'No subject',peer:last(t).peer}))].sort((a,b)=>b.at-a.at);
  },[messages,mailbox]);
- const nameFor=n=>leads.find(l=>leadPhones(l).some(p=>digits(p)===digits(n)))?.name||formatPhone(n);
  return <div className="np-screen np-all"><ScreenHeader title="All" subtitle="Recent activity"/><div className="np-scroll np-native-list">{feed.map(item=><button type="button" key={item.type+item.id} className="np-list-row" onClick={()=>item.type==='call'?onCall(item.call):item.type==='mail'?onMail(item.id):onMessage(item.channel,item.number)}><Avatar name={item.type==='mail'?item.peer:nameFor(item.number)} size={43} initial={item.type==='mail'||Boolean(leads.find(l=>leadPhones(l).some(p=>digits(p)===digits(item.number))))}/><span className="np-list-copy"><span className="np-list-top"><strong>{item.type==='mail'?item.peer||'Email':nameFor(item.number)}</strong><span className="np-meta">{formatStamp(item.at)}</span></span><span className="np-preview">{item.type==='message'?(item.channel==='wa'?'WhatsApp · ':'SMS · '):item.type==='call'?'Call · ':'Email · '}{item.preview}</span></span><NativeIcon name="chevron" size={13}/></button>)}{!feed.length&&<p className="np-empty">No recent activity</p>}</div></div>;
 }
-function EmbeddedEmail({view,mailId,mailbox,setMailbox,onEmail,onBack,onOpen}){
+function EmbeddedEmail({view,mailId,mailbox,onEmail,onBack,onOpen}){
  const [search,setSearch]=useState('');
  const inbox=useMemo(()=>mailbox.filter(t=>t.folder==='inbox').sort((a,b)=>(last(b).at||0)-(last(a).at||0)),[mailbox]);
  const thread=mailbox.find(t=>t.id===mailId);
@@ -72,7 +71,7 @@ export default function Comms({open,onToggle,leads,onSelectLead,phoneController,
     {screen.id==='messages'&&<Messages page={screen.view} number={screen.number} messages={messages} leads={leads} onBack={back} onThread={n=>thread('text',n)} onCompose={()=>setScreen({id:'messages',view:'new'})} onWhatsApp={()=>{setOrigin('messages');setScreen({id:'whatsapp',view:'list'})}} onSave={saveLocal} onCall={keypad}/>}
     {screen.id==='whatsapp'&&<WhatsApp page={screen.view} number={screen.number} messages={messages} leads={leads} onBack={back} onThread={n=>thread('wa',n)} onCompose={()=>setScreen({id:'whatsapp',view:'new'})} onSave={saveLocal} onCall={n=>phoneController.callNumber(n)} onCalls={()=>navigate('calls')}/>}
     {screen.id==='calls'&&<Calls view={screen.view} call={screen.call} leads={leads} calls={calls} phoneController={phoneController} onBack={back} onDetail={callDetail} onMessage={n=>thread('text',n)} onWhatsApp={n=>thread('wa',n)} onContacts={()=>setScreen({id:'calls',view:'contacts'})} onKeypad={()=>keypad('')}/>}
-    {screen.id==='email'&&<EmbeddedEmail view={screen.view} mailId={screen.mailId} mailbox={mailbox} setMailbox={setMailbox} onEmail={onEmail} onBack={back} onOpen={emailDetail}/>}
+    {screen.id==='email'&&<EmbeddedEmail view={screen.view} mailId={screen.mailId} mailbox={mailbox} onEmail={onEmail} onBack={back} onOpen={emailDetail}/>}
    </main>
    {notice&&<div className="np-status-note" role="status">{notice}<NativeButton name="close" label="Dismiss" onClick={()=>setNotice('')} size={16}/></div>}
    {showNav&&<nav className="np-root-tabs" aria-label="Communications sections">{rootPages.map(([id,title,icon])=><button type="button" key={id} className={screen.id===id?'np-active':''} onClick={()=>navigate(id)}><NativeIcon name={icon} size={22}/><span>{title}</span></button>)}</nav>}
