@@ -1,3 +1,5 @@
-# iPhoneLink React v03 — Test report
+# v04 Test Report
 
-Updated source verification and v03 regression assertions. Run `npm run verify`, `npm run build`, and in-browser checks after deployment. The code does not include mock call acknowledgements or claim local drafts were delivered.
+GitHub Actions workflow: `.github/workflows/verify.yml`.
+
+`npm run build` runs source resolution checks and the v04 regression suite before the Vite production compilation. Visual screenshot comparison, iOS Safari gestures, provider calling and real external delivery require separate practical browser/provider testing.

@@ -1,23 +1,19 @@
-# iPhoneLink React v03
+# iPhoneLink React v04
 
-React/Vite CRM preserving the Leads grid and existing Email workspace.
+Vite + React frontend with preserved Leads and Gmail-style Email workspaces.
 
-## Communications v03
+## Communications
+One iPhone-shaped Communications shell. Root sections are All, Messages, Calls, and Email. Full-screen native-style Messages list, New Message and thread views; separate WhatsApp Chats, new-chat picker and thread. Calls includes Recents, Contacts, detail and keypad, using one shared call controller.
 
-A new standalone Communications visual system replaces all previous popup and topbar dialer components. Its four views are **All, Messages, Calls, Email**. It has a movable bottom-edge launcher, local conversation drafts, an integrated Calls keypad with Web Audio DTMF tones, Recents/Contacts, and a compact inbox connected to the existing mailbox store. All CRM buttons have a subtle press animation and click tone.
-
-## Run and test
-
-```bash
+## Run
+```sh
 npm install
 npm run verify
 npm run build
 ```
+Output: `dist/`. CI verifies the production build.
 
 ## Provider and storage limits
+Phone provider: `window.CRMPhoneProvider`. A browser `tel:` handoff does not confirm an active browser call. Sample calls, sample phones and mock messages are not real provider records. DTMF audio does not reach the network unless an attached provider implements `sendTone`.
 
-This build is a browser-based CRM. The phone provider API is `window.CRMPhoneProvider`. Without a compatible provider, the browser's `tel:` handoff is used and the app does not pretend a connected call exists. Web Audio DTMF makes correct audible pairs; transmission during a live call requires a phone provider implementing `sendTone`.
-
-Messages composed in the new panel are stored locally and clearly marked **not delivered**; they are not sent over SMS or WhatsApp without a provider. Email sending in the main Gmail-like workspace also remains local-only. Leads, messages and mailbox storage use existing browser persistence and are not synced between devices. Sample call history is labeled accordingly.
-
-No legacy Communications panel or topbar dialer code is retained.
+New SMS and WhatsApp messages remain in local browser storage, visibly marked **not delivered**. Email sending is local only. Data does not sync across browsers. The mobile shell resembles iOS but is not a native iPhone application.
