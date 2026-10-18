@@ -39,9 +39,7 @@ async function run(type,mobile){
   await page.getByText('New chat',{exact:true}).waitFor();
   await page.getByRole('button',{name:'Close',exact:true}).click();
   await page.locator('.np-wa-list-row').first().click();
-  await page.waitForTimeout(450);
-  console.log('WA thread diagnostics',await page.locator('.np-device-main').innerText().catch(()=>'<no main>'),'errors',errors,'thread count',await page.locator('.np-wa-thread').count());
-  await page.locator('.np-wa-thread').waitFor({timeout:5000});
+  await page.locator('.np-wa-thread').waitFor();
   assert.equal(await page.locator('.np-root-tabs').count(),0,'Root tabs in WhatsApp thread');
   await page.getByRole('button',{name:'Back to WhatsApp chats'}).click();
   await page.getByRole('button',{name:'Messages'}).first().click();

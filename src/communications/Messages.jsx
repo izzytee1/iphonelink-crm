@@ -20,7 +20,7 @@ function Thread({number,messages,leads,onBack,onCall,onSave}){
  const [draft,setDraft]=useState('');const bottom=useRef(null);
  const conversation=useMemo(()=>messages.filter(m=>m.channel==='text'&&digits(m.number)===digits(number)).sort((a,b)=>a.at-b.at),[messages,number]);
  const name=nameFor(leads,number);
- useEffect(()=>bottom.current?.scrollIntoView?.({block:'end'}),[conversation.length,number]);
+ useEffect(()=>{bottom.current?.scrollIntoView?.({block:'end'});},[conversation.length,number]);
  const save=e=>{e.preventDefault();if(!draft.trim())return;onSave('text',number,draft.trim());setDraft('')};
  return <div className="np-screen np-thread">
   <div className="np-thread-nav"><NativeButton name="back" label="Back to messages" onClick={onBack} kind="np-back"/><div className="np-thread-identity"><Avatar name={name} size={37} initial={name!==formatPhone(number)}/><span>{name}</span></div><div className="np-thread-actions"><NativeButton name="phone" label={'Call '+name} onClick={()=>onCall(number)}/><NativeButton name="video" label="Video call unavailable" onClick={()=>{}}/></div></div>
