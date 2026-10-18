@@ -120,7 +120,7 @@
 .gm-compact .gm-message-body {margin-left:0;}
 .gm-compact .gm-read-replies {margin-left:0;}
 .gm-compact .gm-compose {right:2px;width:calc(100% - 4px);height:min(490px,100%);}
-@media(max-width:650px){.gm-mail-app:not(.gm-compact) .gm-sidebar {width:138px;flex-basis:138px;} .gm-mail-app:not(.gm-compact) .gm-folder {font-size:12px;gap:6px;padding-left:8px;} .gm-logo span{font-size:16px;} .gm-mailrow-open{grid-template-columns:minmax(0,1fr) 55px;font-size:12px;} .gm-row-detail {display:none;} .gm-header{padding:0 7px;}.gm-reader-scroll {padding:16px 12px;} .gm-message-body{margin-left:0;}.gm-read-replies{margin-left:0;}}
+
 
 .gm-compact .gm-logo {padding:9px 7px 11px;gap:6px;justify-content:center;}
 .gm-compact .gm-logo svg {width:19px;height:15px;}

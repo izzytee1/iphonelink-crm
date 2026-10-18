@@ -11,6 +11,8 @@ function clamp(value, min, max) {
 
 function readAutoScale() {
   if (typeof window === 'undefined') return 1;
+  // Phones retain the full desktop workspace instead of squeezing it to fit.
+  if (window.innerWidth < 768) return 1;
   const widthFit = window.innerWidth / BASE_WIDTH;
   const heightFit = window.innerHeight / BASE_HEIGHT;
   return clamp(Math.min(widthFit, heightFit), MIN_AUTO_SCALE, MAX_AUTO_SCALE);
