@@ -22,9 +22,10 @@ async function run(type,mobile){
   page.on('pageerror',e=>errors.push(e.message));
   await page.goto(host,{waitUntil:'networkidle'});
   if(mobile){
-   const dimensions=await page.evaluate(()=>({scroll:document.documentElement.scrollWidth,canvas:document.querySelector('.crm-app').getBoundingClientRect().width,view:window.innerWidth}));
+   const dimensions=await page.evaluate(()=>({scroll:document.documentElement.scrollWidth,canvas:document.querySelector('.crm-app').getBoundingClientRect().width,view:window.visualViewport?.width||window.innerWidth,layout:window.innerWidth,small:matchMedia('(max-width:767px)').matches}));
    assert.ok(dimensions.scroll>=1400,'Desktop CRM must extend beyond phone viewport');
    assert.ok(dimensions.canvas>=1400,'CRM must initially be full desktop width');
+   console.log('Mobile viewport:',JSON.stringify(dimensions));
    assert.ok(dimensions.view<500,'Browser must remain phone-sized');
    await page.evaluate(()=>window.scrollTo({left:550,top:0,behavior:'instant'}));
    await page.waitForTimeout(200);

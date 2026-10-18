@@ -2,7 +2,7 @@
    one-finger page panning and two-finger browser pinch zoom. */
 @media (max-width: 767px) {
   html {height:auto; overflow:auto; -webkit-text-size-adjust:100%;}
-  body {width:1440px; min-width:1440px; height:auto; min-height:900px; overflow:visible; touch-action:pan-x pan-y pinch-zoom;}
+  body {width:100%; min-width:0; height:auto; min-height:100dvh; overflow:visible; touch-action:pan-x pan-y pinch-zoom;}
   #root {width:1440px; height:900px; min-width:1440px; min-height:900px;}
   .crm-app {width:1440px; min-width:1440px; height:900px; min-height:900px; zoom:var(--crm-scale); overflow:hidden;}
   .crm-main {min-width:0; overflow:hidden;}
