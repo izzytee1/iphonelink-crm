@@ -89,7 +89,7 @@ async function run(type,mobile){
   assert.equal(await page.locator('.np-dial-key').count(),12,'Missing DTMF digits');
   assert.equal(await page.locator('.np-in-call button').count(),6,'Call control positions moved');
   for(const d of '2225555555')await page.locator('.np-dial-key').filter({hasText:new RegExp('^'+d)}).first().click();
-  const input=await page.getByRole('textbox',{name:'Phone number'}).inputValue();
+  const input=await page.getByRole('textbox',{name:'Phone number',exact:true}).inputValue();
   assert.equal(input,'(222) 555-5555','Dial formatting wrong');
   await page.getByRole('button',{name:'Back to calls'}).click();
   await page.locator('.np-root-tabs button').filter({hasText:'Email'}).click();
