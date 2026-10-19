@@ -36,7 +36,7 @@ check('No old comms CSS',!css.includes('.nc-'));
 check('Apple system typography',css.includes('-apple-system'));
 check('iOS contact avatars',native.includes('np-avatar'));
 check('Local drafts labeled not delivered',comm.includes('Saved locally · not delivered'));
-check('Version 06',brand.includes('v06'));
+check('Version 07',brand.includes('v07'));
 check('No v02 source importer',!existsSync(new URL('../.github/workflows/import-v02.yml',import.meta.url)));
 check('No v04 tests',!existsSync(new URL('./test-iphonelink-v04.mjs',import.meta.url)));
 
@@ -66,7 +66,7 @@ check('Appearance scoped to explicit preference',css.includes('data-theme="light
 check('Gmail retains full sidebar',emailStyles.includes('.gm-sidebar { width:245px;'));
 check('Lead row density bound',leadStyles.includes('height:var(--crm-row-height)'));
 check('No unused clock import',!read('../src/main.jsx').includes('clock.css'));
-console.log(count+' v06 regression checks passed');
+
 
 const floatCall=read('../src/shell/topbar/FloatingCallPanel.jsx');
 const drag=read('../src/hooks/useDraggablePosition.js');
@@ -75,3 +75,13 @@ check('Floating call panel shares controller',floatCall.includes('phoneControlle
 check('Shared drag hook',drag.includes('setPointerCapture')&&drag.includes('localStorage'));
 check('SMS and iMessage distinct threads',msg.includes('m.channel===channel')&&msg.includes('iMessage Demo'));
 check('WhatsApp paper plane',wa.includes('paperplane'));
+
+const topbarCss=read('../src/shell/topbar/actions.css');
+check('Compact matched dark keypad',topbarCss.includes('width:215px')&&topbarCss.includes('linear-gradient(160deg,#242d3d,#141b2a 72%)'));
+check('Even LCD spacing',topbarCss.includes('height:29px;margin:0 10px'));
+check('Real battery only',native.includes('Phone battery information unavailable')&&native.includes('np-battery-bolt'));
+check('Backend telemetry adapter',read('../src/hooks/useDeviceTelemetry.js').includes('getDeviceStatus'));
+check('Native iOS calls and WhatsApp views',call.includes('np-phone-titlebar')&&wa.includes('np-wa-native-footer'));
+check('Native WhatsApp tabs',wa.includes('Communities')&&wa.includes('Updates')&&wa.includes('No favorites saved'));
+
+console.log(count+' v07 regression checks passed');

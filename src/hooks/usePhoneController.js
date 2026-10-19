@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { dialPhone, getPhoneProvider, invokePhoneProvider, subscribePhoneProvider } from '../services/phoneService.js';
 import { leadPhones } from '../utils/leadUtils.js';
 import { playDtmf } from '../communications/sounds.js';
+import useDeviceTelemetry from './useDeviceTelemetry.js';
 
 export function digitsOf(value) {
   return String(value || '').replace(/\D/g, '').slice(-10);
@@ -61,6 +62,7 @@ export default function usePhoneController({
   const [dialInput, setDialInput] = useState('');
   const [seconds, setSeconds] = useState(0);
   const activePhone = phones[activePhoneIndex] || phones[0] || null;
+  const deviceTelemetry=useDeviceTelemetry(activePhone);
 
   const adoptProviderResult = useCallback((result, number = '') => {
     const apply = (value) => {
@@ -215,6 +217,7 @@ export default function usePhoneController({
   return {
     activePhone,
     activePhoneIndex,
+    deviceTelemetry,
     activeCall,
     capabilities,
     dialInput,

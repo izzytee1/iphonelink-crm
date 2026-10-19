@@ -1,7 +1,7 @@
 name: Verify React Build
 on:
   push:
-    branches: [main, v05-desktop-mobile, v06-dark-call-banner]
+    branches: [main, v05-desktop-mobile, v06-dark-call-banner, v07-iphone-polish]
   pull_request:
 
 permissions:
@@ -19,3 +19,4 @@ jobs:
       - run: npm run build
       - run: npx playwright install --with-deps chromium webkit
       - run: npm run test:ui
+      - run: npm run test:visual

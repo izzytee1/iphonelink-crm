@@ -1,3 +1,9 @@
+# v07 Test Report
+
+Test plan: clean npm install, production build, source regression checks, Chromium desktop/mobile and WebKit mobile, and visual screenshots for dialer, keypad, Calls, Messages, WhatsApp.
+
+Unverified until connected: real iPhone battery telemetry, actual telephone provider calls, real iMessage and WhatsApp delivery.
+
 # v06 Test Report
 
 Validation commands: npm run build, npm run test:ui.

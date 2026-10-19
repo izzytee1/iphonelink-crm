@@ -17,6 +17,13 @@ async function run(type,mobile){
   assert.equal(await input.inputValue(),'1 (305) 299-5147','Preserve typed country digit');
   await page.getByRole('button',{name:'Open keypad',exact:true}).click();
   assert.equal(await page.locator('.crm-topbar-keypad > button').count(),12);
+  assert.equal(await page.locator('.crm-topbar-keypad').evaluate(e=>Math.round(e.getBoundingClientRect().width)),215);
+  const spacing=await page.locator('.crm-call-surface').evaluate(e=>{
+    const rect=selector=>e.querySelector(selector).getBoundingClientRect();
+    return {l:rect('.crm-call-input-wrap').left-rect('.crm-call-keypad-trigger').right,
+      r:rect('.crm-call-main-action').left-rect('.crm-call-input-wrap').right};
+  });
+  assert.ok(Math.abs(spacing.l-spacing.r)<=1,'Even number-screen spacing');
   await page.getByRole('button',{name:'Open keypad',exact:true}).click();
   if(!mobile){
    const grip=page.getByRole('button',{name:'Drag phone bar'});
@@ -56,10 +63,10 @@ async function run(type,mobile){
     assert.equal(await page.locator('.np-wa-submit svg').count(),1);
     await page.locator('.np-wa-submit').click();
     assert.ok((await page.locator('.np-status-note').textContent()).includes('not delivered'));
-    assert.equal(await page.locator('.np-status-glyphs svg').count(),1,'Only neutral battery shown');
+    assert.equal(await page.locator('.np-battery').getAttribute('aria-label'),'Phone battery information unavailable','No simulated battery percentages');
   }
   assert.deepEqual(errors,[],'No uncaught page errors');
-  console.log((type===chromium?'Chromium':'WebKit')+(mobile?' mobile':' desktop')+': v06 PASS');
+  console.log((type===chromium?'Chromium':'WebKit')+(mobile?' mobile':' desktop')+': v07 PASS');
  }finally{await browser.close();}
 }
 try{
@@ -67,5 +74,5 @@ try{
  await run(chromium,false);
  await run(chromium,true);
  await run(webkit,true);
- console.log('All v06 UI states PASS');
+ console.log('All v07 UI states PASS');
 }finally{server.kill();}

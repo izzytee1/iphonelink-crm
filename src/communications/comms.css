@@ -76,10 +76,6 @@
 .np-contact-results>button>span:nth-child(2){flex:1;min-width:0;display:flex;flex-direction:column;gap:4px}
 .np-contact-results strong{font-size:15px;font-weight:500;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
 .np-contact-results small{font-size:12px;color:var(--np-sub)}
-.np-call-top{height:45px;flex:0 0 45px;display:flex;align-items:center;justify-content:space-between;padding:2px 16px}
-.np-segments{display:flex;align-items:center;gap:2px;padding:3px;border-radius:10px;background:var(--np-raised)}
-.np-segments button{border:0;border-radius:8px;padding:6px 13px;background:none;color:var(--np-sub);font-size:13px}
-.np-segments button.selected{background:#55545b;color:#fff}
 .np-call-row{display:flex;align-items:center;min-height:64px;border-bottom:1px solid var(--np-line);gap:2px}
 .np-call-main{display:flex;align-items:center;flex:1;gap:11px;min-width:0;padding:8px 0 8px 16px;border:0;background:none;text-align:left;color:var(--np-text)}
 .np-call-copy{display:flex;flex-direction:column;gap:3px;flex:1;min-width:0}
@@ -90,8 +86,6 @@
 .np-call-side{display:flex;flex:0 0 auto;align-items:center;gap:0;padding:0 10px 0 2px}
 .np-call-side .np-icon-button{min-width:31px;min-height:40px;background:transparent;border:0;color:#0a84ff}
 .np-demo-disclaimer{font-size:12px;text-align:center;color:var(--np-sub);padding:12px 20px}
-.np-call-list-actions{display:flex;align-items:center;justify-content:space-around;padding:7px 20px;border-top:1px solid var(--np-line)}
-.np-call-list-actions button{width:40px;height:33px}
 .np-contact-search{margin:10px 15px}
 .np-detail-screen{background:linear-gradient(180deg,#8992a0 0%,#626880 32%,#272449 63%,#15162f 100%)}
 .np-detail-screen .np-simple-nav{background:transparent;border-color:#ffffff24}
@@ -109,11 +103,11 @@
 .np-detail-card p{margin:7px 0;color:#fff}
 .np-keypad-screen{background:var(--np-bg);overflow:auto;padding:0 10px}
 .np-keypad-back{height:45px;display:flex;align-items:center}
-.np-keypad-number{min-height:68px;display:flex;align-items:center;justify-content:center;gap:9px;margin:4px 15px 0;color:var(--np-sub)}
-.np-keypad-number input{width:235px;max-width:calc(100% - 62px);min-width:0;text-align:center;border:0;background:transparent;color:var(--np-text);font-family:ui-monospace,'SFMono-Regular',SFMono-Regular,Menlo,monospace;font-size:22px;font-weight:500;outline:none;font-variant-numeric:tabular-nums;letter-spacing:-.65px}
+.np-keypad-number{min-height:64px;display:flex;align-items:center;justify-content:center;gap:8px;max-width:290px;margin:9px auto 0;padding:0 9px;border:1px solid #53627455;border-radius:13px;background:linear-gradient(160deg,#222d3f,#1b2536);color:#cbd5e1}
+.np-keypad-number input{flex:1;width:210px;max-width:calc(100% - 40px);min-width:0;text-align:center;border:0;background:transparent;color:#f8fafc;font-family:'Share Tech Mono',monospace;font-size:19px;font-weight:400;outline:none;font-variant-numeric:tabular-nums;letter-spacing:-.65px}
 .np-keypad-number input::placeholder{font-size:15px;font-family:-apple-system,BlinkMacSystemFont,Arial,sans-serif;color:var(--np-sub)}
 .np-keypad-status{text-align:center;color:var(--np-sub);font-size:12px;min-height:23px}
-.np-keypad-grid{display:grid;grid-template-columns:repeat(3,minmax(0,80px));justify-content:center;gap:12px 19px;margin:5px auto 12px}
+.np-keypad-grid{display:grid;grid-template-columns:repeat(3,minmax(0,75px));justify-content:center;gap:9px 17px;margin:8px auto 9px}
 .np-dial-key{aspect-ratio:1;border:0;border-radius:50%;background:#303034;color:#fff;display:flex;align-items:center;justify-content:center;flex-direction:column}
 .np-dial-key strong{font-size:29px;font-weight:400;line-height:1.1}
 .np-dial-key span{font-size:12px;letter-spacing:1.5px}
@@ -132,9 +126,6 @@
 .np-wa-compose{color:#25d366}
 .np-wa-top-actions{padding:2px 15px}
 .np-wa-top-actions>span{flex:1}
-.np-wa-footer{height:60px;display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid #233139}
-.np-wa-footer button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border:0;background:transparent;color:#9ca5aa;font-size:12px}
-.np-wa-footer button.np-wa-current{color:#25d366}
 .np-wa-section-caption{padding:10px 18px;color:var(--np-sub);font-size:12px}
 .np-wa-thread-header{height:54px;flex:0 0 54px;display:flex;align-items:center;gap:5px;padding:0 8px;background:#202c33}
 .np-wa-thread-header strong{flex:1;min-width:0;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -164,7 +155,7 @@
 .np-email-reply{margin-top:11px;padding:10px;border-radius:8px;background:var(--np-raised);color:var(--np-blue);border:0}
 .np-email-compose{align-self:flex-end;display:flex;align-items:center;gap:9px;margin:7px 15px;border:0;border-radius:20px;background:var(--np-blue);color:#fff;padding:10px 16px}
 .np-status-note{position:absolute;bottom:23px;left:15px;right:15px;display:flex;align-items:center;justify-content:space-between;gap:6px;border-radius:10px;background:#343438;padding:7px 10px;color:#fff;font-size:12px;z-index:2}
-.np-root[data-theme="light"]{--np-bg:#fff;--np-surface:#fafafa;--np-raised:#f0f0f2;--np-text:#101014;--np-sub:#8e8e93;--np-line:#e6e6e8;--np-blue:#007aff;--np-bubble-in:#e9e9eb;--np-bubble-out:#007aff}.np-root[data-theme="light"] .np-status,.np-root[data-theme="light"] .np-screen,.np-root[data-theme="light"] .np-home-indicator{background:var(--np-bg)}.np-root[data-theme="light"] .np-segments button.selected{background:#fff;color:#111}.np-root[data-theme="light"] .np-dial-key{background:#e5e5e9;color:#111}.np-root[data-theme="light"] .np-in-call button{background:#e5e5e9;color:#111}.np-root[data-theme="light"] .np-in-call .np-dial-green,.np-root[data-theme="light"] .np-in-call .np-dial-red{color:#fff}.np-root[data-theme="light"] .np-wa-screen{--np-text:#111b21;--np-sub:#667781;background:#fff;--np-line:#e9edef}.np-root[data-theme="light"] .np-wa-screen .np-search-pill{background:#f0f2f5}.np-root[data-theme="light"] .np-wa-screen .np-wa-footer{border-color:#e9edef}.np-root[data-theme="light"] .np-wa-thread-header{background:#f0f2f5}.np-root[data-theme="light"] .np-wa-thread-header .np-icon-button{color:#49616d}.np-root[data-theme="light"] .np-wa-wallpaper{background-color:#e6ddd3;background-image:radial-gradient(circle,#fff4 8%,transparent 9%);background-size:45px 45px}.np-root[data-theme="light"] .np-wa-bubble{background:#fff;color:#202c33}.np-root[data-theme="light"] .np-wa-out .np-wa-bubble{background:#d9fdd3;color:#202c33}.np-root[data-theme="light"] .np-wa-bubble small{color:#687b75}.np-root[data-theme="light"] .np-wa-date{background:#f6f8f9;color:#72858d}.np-root[data-theme="light"] .np-wa-input{background:#f5f6f7}.np-root[data-theme="light"] .np-wa-input label{background:#fff;color:#667781}.np-root[data-theme="light"] .np-wa-input input{color:#111b21}.np-root[data-theme="light"] .np-wa-screen .np-list-row:after{border-color:#e9edef}
+.np-root[data-theme="light"]{--np-bg:#fff;--np-surface:#fafafa;--np-raised:#f0f0f2;--np-text:#101014;--np-sub:#8e8e93;--np-line:#e6e6e8;--np-blue:#007aff;--np-bubble-in:#e9e9eb;--np-bubble-out:#007aff}.np-root[data-theme="light"] .np-status,.np-root[data-theme="light"] .np-screen,.np-root[data-theme="light"] .np-home-indicator{background:var(--np-bg)}.np-root[data-theme="light"] .np-dial-key{background:#e5e5e9;color:#111}.np-root[data-theme="light"] .np-in-call button{background:#e5e5e9;color:#111}.np-root[data-theme="light"] .np-in-call .np-dial-green,.np-root[data-theme="light"] .np-in-call .np-dial-red{color:#fff}.np-root[data-theme="light"] .np-wa-screen{--np-text:#111b21;--np-sub:#667781;background:#fff;--np-line:#e9edef}.np-root[data-theme="light"] .np-wa-screen .np-search-pill{background:#f0f2f5}.np-root[data-theme="light"] .np-wa-thread-header{background:#f0f2f5}.np-root[data-theme="light"] .np-wa-thread-header .np-icon-button{color:#49616d}.np-root[data-theme="light"] .np-wa-wallpaper{background-color:#e6ddd3;background-image:radial-gradient(circle,#fff4 8%,transparent 9%);background-size:45px 45px}.np-root[data-theme="light"] .np-wa-bubble{background:#fff;color:#202c33}.np-root[data-theme="light"] .np-wa-out .np-wa-bubble{background:#d9fdd3;color:#202c33}.np-root[data-theme="light"] .np-wa-bubble small{color:#687b75}.np-root[data-theme="light"] .np-wa-date{background:#f6f8f9;color:#72858d}.np-root[data-theme="light"] .np-wa-input{background:#f5f6f7}.np-root[data-theme="light"] .np-wa-input label{background:#fff;color:#667781}.np-root[data-theme="light"] .np-wa-input input{color:#111b21}.np-root[data-theme="light"] .np-wa-screen .np-list-row:after{border-color:#e9edef}
 @media (max-width:600px){.np-device{width:var(--np-width,min(calc(100vw - 8px),calc((100dvh - 57px)*.461)));bottom:47px;left:50%;transform:translate(-50%,12px) scale(.97);border-width:2px;border-radius:44px;max-height:calc(100dvh - 57px)}.np-device.np-is-open{transform:translateX(-50%)}.np-device-close{top:8px;right:9px;left:auto;bottom:auto;width:27px;height:27px;z-index:3;background:#45454c}.np-launch{height:39px}.np-keypad-grid{grid-template-columns:repeat(3,minmax(0,70px));gap:9px 17px}.np-keypad-number{min-height:55px}.np-keypad-back{height:40px}.np-keypad-status{min-height:17px}.np-in-call{padding-bottom:9px}.np-in-call button{width:40px;height:40px}}
 @media (max-height:740px){.np-keypad-grid{grid-template-columns:repeat(3,56px);gap:7px 18px}.np-keypad-grid .np-dial-key strong{font-size:24px}.np-keypad-number{min-height:43px}.np-in-call button{width:37px;height:37px}.np-in-call button:nth-child(n+5){width:44px;height:44px}}
 @media (prefers-reduced-motion:reduce){.np-device{transition:none}}
@@ -177,3 +168,52 @@
 .np-channel-tabs button{border:0;background:transparent;color:var(--np-sub);font-size:12px;padding:4px 7px;border-radius:5px}
 .np-channel-tabs button.np-current{color:var(--np-text);background:var(--np-raised)}
 .np-channel-blue{color:#0a84ff}.np-channel-green{color:#34c759}
+
+/* Phone battery geometry tracks iOS proportions. Values come from a connected provider only. */
+.np-battery{position:relative;display:flex;align-items:center;justify-content:center;width:27px;height:13px;border:1px solid #b0b2ba;border-radius:4px;box-sizing:border-box}
+.np-battery:after{content:'';position:absolute;right:-4px;top:4px;width:2px;height:4px;background:#a2a6ad;border-radius:0 2px 2px 0}
+.np-battery-live{border-color:var(--np-battery-color)}
+.np-battery-fill{position:absolute;left:1px;top:1px;height:9px;max-width:calc(100% - 2px);border-radius:2px;background:var(--np-battery-color)}
+.np-battery-percent{position:relative;font-size:11px;font-weight:750;letter-spacing:-.6px;line-height:1;color:#14171d;text-shadow:0 1px #fff4}
+.np-battery-unavailable .np-battery-percent{font-size:12px;font-weight:500;color:var(--np-text);text-shadow:none}
+.np-battery-bolt{position:absolute;right:-7px;top:0;filter:drop-shadow(0 1px 1px #10210eaa)}
+.np-root[data-theme="light"] .np-battery-unavailable{border-color:#6e7480}
+.np-root[data-theme="light"] .np-battery-unavailable:after{background:#6e7480}
+
+.np-phone-titlebar{height:49px;flex:0 0 49px;display:grid;grid-template-columns:46px 1fr 46px;align-items:center;justify-items:center;padding:0 10px;position:relative}
+.np-phone-titlebar h1{margin:0;font-weight:600;font-size:15px;letter-spacing:-.3px}
+.np-phone-titlebar .np-icon-button{color:var(--np-blue)}
+.np-phone-filter{position:relative}
+.np-phone-filter-menu{position:absolute;right:0;top:37px;z-index:3;min-width:135px;background:var(--np-raised);border:1px solid var(--np-line);border-radius:12px;box-shadow:0 12px 25px #0004;padding:6px}
+.np-phone-filter-menu button{width:100%;display:block;text-align:left;padding:9px 12px;color:var(--np-text);border:0;border-radius:7px;background:transparent;font-size:13px}
+.np-phone-filter-menu button[aria-pressed="true"]{color:var(--np-blue)}
+.np-native-phone-tabs{height:62px;flex:0 0 62px;display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--np-line);background:var(--np-bg)}
+.np-native-phone-tabs button{display:flex;align-items:center;justify-content:center;flex-direction:column;gap:2px;min-width:0;border:0;background:transparent;color:var(--np-sub);font-size:11px}
+.np-native-phone-tabs button.np-native-current{color:var(--np-blue)}
+
+.np-wa-chips{display:flex;gap:7px;padding:1px 13px 10px;overflow-x:auto;scrollbar-width:none;flex:0 0 auto}
+.np-wa-chips::-webkit-scrollbar{display:none}
+.np-wa-chips button{flex:0 0 auto;border:0;border-radius:14px;padding:5px 11px;background:#25292c;color:#b3b7bc;font-size:12px}
+.np-wa-chips button.np-wa-selected{background:#143d2b;color:#6cd99c}
+.np-wa-native-footer{height:59px;flex:0 0 59px;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));border-top:1px solid #233139;background:var(--np-bg)}
+.np-wa-native-footer button{display:flex;align-items:center;justify-content:center;flex-direction:column;gap:2px;border:0;background:transparent;color:#929da5;min-width:0;font-size:11px;padding:3px}
+.np-wa-native-footer button.np-wa-current{color:#2fc66a}
+.np-wa-placeholder{display:flex;flex:1;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:30px;color:var(--np-sub);text-align:center}
+.np-wa-placeholder h2{font-size:22px;font-weight:600;color:var(--np-text);margin:0}
+.np-wa-placeholder p{font-size:13px;max-width:235px;margin:0}
+.np-wa-encryption{font-size:12px;text-align:center;line-height:1.4;color:#6c917f;margin:20px 15px}
+.np-wa-compose{background:#20bc62!important;color:#fff!important;width:30px!important;height:30px!important;border-radius:50%!important}
+
+/* Connected-provider battery and WhatsApp navigation share native iPhone geometry in either theme. */
+.np-root[data-theme="light"] .np-battery-unavailable .np-battery-percent{color:#414753}
+.np-root[data-theme="light"] .np-keypad-number{background:linear-gradient(165deg,#e9eef6,#e1e8f1);border-color:#aebccc}
+.np-root[data-theme="light"] .np-keypad-number input{color:#243044}
+.np-root[data-theme="light"] .np-keypad-number>svg{color:#66788d}
+.np-root[data-theme="light"] .np-keypad-number input::placeholder{color:#77869b}
+.np-wa-chips button{font:inherit;font-size:12px}
+.np-root[data-theme="light"] .np-wa-chips button{background:#f1f2f4;color:#7e868e}
+.np-root[data-theme="light"] .np-wa-chips button.np-wa-selected{background:#e1f5ea;color:#168d4e}
+.np-root[data-theme="light"] .np-wa-native-footer{border-top-color:#e7e9ec}
+.np-root[data-theme="light"] .np-wa-native-footer button{color:#727e86}
+.np-root[data-theme="light"] .np-wa-native-footer button.np-wa-current{color:#178c4d}
+.np-root[data-theme="light"] .np-wa-encryption{color:#4c8f71}

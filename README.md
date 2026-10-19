@@ -1,4 +1,4 @@
-# iPhoneLink React v06
+# iPhoneLink React v07
 
 React/Vite CRM with desktop-sized Leads and Gmail-style Email workspaces, plus the iPhone-shaped Communications window.
 

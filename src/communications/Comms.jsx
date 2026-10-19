@@ -35,7 +35,7 @@ export default function Comms({theme='light',open,onToggle,leads,onSelectLead,ph
  const resizing=useRef(null);
  const drag=useRef(null),cancelClick=useRef(false);
  const root=screen.view==='list'&&rootPages.some(([id])=>id===screen.id);
- const showNav=root;
+ const showNav=root&&screen.id!=='calls';
  const navigate=id=>{setScreen({id,view:'list'});setNotice('')};
  const identify=n=>{const lead=leads.find(l=>leadPhones(l).some(p=>digits(p)===digits(n)));if(lead)onSelectLead?.(lead.id)};
  const thread=(channel,number)=>{
@@ -70,12 +70,12 @@ export default function Comms({theme='light',open,onToggle,leads,onSelectLead,ph
  function pointerUp(){if(!drag.current)return;cancelClick.current=drag.current.moved;if(drag.current.moved)try{localStorage.setItem('iphonelink.comms.x',String(Math.round(position)))}catch{}drag.current=null}
  return createPortal(<div className="np-root" data-theme={theme} style={{'--np-close-x':position+'px',...(size?{'--np-width':size.width+'px','--np-height':size.height+'px'}:{})}}>
   <section className={'np-device '+(open?'np-is-open':'')}  aria-label="iPhone Communications" aria-hidden={!open}>
-   <StatusBar/>
+   <StatusBar telemetry={phoneController.deviceTelemetry}/>
    <main className="np-device-main">
     {screen.id==='all'&&<AllActivity messages={messages} mailbox={mailbox} leads={leads} onMessage={thread} onCall={callDetail} onMail={emailDetail}/>}
     {screen.id==='messages'&&<Messages page={screen.view} number={screen.number} channel={screen.channel||'text'} messages={messages} leads={leads} onBack={back} onThread={thread} onCompose={()=>setScreen({id:'messages',view:'new'})} onWhatsApp={()=>setScreen({id:'whatsapp',view:'list'})} onSave={saveLocal} onCall={keypad}/>}
     {screen.id==='whatsapp'&&<WhatsApp page={screen.view} number={screen.number} messages={messages} leads={leads} onBack={back} onThread={n=>thread('wa',n)} onCompose={()=>setScreen({id:'whatsapp',view:'new'})} onSave={saveLocal} onCall={n=>phoneController.callNumber(n)} onCalls={()=>navigate('calls')}/>}
-    {screen.id==='calls'&&<Calls view={screen.view} call={screen.call} leads={leads} calls={calls} phoneController={phoneController} onBack={back} onDetail={callDetail} onMessage={n=>thread('text',n)} onWhatsApp={n=>thread('wa',n)} onContacts={()=>setScreen({id:'calls',view:'contacts'})} onKeypad={()=>keypad('')}/>}
+    {screen.id==='calls'&&<Calls view={screen.view} call={screen.call} leads={leads} calls={calls} phoneController={phoneController} onBack={back} onDetail={callDetail} onMessage={n=>thread('text',n)} onWhatsApp={n=>thread('wa',n)} onContacts={()=>setScreen({id:'calls',view:'contacts'})} onKeypad={()=>keypad('')} onExit={()=>navigate('all')}/>}
     {screen.id==='email'&&<EmbeddedEmail view={screen.view} mailId={screen.mailId} mailbox={mailbox} onEmail={onEmail} onBack={back} onOpen={emailDetail}/>}
    </main>
    {notice&&<div className="np-status-note" role="status">{notice}<NativeButton name="close" label="Dismiss" onClick={()=>setNotice('')} size={16}/></div>}

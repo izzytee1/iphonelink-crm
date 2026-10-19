@@ -15,6 +15,8 @@ const art={
  camera:<><path d="M4 7h4l1.5-2h5L16 7h4v12H4z"/><circle cx="12" cy="13" r="3.2"/></>,
  chevron:<path d="m9 5 7 7-7 7"/>, resize:<path d="m10 19 9-9m-5 9h5v-5M6 19 19 6"/>,
  more:<><circle cx="5" cy="12" r="1.25"/><circle cx="12" cy="12" r="1.25"/><circle cx="19" cy="12" r="1.25"/></>,
+ updates:<><circle cx="12" cy="12" r="8"/><path d="m6 6 2-2M16 4l2 2M12 7v5l3 2"/></>,
+ community:<><circle cx="8" cy="9" r="3"/><circle cx="17" cy="9" r="3"/><path d="M2 21c0-4 2-6 6-6s6 2 6 6M12 17c1-1 3-2 5-2 4 0 5 2 5 6"/></>,
  user:<><circle cx="12" cy="8" r="4"/><path d="M4.5 21c0-5 3-7.5 7.5-7.5s7.5 2.5 7.5 7.5"/></>,
  keypad:<>{[5,12,19].flatMap(x=>[5,12,19].map(y=><circle key={x+'-'+y} cx={x} cy={y} r="1.5" fill="currentColor" stroke="none"/>))}</>,
  all:<><rect x="3" y="3" width="8" height="8" rx="2"/><rect x="13" y="3" width="8" height="8" rx="2"/><rect x="3" y="13" width="8" height="8" rx="2"/><rect x="13" y="13" width="8" height="8" rx="2"/></>,
@@ -28,6 +30,25 @@ const art={
 export function NativeIcon({name,size=21,className='',strokeWidth=1.8}){return <svg className={className} width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{art[name]||art.more}</svg>}
 export function Avatar({name='',size=48,initial=false}){const n=String(name||'').trim();const letter=n&&!/^\+?[\d(\s-]+$/.test(n)?n[0]?.toUpperCase():'';return <span className={'np-avatar'+(initial&&letter?' np-initial':'')} style={{width:size,height:size,fontSize:Math.round(size*.46)}} aria-hidden="true">{initial&&letter?letter:<svg viewBox="0 0 64 64" width="100%" height="100%" aria-hidden="true"><circle cx="32" cy="24" r="11" fill="#fff"/><path d="M6 57c2-12 11-18 26-18s24 6 26 18a31 31 0 0 1-52 0" fill="#fff"/></svg>}</span>}
 export function NativeButton({name,label,onClick,kind='',size=21}){return <button className={'np-icon-button '+kind} type="button" onClick={onClick} aria-label={label} title={label}><NativeIcon name={name} size={size}/></button>}
-export function StatusBar(){const [now,setNow]=React.useState(()=>new Date());React.useEffect(()=>{const id=setInterval(()=>setNow(new Date()),30000);return()=>clearInterval(id)},[]);return <div className="np-status" aria-label="Phone-style status graphics"><span>{now.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',hour12:true}).replace(/\s?(AM|PM)$/,'')}</span><div className="np-status-glyphs" aria-label="Battery status unavailable"><svg width="26" height="14" viewBox="0 0 26 14" role="img" aria-label="Battery data unavailable"><rect x="1" y="1" width="21" height="12" rx="4" stroke="currentColor" strokeWidth="1.5" fill="none"/><path d="M23 5v4" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg></div></div>}
+export function StatusBar({telemetry}){
+ const [now,setNow]=React.useState(()=>new Date());
+ React.useEffect(()=>{const id=setInterval(()=>setNow(new Date()),30000);return()=>clearInterval(id)},[]);
+ const known=Number.isFinite(telemetry?.percent);
+ const level=known?telemetry.percent:0;
+ const charging=known&&telemetry.charging;
+ const color=telemetry?.lowPower?'#ffdb38':charging?'#34c759':known&&level<20?'#ff453a':'#f5f5f7';
+ return <div className="np-status" aria-label="iPhone status bar">
+  <span>{now.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',hour12:true}).replace(/\s?(AM|PM)$/,'')}</span>
+  <div className="np-status-glyphs">
+    <div className={'np-battery'+(known?' np-battery-live':' np-battery-unavailable')} style={{'--np-battery-color':color}}
+       role="img" aria-label={known?'Phone battery '+level+' percent'+(charging?', charging':'')+(telemetry.lowPower?', low power mode':''):'Phone battery information unavailable'}>
+      <span className="np-battery-fill" style={{width:known?level+'%':'0%'}}/>
+      <span className="np-battery-percent">{known?level:'—'}</span>
+      {charging&&<svg className="np-battery-bolt" width="9" height="12" viewBox="0 0 10 16" aria-hidden="true">
+        <path d="M6.4 0 1.2 8.8h3.3L3.6 16 9.1 6.8H5.8z" fill="#ffffff"/></svg>}
+    </div>
+  </div>
+ </div>;
+}
 export function formatStamp(value){if(!value)return '';const d=new Date(value);if(Number.isNaN(+d))return '';const today=new Date();return d.toDateString()===today.toDateString()?d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'}):d.toLocaleDateString('en-US',{month:'short',day:'numeric'})}
 export function digits(value){return String(value||'').replace(/\D/g,'').slice(-10)}
