@@ -5,6 +5,8 @@ export const crmPhones = [
 ];
 
 const messageSeed = [
+  ['imessage','4153097723','in','Demo iMessage conversation · sample only',4,1],
+  ['imessage','2125549031','out','This is an iMessage demo, saved only in CRM.',8,1],
   ['text','4153097723','out','Hi Sandra, sending the Zoom link for today’s demo.',310,1,false,305],
   ['text','4153097723','in','Perfect, thanks! Can we cover SSO too?',296,1],
   ['text','4153097723','out','Absolutely — I’ll add it to the agenda.',290,1,false,288],

@@ -1,3 +1,13 @@
+# v06 Test Report
+
+Validation commands: npm run build, npm run test:ui.
+
+- Source regression: 48 checks.
+- Build: Vite React production bundle.
+- Browser: Chromium desktop (1440 × 900); Chromium mobile (390 × 844); WebKit mobile (390 × 844).
+- v06 coverage: 10/11-digit entry, 12-key dropdown, dark call states, draggable/dockable banner, floating call panel, SMS/iMessage and WhatsApp presentation.
+- Live connected phone hardware, actual voice provider, and real telemetry are not represented by these simulated UI tests.
+
 # v05 regression test report
 
 The GitHub Actions `Verify React Build` workflow runs `npm run build` (source verification and v05 regression assertions) and `npm run test:ui` (desktop Chromium, mobile Chromium, mobile WebKit).

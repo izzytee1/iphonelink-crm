@@ -21,6 +21,13 @@ export default function App() {
   const [activeCall, setActiveCall] = useState({ phase: 'idle', number: '', name: '', startedAt: 0, muted: false, held: false, speaker: false });
   const [activePhoneIndex, setActivePhoneIndex] = usePersistentState('crm.iphonelink.phone.index', 0);
   const [messages, setMessages] = usePersistentState('crm.react.messages', initialMessages);
+  // Add clearly labeled demo-only iMessage examples for existing saved local messages.
+  useEffect(()=>{
+    setMessages(current=>{
+      if(current.some(m=>m.channel==='imessage'))return current;
+      return [...current,...initialMessages.filter(m=>m.channel==='imessage')];
+    });
+  },[setMessages]);
   const [mailbox, setMailbox] = useState(initialMailbox);
   const [mailHydrated, setMailHydrated] = useState(false);
   const [workspace, setWorkspace] = useState('leads');

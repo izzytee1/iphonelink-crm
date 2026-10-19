@@ -19,7 +19,7 @@ export function validNumber(value) {
 export function formatPhone(value) {
   const raw = String(value || '').replace(/\D/g, '');
   const digits = raw.length === 11 && raw[0] === '1' ? raw.slice(1) : raw;
-  if (digits.length === 10) return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`;
+  if (digits.length === 10) return (raw.length === 11 ? "1 " : "") + `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`;
   return String(value || '');
 }
 
@@ -31,7 +31,7 @@ export function formatPhonePartial(value) {
   let output = raw.length < 4 ? raw : `(${raw.slice(0, 3)})`;
   if (raw.length >= 4) output += ` ${raw.slice(3, 6)}`;
   if (raw.length >= 7) output += `-${raw.slice(6, 10)}`;
-  return output;
+  return country ? '1 ' + output : output;
 }
 
 export function leadByNumber(leads, number) {

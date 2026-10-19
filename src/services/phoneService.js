@@ -2,6 +2,16 @@ export function getPhoneProvider() {
   return window.CRMPhoneProvider || null;
 }
 
+// The sample phone list is never proof of a connected device.
+export function isPhoneConnected(phone) {
+  const provider = getPhoneProvider();
+  if (!provider || !phone?.id) return false;
+  try {
+    const devices = typeof provider.getDevices === 'function' ? provider.getDevices() : provider.devices;
+    return Array.isArray(devices) && devices.some(device => device?.id === phone.id && device.connected === true);
+  } catch { return false; }
+}
+
 export function subscribePhoneProvider(handler) {
   const provider = getPhoneProvider();
   if (!provider || typeof provider.subscribe !== 'function') return () => {};

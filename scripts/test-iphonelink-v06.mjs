@@ -36,7 +36,7 @@ check('No old comms CSS',!css.includes('.nc-'));
 check('Apple system typography',css.includes('-apple-system'));
 check('iOS contact avatars',native.includes('np-avatar'));
 check('Local drafts labeled not delivered',comm.includes('Saved locally · not delivered'));
-check('Version 05',brand.includes('v05'));
+check('Version 06',brand.includes('v06'));
 check('No v02 source importer',!existsSync(new URL('../.github/workflows/import-v02.yml',import.meta.url)));
 check('No v04 tests',!existsSync(new URL('./test-iphonelink-v04.mjs',import.meta.url)));
 
@@ -52,7 +52,7 @@ check('Mobile desktop 1440px canvas',viewport.includes('min-width:1440px')&&view
 check('Mobile auto fit removed',scale.includes('window.innerWidth < 768) return 1'));
 check('Mobile manual UI scale supported',viewport.includes('zoom:var(--crm-scale)'));
 check('Topbar phone switcher',phoneToolbar.includes('Select phone'));
-check('Topbar dialer',phoneToolbar.includes('Topbar phone number')&&phoneToolbar.includes('Start call')&&phoneToolbar.includes('End call'));
+check('Topbar dark call control',phoneToolbar.includes('Topbar phone number')&&phoneToolbar.includes('Start call')&&phoneToolbar.includes('End or decline call')&&phoneToolbar.includes('crm-call-surface'));
 check('Topbar DTMF and popup',phoneToolbar.includes('phoneController.sendTone')&&phoneToolbar.includes('Open keypad'));
 check('Settings hidden in user avatar',topbar.includes('User menu')&&topbar.includes('Display settings')&&!topbar.includes('crmDisplaySettingsOpen'));
 check('Appearance switch',appSettings.includes("update('theme',value)"));
@@ -66,4 +66,12 @@ check('Appearance scoped to explicit preference',css.includes('data-theme="light
 check('Gmail retains full sidebar',emailStyles.includes('.gm-sidebar { width:245px;'));
 check('Lead row density bound',leadStyles.includes('height:var(--crm-row-height)'));
 check('No unused clock import',!read('../src/main.jsx').includes('clock.css'));
-console.log(count+' v05 regression checks passed');
+console.log(count+' v06 regression checks passed');
+
+const floatCall=read('../src/shell/topbar/FloatingCallPanel.jsx');
+const drag=read('../src/hooks/useDraggablePosition.js');
+check('Draggable phone bar',phoneToolbar.includes('useDraggablePosition')&&phoneToolbar.includes('Return phone bar to topbar'));
+check('Floating call panel shares controller',floatCall.includes('phoneController')&&floatCall.includes('useDraggablePosition'));
+check('Shared drag hook',drag.includes('setPointerCapture')&&drag.includes('localStorage'));
+check('SMS and iMessage distinct threads',msg.includes('m.channel===channel')&&msg.includes('iMessage Demo'));
+check('WhatsApp paper plane',wa.includes('paperplane'));

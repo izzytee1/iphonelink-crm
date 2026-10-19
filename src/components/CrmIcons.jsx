@@ -24,6 +24,7 @@ const paths = {
   contacts: <><circle cx="9" cy="8" r="3"/><path d="M3 20a6 6 0 0 1 12 0M18 7h4M18 12h4M18 17h4"/></>,
   send: <><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></>,
   endcall: <path d="M3 15.5v-3c0-1.2 4.1-4.4 9-4.4s9 3.2 9 4.4v3l-4.3.5-1.5-3.1a17 17 0 0 0-6.4 0l-1.5 3.1Z"/>,
+  resize: <><path d="m10 19 9-9m-5 9h5v-5M6 19 19 6"/></>,
   close: <path d="m6 6 12 12M18 6 6 18"/>,
 };
 
