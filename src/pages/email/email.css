@@ -1,24 +1,24 @@
 /* Gmail-proportioned mailbox. Scoped to EmailClient; no global CRM style overrides. */
-.gm-mail-app { --gm-gray:#5f6368; --gm-blue:#0b57d0; --gm-surface:var(--crm-surface); --gm-back:var(--crm-bg); --gm-text:var(--crm-text); --gm-muted:var(--crm-muted); --gm-line:var(--crm-border-soft); position:relative; height:100%; min-height:0; display:flex; overflow:hidden; border:1px solid var(--gm-line); border-radius:10px; background:var(--gm-surface); color:var(--gm-text); font-family:Roboto,Arial,sans-serif; font-size:14px; }
+.gm-mail-app { --gm-gray:#5f6368; --gm-blue:#0b57d0; --gm-surface:var(--crm-surface); --gm-back:var(--crm-bg); --gm-text:var(--crm-text); --gm-muted:var(--crm-muted); --gm-line:var(--crm-border-soft); --gm-hover:#e9eef6; --gm-active-bg:#d3e3fd; --gm-active-text:#001d35; --gm-search-bg:#eaf1fb; position:relative; height:100%; min-height:0; display:flex; overflow:hidden; border:1px solid var(--gm-line); border-radius:10px; background:var(--gm-surface); color:var(--gm-text); font-family:Roboto,Arial,sans-serif; font-size:14px; }
 .gm-mail-app button { cursor:pointer; }
 .gm-sidebar { width:245px; flex:0 0 245px; padding:13px 8px 12px 0; overflow-y:auto; background:var(--gm-back); }
 .gm-logo { display:flex; align-items:center; gap:12px; padding:6px 18px 20px; font-size:22px; color:var(--gm-muted); letter-spacing:-.5px; }
 .gm-compose-trigger { display:flex; justify-content:center; align-items:center; gap:10px; height:55px; width:145px; border:0; border-radius:16px; margin:0 0 15px 8px; background:#c2e7ff; color:#001d35; box-shadow:0 1px 2px #0001; font-size:14px; font-weight:500; }
 .gm-compose-trigger:hover { box-shadow:0 2px 6px #0002; }
 .gm-folder-nav { display:flex; flex-direction:column; gap:1px; }
-.gm-folder { height:32px; width:100%; padding:0 15px 0 24px; border:0; border-radius:0 18px 18px 0; background:transparent; color:#444746; text-align:left; display:flex; align-items:center; gap:18px; font-size:14px; font-weight:400; }
-.gm-folder:hover { background:#e9eef6; }
-.gm-folder.active { color:#001d35; background:#d3e3fd; font-weight:600; }
+.gm-folder { height:32px; width:100%; padding:0 15px 0 24px; border:0; border-radius:0 18px 18px 0; background:transparent; color:var(--gm-text); text-align:left; display:flex; align-items:center; gap:18px; font-size:14px; font-weight:400; }
+.gm-folder:hover { background:var(--gm-hover); }
+.gm-folder.active { color:var(--gm-active-text); background:var(--gm-active-bg); font-weight:600; }
 .gm-folder svg { flex-shrink:0; color:var(--gm-muted); }
-.gm-folder.active svg { color:#001d35; }
+.gm-folder.active svg { color:var(--gm-active-text); }
 .gm-folder small { font-size:12px; margin-left:auto; }
 .gm-main { min-width:0; min-height:0; display:flex; flex:1; flex-direction:column; background:var(--gm-surface); }
 .gm-header { flex:0 0 70px; height:70px; display:flex; align-items:center; padding:0 19px 6px 13px; position:relative; z-index:11; background:var(--gm-back); }
-.gm-search-wrap { flex:1; max-width:720px; height:46px; background:#eaf1fb; border-radius:25px; display:flex; align-items:center; gap:13px; padding:0 15px; color:#444746; }
+.gm-search-wrap { flex:1; max-width:720px; height:46px; background:var(--gm-search-bg); border-radius:25px; display:flex; align-items:center; gap:13px; padding:0 15px; color:var(--gm-muted); }
 .gm-search-wrap:focus-within { background:var(--gm-surface); box-shadow:0 1px 6px #0002; }
 .gm-search-wrap input { flex:1; width:100%; min-width:0; border:0; outline:none; background:transparent; color:var(--gm-text); font-size:16px; }
-.gm-search-wrap button { border:0; background:transparent; width:31px; height:31px; flex-shrink:0; display:grid; place-items:center; border-radius:50%; color:#444746; }
-.gm-search-wrap button:hover,.gm-reader-toolbar button:hover,.gm-list-toolbar button:hover,.gm-message-header button:hover { background:#e6e9ed; }
+.gm-search-wrap button { border:0; background:transparent; width:31px; height:31px; flex-shrink:0; display:grid; place-items:center; border-radius:50%; color:var(--gm-muted); }
+.gm-search-wrap button:hover,.gm-reader-toolbar button:hover,.gm-list-toolbar button:hover,.gm-message-header button:hover { background:var(--gm-hover); }
 .gm-advanced { position:absolute; z-index:50; top:60px; left:12px; width:min(560px,calc(100% - 28px)); padding:20px; background:var(--gm-surface); box-shadow:0 8px 26px #0003; border:1px solid #dce0e5; border-radius:8px; display:grid; grid-template-columns:1fr 1fr; gap:12px; }
 .gm-advanced label { font-size:12px; color:var(--gm-muted); display:flex; flex-direction:column; gap:5px; }
 .gm-advanced label input:not([type=checkbox]) { border:1px solid var(--gm-line); border-radius:4px; padding:8px; font-size:13px; color:var(--gm-text); }
@@ -125,3 +125,5 @@
 .gm-compact .gm-logo {padding:9px 7px 11px;gap:6px;justify-content:center;}
 .gm-compact .gm-logo svg {width:19px;height:15px;}
 .gm-compact .gm-logo span {font-size:13px;letter-spacing:0;}
+
+:root[data-theme='dark'] .gm-mail-app{--gm-hover:#2b3a51;--gm-active-bg:#354765;--gm-active-text:#ecf4ff;--gm-search-bg:#2b3a50;--gm-muted:#bcc8da}

@@ -78,3 +78,7 @@ button { touch-action: manipulation; }
 .crm-app button:disabled {opacity:1;filter:none}
 
 :root[data-theme='dark'] {--crm-bg:#111827;--crm-topbar:#192538;--crm-surface:#182336;--crm-border:#344259;--crm-border-soft:#2c3b50;--crm-text:#e7edf7;--crm-muted:#aab6c8;--crm-faint:#8390a6;--crm-shadow:0 6px 22px #0004}
+
+/* Brand contrast under the dark topbar. */
+:root[data-theme='dark'] .il-brand span:first-child{color:#e7edf7}
+:root[data-theme='dark'] .il-brand span:nth-child(2){color:#7ba7ff}

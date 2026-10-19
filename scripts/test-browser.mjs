@@ -110,7 +110,7 @@ async function run(type,mobile){
   await page.getByRole('button',{name:'Back to calls'}).click();
   await page.getByRole('button',{name:'Back to Communications'}).click();
   await page.locator('.np-root-tabs button').filter({hasText:'Email'}).click();
-  await page.getByRole('heading',{name:'Inbox'}).waitFor();
+  await page.locator('.np-gmail-embedded .gm-mail-app').waitFor();
   const oldBounds=await page.locator('.np-device').boundingBox();
   const grip=await page.getByRole('button',{name:'Resize Communications'}).boundingBox();
   assert.ok(grip,'Resize handle must be available');

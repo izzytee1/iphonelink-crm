@@ -27,11 +27,11 @@ export function leadPhoneGroups(lead) {
 function DetailSection({ title, titleAction, children, className = '' }) {
   return (
     <section className={`min-w-0 ${className}`}>
-      <div className="mb-3 flex min-h-6 items-center gap-2 border-b border-slate-200/80 pb-2">
-        <h3 className="[font-size:calc(10px+var(--crm-font-offset))] font-semibold uppercase tracking-[0.075em] text-slate-500">{title}</h3>
+      <div className="mb-2 flex min-h-6 items-center gap-2 border-b lead-detail-separator pb-1.5">
+        <h3 className="[font-size:calc(12px+var(--crm-font-offset))] font-semibold uppercase tracking-[0.075em] lead-detail-muted">{title}</h3>
         {titleAction ? <div className="ml-auto">{titleAction}</div> : null}
       </div>
-      <div className="space-y-2.5">{children}</div>
+      <div className="lead-detail-fields">{children}</div>
     </section>
   );
 }
@@ -39,8 +39,8 @@ function DetailSection({ title, titleAction, children, className = '' }) {
 function DetailValue({ label, children, mono = false }) {
   return (
     <div className="min-w-0">
-      <div className="mb-0.5 [font-size:calc(10px+var(--crm-font-offset))] leading-4 text-slate-400">{label}</div>
-      <div className={`min-w-0 break-words [font-size:calc(12px+var(--crm-font-offset))] font-normal leading-[1.4] text-slate-700 ${mono ? 'tabular-nums' : ''}`}>{children || '—'}</div>
+      <div className="mb-0.5 [font-size:calc(12px+var(--crm-font-offset))] leading-4 lead-detail-label">{label}</div>
+      <div className={`min-w-0 break-words [font-size:calc(12px+var(--crm-font-offset))] font-normal leading-[1.4] lead-detail-text ${mono ? 'tabular-nums' : ''}`}>{children || '—'}</div>
     </div>
   );
 }
@@ -54,7 +54,7 @@ function ActionIconButton({ title, icon, onClick, disabled = false }) {
       aria-label={title}
       disabled={disabled}
       onClick={(event) => { event.stopPropagation(); onClick(); }}
-      className="grid h-5 w-5 shrink-0 place-items-center text-slate-400 transition-colors hover:text-slate-700 disabled:cursor-default disabled:opacity-35"
+      className="grid h-5 w-5 shrink-0 place-items-center lead-detail-label transition-colors hover:lead-detail-text disabled:cursor-default disabled:opacity-35"
     >
       <CrmIcon name={icon} size={13} strokeWidth={1.7} />
     </button>
@@ -64,7 +64,7 @@ function ActionIconButton({ title, icon, onClick, disabled = false }) {
 function ContactValue({ value, actions }) {
   return (
     <div className="flex min-w-0 items-center">
-      <span className="min-w-0 truncate [font-size:calc(12px+var(--crm-font-offset))] leading-[1.4] text-slate-700">{value}</span>
+      <span className="min-w-0 truncate [font-size:calc(12px+var(--crm-font-offset))] leading-[1.4] lead-detail-text">{value}</span>
       <span className="ml-[0.5em] flex shrink-0 items-center gap-[0.25em]">
         {actions}
       </span>
@@ -73,7 +73,7 @@ function ContactValue({ value, actions }) {
 }
 
 function EmptyValue() {
-  return <span className="[font-size:calc(12px+var(--crm-font-offset))] text-slate-400">—</span>;
+  return <span className="[font-size:calc(12px+var(--crm-font-offset))] lead-detail-label">—</span>;
 }
 
 export default function LeadDetails({
@@ -116,10 +116,10 @@ export default function LeadDetails({
 
         <DetailSection title="Statements">
           {(lead.statements || []).length ? (lead.statements || []).map((statement) => (
-            <div key={`${lead.id}-${statement.month}`} className="grid grid-cols-[34px_minmax(0,1fr)] gap-x-2 gap-y-0.5 border-b border-slate-100 pb-2 last:border-b-0 last:pb-0">
-              <span className="row-span-2 [font-size:calc(11px+var(--crm-font-offset))] font-medium text-slate-500">{statement.month}</span>
-              <span className="[font-size:calc(10px+var(--crm-font-offset))] text-slate-400">Deposits <span className="ml-1 tabular-nums [font-size:calc(12px+var(--crm-font-offset))] text-slate-700">{formatMoneyText(statement.deposits)}</span></span>
-              <span className="[font-size:calc(10px+var(--crm-font-offset))] text-slate-400">Balance <span className="ml-1 tabular-nums [font-size:calc(12px+var(--crm-font-offset))] text-slate-700">{formatMoneyText(statement.balance)}</span></span>
+            <div key={`${lead.id}-${statement.month}`} className="grid grid-cols-[34px_minmax(0,1fr)] gap-x-2 gap-y-0.5 border-b lead-detail-separator pb-1.5 last:border-b-0 last:pb-0">
+              <span className="row-span-2 [font-size:calc(12px+var(--crm-font-offset))] font-medium lead-detail-muted">{statement.month}</span>
+              <span className="[font-size:calc(12px+var(--crm-font-offset))] lead-detail-label">Deposits <span className="ml-1 tabular-nums [font-size:calc(12px+var(--crm-font-offset))] lead-detail-text">{formatMoneyText(statement.deposits)}</span></span>
+              <span className="[font-size:calc(12px+var(--crm-font-offset))] lead-detail-label">Balance <span className="ml-1 tabular-nums [font-size:calc(12px+var(--crm-font-offset))] lead-detail-text">{formatMoneyText(statement.balance)}</span></span>
             </div>
           )) : <EmptyValue />}
         </DetailSection>
@@ -151,7 +151,7 @@ export default function LeadDetails({
         <DetailSection
           title="Email"
           titleAction={emails.length > 1 && onEmailAll ? (
-            <button type="button" onClick={(event) => { event.stopPropagation(); onEmailAll(emails); }} className="[font-size:calc(10px+var(--crm-font-offset))] font-medium text-slate-500 transition-colors hover:text-slate-800">Email all</button>
+            <button type="button" onClick={(event) => { event.stopPropagation(); onEmailAll(emails); }} className="[font-size:calc(12px+var(--crm-font-offset))] font-medium lead-detail-muted transition-colors hover:text-slate-800">Email all</button>
           ) : null}
         >
           {emails.length ? emails.map((email) => (
@@ -168,7 +168,7 @@ export default function LeadDetails({
         <DetailSection title="Notes">
           <textarea
             id="commNotes"
-            className="min-h-28 w-full resize-y border-0 bg-transparent p-0 [font-size:calc(12px+var(--crm-font-offset))] font-normal leading-5 text-slate-700 outline-none placeholder:text-slate-400"
+            className="min-h-28 w-full resize-y border-0 bg-transparent p-0 [font-size:calc(12px+var(--crm-font-offset))] font-normal leading-5 lead-detail-text outline-none "
             placeholder="Add a note…"
             value={notes}
             onClick={(event) => event.stopPropagation()}
@@ -178,22 +178,22 @@ export default function LeadDetails({
 
         <DetailSection title="Upcoming Activity">
           {activity.length ? activity.map((item, index) => (
-            <div key={`${item.text}-${index}`} className="border-b border-slate-100 pb-2.5 last:border-b-0 last:pb-0">
-              <div className="[font-size:calc(12px+var(--crm-font-offset))] leading-5 text-slate-700">{item.text}</div>
-              <div className="mt-0.5 [font-size:calc(10px+var(--crm-font-offset))] text-slate-400">{item.time}</div>
+            <div key={`${item.text}-${index}`} className="border-b lead-detail-separator pb-1.5 last:border-b-0 last:pb-0">
+              <div className="[font-size:calc(12px+var(--crm-font-offset))] leading-5 lead-detail-text">{item.text}</div>
+              <div className="mt-0.5 [font-size:calc(12px+var(--crm-font-offset))] lead-detail-label">{item.time}</div>
             </div>
           )) : <EmptyValue />}
         </DetailSection>
 
         <DetailSection title="History">
           {history.length ? history.map((item, index) => (
-            <div key={`${item.subject}-${index}`} className="grid grid-cols-[36px_minmax(0,1fr)_42px] gap-2 border-b border-slate-100 pb-2.5 last:border-b-0 last:pb-0">
-              <span className="[font-size:calc(9px+var(--crm-font-offset))] font-medium uppercase text-slate-400">{item.type}</span>
+            <div key={`${item.subject}-${index}`} className="grid grid-cols-[36px_minmax(0,1fr)_42px] gap-2 border-b lead-detail-separator pb-1.5 last:border-b-0 last:pb-0">
+              <span className="[font-size:calc(12px+var(--crm-font-offset))] font-medium uppercase lead-detail-label">{item.type}</span>
               <div className="min-w-0">
-                <div className="truncate [font-size:calc(12px+var(--crm-font-offset))] text-slate-700">{item.subject}</div>
-                <div className="mt-0.5 truncate [font-size:calc(10px+var(--crm-font-offset))] text-slate-400">{item.preview}</div>
+                <div className="truncate [font-size:calc(12px+var(--crm-font-offset))] lead-detail-text">{item.subject}</div>
+                <div className="mt-0.5 truncate [font-size:calc(12px+var(--crm-font-offset))] lead-detail-label">{item.preview}</div>
               </div>
-              <span className="text-right [font-size:calc(10px+var(--crm-font-offset))] text-slate-400">{item.date}</span>
+              <span className="text-right [font-size:calc(12px+var(--crm-font-offset))] lead-detail-label">{item.date}</span>
             </div>
           )) : <EmptyValue />}
         </DetailSection>

@@ -47,7 +47,8 @@ async function run(type,mobile){
     assert.ok(await page.locator('.np-channel-blue').count()>0,'iMessage mock conversations visible');
     await page.locator('.np-list-row').filter({has:page.locator('.np-channel-blue')}).first().click();
     assert.equal(await page.locator('.np-imessage-send').count(),1);
-    await page.getByRole('button',{name:'SMS',exact:true}).click();
+    await page.getByRole('button',{name:'Back to messages'}).click();
+    await page.locator('.np-list-row').filter({has:page.locator('.np-channel-green')}).first().click();
     assert.equal(await page.locator('.np-sms-send').count(),1);
     await page.getByRole('button',{name:'Back to messages'}).click();
     await page.getByRole('button',{name:'WhatsApp chats'}).click();
@@ -59,7 +60,7 @@ async function run(type,mobile){
     assert.equal(await page.locator('.np-battery').getAttribute('aria-label'),'Phone battery information unavailable');
   }
   assert.deepEqual(errors,[],'No uncaught page errors');
-  console.log((type===chromium?'Chromium':'WebKit')+(mobile?' mobile':' desktop')+': v08 PASS');
+  console.log((type===chromium?'Chromium':'WebKit')+(mobile?' mobile':' desktop')+': v09 PASS');
  }finally{await browser.close();}
 }
 try{
@@ -67,5 +68,5 @@ try{
  await run(chromium,false);
  await run(chromium,true);
  await run(webkit,true);
- console.log('All v08 UI states PASS');
+ console.log('All v09 UI states PASS');
 }finally{server.kill();}

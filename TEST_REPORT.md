@@ -1,3 +1,18 @@
+# v10 Verification Plan
+
+- React production build and static source verification.
+- Shared Gmail: folder switching, account switching, composing and replies inside Communications.
+- Quick notifications: badge, dropdown, inline reply, banner entrance and timed exit.
+- Native SMS/iMessage/WhatsApp local quick replies, lead details, dark mode, phone keypad and mobile browser regression.
+- Actual carrier sending and connected mailbox synchronization are not implemented without external providers.
+
+# v09 Test Report
+
+- Source verification, production build, regression and visual checks.
+- Desktop Chromium, mobile Chromium and mobile WebKit.
+- Validate Back buttons, message channels, keypad label geometry, compact leads and dark colors.
+- Actual phone backend and physical device status not tested without provider.
+
 # v08 Test Report
 
 - React production build plus source assertions and duplicate-selector audit.

@@ -1,1 +1,1 @@
-export default function Brand({onLeads}) {return <button type="button" className="crm-brand il-brand" onClick={onLeads} aria-label="Open Leads"><span>iPhone</span><span>Link</span><small className="crm-version">v08</small></button>;}
+export default function Brand({onLeads}) {return <button type="button" className="crm-brand il-brand" onClick={onLeads} aria-label="Open Leads"><span>iPhone</span><span>Link</span><small className="crm-version">v10</small></button>;}

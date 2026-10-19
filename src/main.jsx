@@ -14,6 +14,7 @@ import './pages/leads/iphone.css';
 import './communications/comms.css';
 import './shell/responsive.css';
 import './pages/email/email.css';
+import './communications/compact-mail.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode><div className="crm-scroll-viewport"><App /></div></React.StrictMode>,

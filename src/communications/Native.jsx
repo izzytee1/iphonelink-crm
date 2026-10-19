@@ -29,10 +29,10 @@ const WHATSAPP_AVATAR_COLORS=[
 export function Avatar({name='',size=48,initial=false,variant='default'}){
  const n=String(name||'').trim();
  const letter=n&&!/^\+?[\d(\s-]+$/.test(n)?n[0]?.toUpperCase():'';
- const palette=variant==='whatsapp'?WHATSAPP_AVATAR_COLORS[[...n].reduce((value,c)=>((value*31+c.charCodeAt(0))>>>0),7)%WHATSAPP_AVATAR_COLORS.length]:null;
- const style={width:size,height:size,fontSize:Math.round(size*.46),...(palette?{'--np-avatar-bg':palette[0],'--np-avatar-ink':palette[1]}:{})};
- return <span className={'np-avatar'+(initial&&letter?' np-initial':'')+(palette?' np-avatar-wa':'')} style={style} aria-hidden="true">
-   {initial&&letter?letter:<svg viewBox="0 0 64 64" width="100%" height="100%" aria-hidden="true"><circle cx="32" cy="24" r="11" fill="#fff"/><path d="M6 57c2-12 11-18 26-18s24 6 26 18a31 31 0 0 1-52 0" fill="#fff"/></svg>}
+ const palette=WHATSAPP_AVATAR_COLORS[[...n].reduce((value,c)=>((value*31+c.charCodeAt(0))>>>0),7)%WHATSAPP_AVATAR_COLORS.length];
+ const style={width:size,height:size,fontSize:Math.round(size*.46),'--np-avatar-bg':palette[0],'--np-avatar-ink':palette[1]};
+ return <span className={'np-avatar'+(initial&&letter?' np-initial':'')+' np-avatar-solid'} style={style} aria-hidden="true">
+   {initial&&letter?letter:<svg viewBox="0 0 64 64" width="100%" height="100%" aria-hidden="true"><circle cx="32" cy="24" r="11" fill="currentColor"/><path d="M6 57c2-12 11-18 26-18s24 6 26 18a31 31 0 0 1-52 0" fill="currentColor"/></svg>}
  </span>;
 }
 

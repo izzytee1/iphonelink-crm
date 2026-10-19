@@ -25,7 +25,7 @@
 .crm-call-main-action:hover{filter:brightness(1.1)}
 .crm-call-redock{position:absolute;top:-12px;right:6px;width:22px;height:22px;border:0;border-radius:50%;background:#243348;color:#fff;display:grid;place-items:center}
 .crm-phone-select{position:relative;flex:0 0 auto}
-.crm-phone-choice{display:flex;align-items:center;gap:9px;height:37px;max-width:155px;min-width:101px;padding:0 13px;border-radius:12px;border:1px solid var(--crm-border);background:linear-gradient(145deg,#f7f9fb,#e6ebf2);color:#344256;font-size:12px;letter-spacing:-.1px}
+.crm-phone-choice{display:flex;align-items:center;gap:9px;height:40px;max-width:165px;min-width:109px;padding:0 13px;border-radius:21px;border:1px solid #344054;background:linear-gradient(160deg,#242d3d,#141b2a 72%);box-shadow:inset 0 1px #ffffff1b,0 4px 12px #15213920;color:#f4f7fb;font-size:12px;letter-spacing:-.1px}
 .crm-phone-name{max-width:112px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .crm-phone-dot{display:inline-block;width:7px;height:7px;flex:0 0 7px;border-radius:50%;background:#aeb9c7}
 .crm-phone-online{background:#30a46c}

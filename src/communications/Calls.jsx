@@ -17,7 +17,7 @@ function CallsList({calls,leads,onDetail,onContacts,onKeypad,onCall,onExit}){
   </div>
   {searchOpen&&<label className="np-phone-search"><NativeIcon name="search" size={17}/><input aria-label="Search call history" type="search" placeholder="Search calls" value={search} onChange={e=>setSearch(e.target.value)}/></label>}
   <div className="np-native-list np-scroll">{filtered.map(c=><div className="np-call-row" key={c.id}>
-   <button className="np-call-main" type="button" onClick={()=>onDetail(c)}><Avatar name={label(leads,c.number)} size={43} initial={Boolean(findLead(leads,c.number))}/>
+   <button className="np-call-main" type="button" onClick={()=>onDetail(c)}><Avatar name={label(leads,c.number)} size={42} initial={Boolean(findLead(leads,c.number))}/>
     <span className="np-call-copy"><strong className={c.dir==='missed'?'np-missed':''}>{label(leads,c.number)}</strong><small>{c.dir==='missed'?'Missed':c.dir==='out'?'Outgoing':'Incoming'} · {telephone(c.number)}</small></span><span className="np-call-time">{formatStamp(c.at)}</span></button>
    <div className="np-call-side"><NativeButton name="message" label={'Message '+label(leads,c.number)} onClick={()=>onDetail(c,'message')} size={19}/><NativeButton name="phone" label={'Call '+label(leads,c.number)} onClick={()=>onCall(c.number)} size={20}/></div>
   </div>)}<p className="np-demo-disclaimer">Sample call history · provider call history not connected</p></div>

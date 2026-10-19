@@ -2,17 +2,20 @@ import {useEffect,useRef,useState} from 'react';
 import PhoneToolbar from './PhoneToolbar.jsx';
 import Notifications from '../notifications/Notifications.jsx';
 import CrmIcon from '../../components/CrmIcons.jsx';
+import {mailAccounts} from '../../data/mail.js';
 
-export default function TopbarActions({setWorkspace,unreadMail,onSettings,phoneController}){
+export default function TopbarActions({setWorkspace,messages,setMessages,mailbox,setMailbox,onSettings,phoneController}){
  const [menuOpen,setMenuOpen]=useState(false);
+ const user=mailAccounts[0]?.name||"";
+ const initials=user.split(/\s+/).filter(Boolean).slice(0,2).map(n=>n[0]?.toUpperCase()).join("")||"U";
  const menu=useRef(null);
  useEffect(()=>{const close=e=>{if(!menu.current?.contains(e.target))setMenuOpen(false)};document.addEventListener('pointerdown',close);return()=>document.removeEventListener('pointerdown',close)},[]);
  return <div className="crm-topbar-tools">
    <PhoneToolbar phoneController={phoneController}/>
-   <Notifications unreadMail={unreadMail} onOpenEmail={()=>setWorkspace('email')}/>
+   <Notifications messages={messages} setMessages={setMessages} mailbox={mailbox} setMailbox={setMailbox}/>
    <div className="crm-account" ref={menu}>
      <button type="button" className="crm-avatar-button" aria-expanded={menuOpen} aria-label="User menu" onClick={()=>setMenuOpen(s=>!s)}>
-       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" aria-hidden="true"><circle cx="12" cy="8.3" r="3.3"/><path d="M5.4 20c.3-3.9 2.6-5.7 6.6-5.7s6.3 1.8 6.6 5.7"/></svg>
+       <span className="crm-user-initials">{initials}</span>
      </button>
      {menuOpen&&<div className="crm-user-menu" role="menu">
        <button type="button" role="menuitem" aria-label="Display settings" onClick={()=>{setMenuOpen(false);onSettings()}}><CrmIcon name="settings" size={17}/> Display settings</button>

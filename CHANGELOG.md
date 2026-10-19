@@ -1,3 +1,22 @@
+# v10 — Instant Communications
+
+- One shared Gmail client reused inside Communications, with folder switching, account selection, inline compose and reply.
+- One local outbox helper for email, SMS, iMessage and WhatsApp; no fake provider delivery.
+- Notifications stay in a bell dropdown, with direct inline quick reply for email, SMS, iMessage and WhatsApp.
+- Incoming alert slides in below the topbar, remains for 5 seconds and slides out to the right; composing a reply pauses dismissal.
+- Solid iOS-style user initials derived from the configured mail account.
+- Retains compact lead details, native call UI and responsive CRM shell.
+
+# v09 — Compact Communications and lead detail repairs
+
+- Back icon on Messages root; native Back behavior on nested Communications screens.
+- Simplified message previews and removed SMS/iMessage demonstration tabs; channel color remains correct and local-only delivery remains truthful.
+- Consistent solid 42px list avatars, 40px thread avatars and stable row sizing.
+- Corrected in-phone keypad call control positioning and gaps to prevent label overlap.
+- Lead Company fields now form a compact three-column matrix, with two more sections per row on supported widths.
+- Dark mode CRM brand and Gmail folder contrast repaired; lead details use theme-aware colors.
+- Phone switcher matches premium navy call bar, without chevron.
+
 # v08 — iPhone communications visual precision
 
 - Match current iPhone-style chat typography, spacing, colors and native avatar proportions.

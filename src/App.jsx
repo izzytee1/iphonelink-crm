@@ -141,6 +141,10 @@ export default function App() {
         globalSearch={globalSearch}
         setGlobalSearch={setGlobalSearch}
         unreadMail={unreadMail}
+        messages={messages}
+        setMessages={setMessages}
+        mailbox={mailbox}
+        setMailbox={setMailbox}
         onSettings={() => setSettingsOpen(true)}
         communicationsOpen={communicationsOpen}
         onToggleCommunications={toggleCommunications}

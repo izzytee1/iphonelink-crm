@@ -36,7 +36,7 @@ check('No old comms CSS',!css.includes('.nc-'));
 check('Apple system typography',css.includes('-apple-system'));
 check('iOS contact avatars',native.includes('np-avatar'));
 check('Local drafts labeled not delivered',comm.includes('Saved locally · not delivered'));
-check('Version 08',brand.includes('v08'));
+check('Version 10',brand.includes('v10'));
 check('No v02 source importer',!existsSync(new URL('../.github/workflows/import-v02.yml',import.meta.url)));
 check('No v04 tests',!existsSync(new URL('./test-iphonelink-v04.mjs',import.meta.url)));
 
@@ -73,7 +73,7 @@ const drag=read('../src/hooks/useDraggablePosition.js');
 check('Draggable phone bar',phoneToolbar.includes('useDraggablePosition')&&phoneToolbar.includes('Return phone bar to topbar'));
 check('Floating call panel shares controller',floatCall.includes('phoneController')&&floatCall.includes('useDraggablePosition'));
 check('Shared drag hook',drag.includes('setPointerCapture')&&drag.includes('localStorage'));
-check('SMS and iMessage distinct threads',msg.includes('m.channel===channel')&&msg.includes('iMessage Demo'));
+check('SMS and iMessage distinct threads',msg.includes('m.channel===channel')&&msg.includes("m.channel==='imessage'"));
 check('WhatsApp paper plane',wa.includes('paperplane'));
 
 const dialCss=read('../src/shell/topbar/actions.css');
@@ -87,11 +87,18 @@ check('Stable press geometry',!css.includes('button:active{transform:scale(.97)'
 
 const selectors=[...css.matchAll(/^([^{}\n]+)\{/gm)].map(m=>m[1].trim()).filter(n=>n.startsWith('.'));
 check('One CSS implementation per selector',selectors.length===new Set(selectors).size);
-check('iOS WhatsApp chat alignment',css.includes('.np-wa-chats .np-list-row')&&css.includes('.np-wa-screen .np-avatar'));
+check('iOS WhatsApp chat alignment',css.includes('.np-wa-chats .np-list-row')&&native.includes('np-avatar-solid'));
 check('Message header and WhatsApp title scale',css.includes('.np-messages .np-large-title')&&css.includes('.np-wa-screen .np-large-title'));
 check('Single WhatsApp compose entry',!msg.includes('np-text-action')&&msg.includes('np-compose-entry'));
 
 
 
-check('One shared avatar with WhatsApp style',native.includes('WHATSAPP_AVATAR_COLORS')&&native.includes('variant=')&&wa.includes('variant="whatsapp"'));
-console.log(count+' v08 regression checks passed');
+check('One shared avatar with WhatsApp style',native.includes('WHATSAPP_AVATAR_COLORS')&&native.includes('np-avatar-solid')&&wa.includes('variant="whatsapp"'));
+
+
+check('Compact lead 3-column company detail',read('../src/pages/leads/leads.css').includes('grid-template-columns:repeat(3,minmax(0,1fr))'));
+check('Dark Gmail folder contrast',emailStyles.includes('color:var(--gm-text)'));
+check('No message demo labels',!msg.includes('iMessage · DEMO')&&!msg.includes('np-channel-tabs'));
+check('Back button in Messages list',msg.includes('Back to All'));
+check('Dark premium phone switcher',read('../src/shell/topbar/actions.css').includes('crm-phone-choice{display:flex')&&read('../src/shell/topbar/actions.css').includes('border-radius:21px'));
+console.log(count+' v10 regression checks passed');

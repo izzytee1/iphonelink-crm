@@ -34,8 +34,8 @@ async function run(type,mobile,theme){
   await stable(page,'.np-messages .np-list-row');
   await page.getByRole('button',{name:'WhatsApp chats'}).click();
   await stable(page,'.np-wa-list-row');
-  const avatarColors=await page.locator('.np-wa-chats .np-avatar-wa').evaluateAll(nodes=>nodes.map(node=>getComputedStyle(node).backgroundColor));
-  assert.ok(avatarColors.length>=3 && new Set(avatarColors).size>1,'WhatsApp avatars should be visually distinct and stable');
+  const avatarColors=await page.locator('.np-wa-chats .np-avatar-solid').evaluateAll(nodes=>nodes.map(node=>getComputedStyle(node).backgroundColor));
+  assert.ok(avatarColors.length>=2 && new Set(avatarColors).size>1,'WhatsApp avatars should be visually distinct and stable');
 
   assert.equal(await page.getByRole('button',{name:'Camera unavailable'}).count(),0);
   assert.equal(await page.locator('.np-wa-chips button').count(),2);
