@@ -1,11 +1,10 @@
-# v07 — Premium iPhone UI refinements
+# v07 — Compact iPhone and WhatsApp refinements
 
-- Smaller, evenly spaced topbar LCD number field with matched 215px dark keypad.
-- iPhone Calls navigation, call filtering, native keypad layout and digital number screen.
-- iPhone-style provider-driven battery visual, charging bolt, yellow Low Power Mode, red below 20%.
-- WhatsApp five-tab iOS layout and real empty states for unconnected features.
-- No invented call connections, battery readings, message delivery or WhatsApp availability.
-- All changes tested in browser and visually checked before GitHub and Vercel preview.
+- Dark 215px keypad, balanced topbar number screen and premium phone switcher.
+- Provider-ready iPhone battery state, charging icon and low-power yellow, no fake readings.
+- Native Calls titlebar, call filter, working search and bottom navigation.
+- Working WhatsApp chat list, search, unread filter and compose; remove unsupported video/camera/voice/attachment actions.
+- Fix list row and avatar movement by removing press scaling; desktop/mobile browser regression tests.
 
 # v06 — Compact dark call control
 

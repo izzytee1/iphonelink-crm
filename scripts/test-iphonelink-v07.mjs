@@ -28,7 +28,7 @@ check('Contacts inside Calls',call.includes('function Contacts('));
 check('Call detail',call.includes('function CallDetail('));
 check('Keypad',call.includes('function Keypad('));
 check('Call controls visible',call.includes('np-dial-green')&&call.includes('np-dial-red'));
-check('No auto dial from rows',call.includes('onDetail(call)'));
+check('No auto dial from rows',call.includes('onDetail(c)'));
 check('Phone provider DTMF',hook.includes("providerInvoke(['sendTone']"));
 check('DTMF dual frequency',sound.includes('697')&&sound.includes('1209'));
 check('Unboxed call actions',css.includes('.np-call-side .np-icon-button'));
@@ -76,12 +76,11 @@ check('Shared drag hook',drag.includes('setPointerCapture')&&drag.includes('loca
 check('SMS and iMessage distinct threads',msg.includes('m.channel===channel')&&msg.includes('iMessage Demo'));
 check('WhatsApp paper plane',wa.includes('paperplane'));
 
-const topbarCss=read('../src/shell/topbar/actions.css');
-check('Compact matched dark keypad',topbarCss.includes('width:215px')&&topbarCss.includes('linear-gradient(160deg,#242d3d,#141b2a 72%)'));
-check('Even LCD spacing',topbarCss.includes('height:29px;margin:0 10px'));
-check('Real battery only',native.includes('Phone battery information unavailable')&&native.includes('np-battery-bolt'));
-check('Backend telemetry adapter',read('../src/hooks/useDeviceTelemetry.js').includes('getDeviceStatus'));
-check('Native iOS calls and WhatsApp views',call.includes('np-phone-titlebar')&&wa.includes('np-wa-native-footer'));
-check('Native WhatsApp tabs',wa.includes('Communities')&&wa.includes('Updates')&&wa.includes('No favorites saved'));
+const dialCss=read('../src/shell/topbar/actions.css');
+check('Matched dark keypad',dialCss.includes('width:215px')&&dialCss.includes('linear-gradient(160deg,#242d3d,#141b2a 72%)'));
+check('Balanced number screen',dialCss.includes('height:29px;margin:0 10px'));
+check('Backend battery adapter',read('../src/hooks/useDeviceTelemetry.js').includes('getDeviceStatus'));
+check('No fake video and camera buttons',!call.includes("title:'video'")&&!msg.includes('Video call unavailable')&&!wa.includes('Video unavailable')&&!wa.includes('Camera unavailable'));
+check('Stable press geometry',!css.includes('button:active{transform:scale(.97)')&&css.includes('.np-wa-list-row:active{transform:none}'));
 
 console.log(count+' v07 regression checks passed');

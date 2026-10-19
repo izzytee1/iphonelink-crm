@@ -1,48 +1,42 @@
 import {useEffect,useState} from 'react';
 import {getPhoneProvider,isPhoneConnected} from '../services/phoneService.js';
-
-// Connected provider: devices [{id,connected}], getDeviceStatus(id) and subscribe(handler).
-function readBattery(data){
- if(!data||typeof data!=='object')return null;
- const percent=data.battery?.percent??data.batteryPercent;
- const level=data.battery?.level??data.batteryLevel;
+// Optional backend contract: {batteryPercent:0..100,charging:boolean,lowPowerMode:boolean}
+// or {battery:{level:0..1,charging:boolean,lowPowerMode:boolean}}.
+function parse(data){
+ if(!data || typeof data!=='object')return null;
+ const percent=data.batteryPercent??data.battery?.percent;
+ const level=data.batteryLevel??data.battery?.level;
  if(percent==null&&level==null)return null;
- const amount=percent!=null?Number(percent):Number(level)*100;
- if(!Number.isFinite(amount)||amount<0||amount>100)return null;
- return {percent:Math.round(amount),charging:Boolean(data.battery?.charging??data.charging),
-  lowPower:Boolean(data.battery?.lowPowerMode??data.lowPowerMode)};
+ const value=Number(percent==null?Number(level)*100:percent);
+ if(!Number.isFinite(value)||value<0||value>100)return null;
+ return {percent:Math.round(value),charging:Boolean(data.battery?.charging??data.charging),
+   lowPower:Boolean(data.battery?.lowPowerMode??data.lowPowerMode)};
 }
 export default function useDeviceTelemetry(device){
- const [battery,setBattery]=useState(null);
- const id=device?.id;
+ const [state,setState]=useState(null),id=device?.id;
  useEffect(()=>{
-  let alive=true,currentProvider=null,unsubscribe=null;
-  setBattery(null);
-  const read=()=>{
-   if(!alive||!id)return;
-   const provider=getPhoneProvider();
-   if(provider!==currentProvider){
-    if(typeof unsubscribe==='function')unsubscribe();
-    unsubscribe=null;currentProvider=provider;
-    if(provider&&typeof provider.subscribe==='function'){
-     try{unsubscribe=provider.subscribe(event=>{
-      if(!alive||event?.deviceId!==id)return;
-      if(event.connected===false){setBattery(null);return;}
-      const updated=readBattery(event);
-      if(updated)setBattery(updated);
-     })}catch{unsubscribe=null}
-    }
-   }
-   if(!provider||!isPhoneConnected({id})){setBattery(null);return;}
+  let active=true;
+  setState(null);
+  const provider=getPhoneProvider();
+  if(!provider||!isPhoneConnected(device))return;
+  const check=()=>{
+   if(!active)return;
+   if(!isPhoneConnected(device)){setState(null);return;}
    const getter=provider.getDeviceStatus||provider.getBatteryStatus;
    if(typeof getter!=='function')return;
-   Promise.resolve().then(()=>getter.call(provider,id))
-    .then(value=>{if(alive&&provider===currentProvider)setBattery(readBattery(value))})
-    .catch(()=>{if(alive)setBattery(null)});
+   Promise.resolve().then(()=>getter.call(provider,id)).then(v=>{if(active)setState(parse(v))}).catch(()=>{if(active)setState(null)});
   };
-  read();
-  const interval=window.setInterval(read,15000);
-  return ()=>{alive=false;window.clearInterval(interval);if(typeof unsubscribe==='function')unsubscribe()};
- },[id]);
- return battery;
+  check();
+  let unsubscribe;
+  try{
+   if(typeof provider.subscribe==='function')unsubscribe=provider.subscribe(event=>{
+    if(!active||event?.deviceId!==id)return;
+    if(event.connected===false){setState(null);return;}
+    const parsed=parse(event);if(parsed)setState(parsed);
+   });
+  }catch{}
+  const poll=window.setInterval(check,15000);
+  return ()=>{active=false;window.clearInterval(poll);if(typeof unsubscribe==='function')unsubscribe()};
+ },[device,id]);
+ return state;
 }

@@ -3,42 +3,20 @@ import {Avatar,NativeIcon,NativeButton,formatStamp,digits} from './Native.jsx';
 import {formatPhone} from '../hooks/usePhoneController.js';
 import {leadPhones} from '../utils/leadUtils.js';
 const who=(leads,num)=>leads.find(l=>leadPhones(l).some(p=>digits(p)===digits(num)))?.name||formatPhone(num)||num;
-const tabs=[['updates','Updates','updates'],['calls','Calls','phone'],['communities','Communities','community'],['chats','Chats','message'],['you','You','user']];
-function WhatsAppFooter({selected,onChange,onCalls}){
- return <nav className="np-wa-native-footer" aria-label="WhatsApp sections">{tabs.map(([key,label,icon])=>
-  <button type="button" key={key} className={selected===key?'np-wa-current':''}
-     onClick={()=>key==='calls'?onCalls():onChange(key)} aria-label={'WhatsApp '+label}>
-    <NativeIcon name={icon} size={20}/><span>{label}</span></button>)}</nav>;
-}
-function Chats({messages,leads,onOpen,onNew,onBack,onCall}){
- const [search,setSearch]=useState(''),[filter,setFilter]=useState('all'),[section,setSection]=useState('chats');
- const threads=useMemo(()=>{const map=new Map();messages.filter(m=>m.channel==='wa').forEach(m=>{
-  const key=digits(m.number),old=map.get(key);if(!old||old.at<m.at)map.set(key,m);
- });return [...map.values()].sort((a,b)=>b.at-a.at)},[messages]);
- const visible=threads.filter(m=>(who(leads,m.number)+' '+m.text).toLowerCase().includes(search.toLowerCase())&&
-   (filter!=='unread'||messages.some(x=>x.channel==='wa'&&digits(x.number)===digits(m.number)&&x.unread)) &&
-   filter!=='favorites'&&filter!=='groups');
- const title=tabs.find(([key])=>key===section)?.[1]||'Chats';
+function Chats({messages,leads,onOpen,onNew,onBack}){
+ const [search,setSearch]=useState(''),[filter,setFilter]=useState('all');
+ const threads=useMemo(()=>{const map=new Map();messages.filter(m=>m.channel==='wa').forEach(m=>{const id=digits(m.number),old=map.get(id);if(!old||old.at<m.at)map.set(id,m)});return [...map.values()].sort((a,b)=>b.at-a.at)},[messages]);
+ const visible=threads.filter(m=>(who(leads,m.number)+' '+m.text).toLowerCase().includes(search.toLowerCase())&&(filter!=='unread'||messages.some(x=>x.channel==='wa'&&digits(x.number)===digits(m.number)&&x.unread)));
  return <div className="np-screen np-wa-screen np-wa-chats">
-  <div className="np-wa-top-actions"><NativeButton name="back" label="Messages" onClick={onBack}/><span/>
-   <NativeButton name="camera" label="Camera unavailable" onClick={()=>{}}/>
-   <NativeButton name="plus" label="New WhatsApp chat" onClick={onNew} kind="np-wa-compose" size={21}/></div>
-  <h1 className="np-large-title">{title}</h1>
-  {section==='chats'?<>
-   <label className="np-search-pill np-wa-search"><NativeIcon name="search" size={18}/>
-    <input placeholder="Ask Meta AI or Search" aria-label="Search WhatsApp chats" value={search} onChange={e=>setSearch(e.target.value)}/></label>
-   <div className="np-wa-chips" aria-label="Chat filters">{[['all','All'],['unread','Unread'],['favorites','Favorites'],['groups','Groups']].map(([key,label])=>
-    <button type="button" key={key} className={filter===key?'np-wa-selected':''} onClick={()=>setFilter(key)}>{label}</button>)}</div>
-   <div className="np-native-list np-scroll">{visible.map(m=><button type="button" className="np-list-row np-wa-list-row"
-     key={digits(m.number)} onClick={()=>onOpen(m.number)}><Avatar name={who(leads,m.number)} size={48} initial={who(leads,m.number)!==formatPhone(m.number)}/>
-     <span className="np-list-copy"><span className="np-list-top"><strong>{who(leads,m.number)}</strong><span className="np-meta">{formatStamp(m.at)}</span></span>
-      <span className="np-preview">{m.text}</span></span>
-     {messages.some(x=>x.channel==='wa'&&digits(x.number)===digits(m.number)&&x.unread)&&<span className="np-wa-unread"/>}
-    </button>)}{!visible.length&&<p className="np-empty">{filter==='groups'?'No connected groups':filter==='favorites'?'No favorites saved':'No conversations'}</p>}
-    <p className="np-wa-encryption">Messages shown here are CRM samples. WhatsApp delivery requires a connected provider.</p></div>
-   </>:<div className="np-wa-placeholder"><NativeIcon name={tabs.find(([key])=>key===section)?.[2]||'message'} size={32}/>
-    <h2>{title}</h2><p>WhatsApp {title.toLowerCase()} are not connected to this CRM yet.</p></div>}
-  <WhatsAppFooter selected={section} onChange={setSection} onCalls={onCall}/>
+  <div className="np-wa-top-actions"><NativeButton name="back" label="Messages" onClick={onBack}/><span/><NativeButton name="plus" label="New WhatsApp chat" onClick={onNew} kind="np-wa-compose" size={21}/></div>
+  <h1 className="np-large-title">Chats</h1>
+  <label className="np-search-pill np-wa-search"><NativeIcon name="search" size={18}/><input placeholder="Search chats" aria-label="Search WhatsApp chats" value={search} onChange={e=>setSearch(e.target.value)}/></label>
+  <div className="np-wa-chips" aria-label="Chat filters">{[['all','All'],['unread','Unread']].map(([key,label])=><button type="button" key={key} className={filter===key?'np-wa-selected':''} onClick={()=>setFilter(key)}>{label}</button>)}</div>
+  <div className="np-native-list np-scroll">{visible.map(m=><button type="button" className="np-list-row np-wa-list-row" key={digits(m.number)} onClick={()=>onOpen(m.number)}>
+   <Avatar name={who(leads,m.number)} size={48} initial={who(leads,m.number)!==formatPhone(m.number)}/>
+   <span className="np-list-copy"><span className="np-list-top"><strong>{who(leads,m.number)}</strong><span className="np-meta">{formatStamp(m.at)}</span></span><span className="np-preview">{m.text}</span></span>
+   {messages.some(x=>x.channel==='wa'&&digits(x.number)===digits(m.number)&&x.unread)&&<span className="np-wa-unread"/>}
+  </button>)}{!visible.length&&<p className="np-empty">No conversations</p>}</div>
  </div>;
 }
 function NewChat({leads,onBack,onOpen}){
@@ -46,15 +24,15 @@ function NewChat({leads,onBack,onOpen}){
  const options=leads.flatMap(l=>leadPhones(l).map(phone=>({id:l.id+'-'+phone,name:l.name,phone}))).filter(o=>(o.name+' '+o.phone).toLowerCase().includes(query.toLowerCase()));
  return <div className="np-screen np-wa-screen"><div className="np-new-bar"><span/><strong>New chat</strong><NativeButton name="close" label="Close" onClick={onBack}/></div><label className="np-search-pill np-wa-search"><NativeIcon name="search" size={19}/><input autoFocus placeholder="Name or phone number" value={query} onChange={e=>setQuery(e.target.value)}/></label><small className="np-wa-section-caption">CRM contacts · WhatsApp availability not verified</small><div className="np-contact-results np-scroll">{options.map(o=><button type="button" key={o.id} onClick={()=>onOpen(o.phone)}><Avatar name={o.name} size={43} initial/><span><strong>{o.name}</strong><small>{formatPhone(o.phone)}</small></span><NativeIcon name="chevron" size={16}/></button>)}{digits(query).length===10&&!options.some(o=>digits(o.phone)===digits(query))&&<button type="button" onClick={()=>onOpen(query)}><Avatar size={43}/><span><strong>{formatPhone(query)}</strong><small>WhatsApp availability not verified</small></span></button>}</div></div>;
 }
-function WAThread({number,messages,leads,onBack,onSave,onCall}){
+function WAThread({number,messages,leads,onBack,onSave}){
  const [draft,setDraft]=useState('');const bottom=useRef(null);
  const name=who(leads,number),conversation=useMemo(()=>messages.filter(m=>m.channel==='wa'&&digits(m.number)===digits(number)).sort((a,b)=>a.at-b.at),[messages,number]);
  useEffect(()=>{bottom.current?.scrollIntoView?.({block:'end'});},[conversation.length,number]);
  const save=e=>{e.preventDefault();if(!draft.trim())return;onSave('wa',number,draft.trim());setDraft('')};
- return <div className="np-screen np-wa-thread np-wa-screen"><div className="np-wa-thread-header"><NativeButton name="back" label="Back to WhatsApp chats" onClick={onBack}/><Avatar name={name} size={35} initial={name!==formatPhone(number)}/><strong>{name}</strong><NativeButton name="video" label="Video unavailable" onClick={()=>{}}/><NativeButton name="phone" label="Call" onClick={()=>onCall(number)}/></div><div className="np-wa-wallpaper np-scroll">{conversation.map((m,i)=><React.Fragment key={m.id||i}>{(i===0||new Date(m.at).toDateString()!==new Date(conversation[i-1].at).toDateString())&&<div className="np-wa-date">{new Date(m.at).toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})}</div>}<div className={'np-wa-line '+(m.dir==='out'?'np-wa-out':'np-wa-in')}><span className="np-wa-bubble">{m.text}<small>{formatStamp(m.at)}{m.status==='local'?' · Saved locally · not delivered':''}</small></span></div></React.Fragment>)}<div ref={bottom}/></div><form className="np-wa-input" onSubmit={save}><NativeButton name="plus" label="Attachments unavailable" onClick={()=>{}}/><label><input value={draft} onChange={e=>setDraft(e.target.value)} aria-label="WhatsApp message" placeholder="Message"/><NativeIcon name="camera" size={18}/></label>{draft.trim()?<button type="submit" className="np-wa-submit" aria-label="Save WhatsApp draft locally"><NativeIcon name="paperplane" size={19}/></button>:<NativeButton name="mic" label="Voice messages unavailable" onClick={()=>{}}/>}</form></div>;
+ return <div className="np-screen np-wa-thread np-wa-screen"><div className="np-wa-thread-header"><NativeButton name="back" label="Back to WhatsApp chats" onClick={onBack}/><Avatar name={name} size={35} initial={name!==formatPhone(number)}/><strong>{name}</strong></div><div className="np-wa-wallpaper np-scroll">{conversation.map((m,i)=><React.Fragment key={m.id||i}>{(i===0||new Date(m.at).toDateString()!==new Date(conversation[i-1].at).toDateString())&&<div className="np-wa-date">{new Date(m.at).toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})}</div>}<div className={'np-wa-line '+(m.dir==='out'?'np-wa-out':'np-wa-in')}><span className="np-wa-bubble">{m.text}<small>{formatStamp(m.at)}{m.status==='local'?' · Saved locally · not delivered':''}</small></span></div></React.Fragment>)}<div ref={bottom}/></div><form className="np-wa-input" onSubmit={save}><label><input value={draft} onChange={e=>setDraft(e.target.value)} aria-label="WhatsApp message" placeholder="Message · local only"/></label>{draft.trim()?<button type="submit" className="np-wa-submit" aria-label="Save WhatsApp draft locally"><NativeIcon name="paperplane" size={19}/></button>:<span className="np-wa-send-placeholder" aria-hidden="true"/>}</form></div>;
 }
-export default function WhatsApp({page='list',number,messages,leads,onBack,onThread,onCompose,onSave,onCall,onCalls}){
- if(page==='thread')return <WAThread number={number} messages={messages} leads={leads} onBack={onBack} onSave={onSave} onCall={onCall}/>;
+export default function WhatsApp({page='list',number,messages,leads,onBack,onThread,onCompose,onSave}){
+ if(page==='thread')return <WAThread number={number} messages={messages} leads={leads} onBack={onBack} onSave={onSave}/>;
  if(page==='new')return <NewChat leads={leads} onBack={onBack} onOpen={onThread}/>;
- return <Chats messages={messages} leads={leads} onBack={onBack} onOpen={onThread} onNew={onCompose} onCall={onCalls}/>;
+ return <Chats messages={messages} leads={leads} onBack={onBack} onOpen={onThread} onNew={onCompose}/>;
 }

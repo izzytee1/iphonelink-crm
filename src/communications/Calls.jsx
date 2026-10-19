@@ -6,36 +6,22 @@ const pad=n=>String(n).padStart(2,'0');
 const telephone=(value)=>{const number=String(value||'').replace(/\D/g,'');const local=number.length===11&&number[0]==='1'?number.slice(1):number;return local.length===10?'('+local.slice(0,3)+') '+local.slice(3,6)+'-'+local.slice(6):value;};
 const findLead=(leads,n)=>leads.find(l=>leadPhones(l).some(p=>digits(p)===digits(n)));
 const label=(leads,n)=>findLead(leads,n)?.name||telephone(n);
-function CallsList({calls,leads,onDetail,onContacts,onKeypad,onCall,onExit,onSearch}){
- const [filter,setFilter]=useState('all'),[filterOpen,setFilterOpen]=useState(false);
- const filtered=calls.filter(call=>filter==='all'||call.dir==='missed');
+function CallsList({calls,leads,onDetail,onContacts,onKeypad,onCall,onExit}){
+ const [filter,setFilter]=useState('all'),[filterOpen,setFilterOpen]=useState(false),[searchOpen,setSearchOpen]=useState(false),[search,setSearch]=useState('');
+ const filtered=calls.filter(c=>(filter==='all'||c.dir==='missed')&&(label(leads,c.number)+' '+telephone(c.number)).toLowerCase().includes(search.toLowerCase()));
  return <div className="np-screen np-call-list">
-  <div className="np-phone-titlebar">
-   <NativeButton name="back" label="Back to Communications" onClick={onExit}/>
-   <h1>Calls</h1>
-   <div className="np-phone-filter"><NativeButton name="filter" label="Filter calls" onClick={()=>setFilterOpen(s=>!s)} kind="np-quiet-round"/>
-    {filterOpen&&<div className="np-phone-filter-menu">{[['all','All'],['missed','Missed']].map(([key,title])=>
-      <button type="button" key={key} onClick={()=>{setFilter(key);setFilterOpen(false)}} aria-pressed={filter===key}>{title}</button>)}</div>}
+  <div className="np-phone-titlebar"><NativeButton name="back" label="Back to Communications" onClick={onExit}/>
+   <strong>Calls</strong><div className="np-phone-filter"><NativeButton name="filter" label="Filter calls" onClick={()=>setFilterOpen(v=>!v)}/>
+    {filterOpen&&<div className="np-phone-filter-menu">{[['all','All'],['missed','Missed']].map(([key,title])=><button key={key} type="button" aria-pressed={filter===key} onClick={()=>{setFilter(key);setFilterOpen(false)}}>{title}</button>)}</div>}
    </div>
   </div>
-  <div className="np-native-list np-scroll">{filtered.map(call=><div className="np-call-row" key={call.id}>
-    <button type="button" className="np-call-main" onClick={()=>onDetail(call)}>
-      <Avatar name={label(leads,call.number)} size={43} initial={Boolean(findLead(leads,call.number))}/>
-      <span className="np-call-copy"><strong className={call.dir==='missed'?'np-missed':''}>{label(leads,call.number)}</strong>
-        <small>{call.dir==='missed'?'Missed':call.dir==='out'?'Outgoing':'Incoming'} · {telephone(call.number)}</small></span>
-      <span className="np-call-time">{formatStamp(call.at)}</span>
-    </button>
-    <div className="np-call-side">
-      <NativeButton name="message" label={'Message '+label(leads,call.number)} onClick={()=>onDetail(call,'message')} size={19}/>
-      <NativeButton name="phone" label={'Call '+label(leads,call.number)} onClick={()=>onCall(call.number)} size={20}/>
-    </div>
-  </div>)}<p className="np-demo-disclaimer">Sample call history · connected provider not available</p></div>
-  <nav className="np-native-phone-tabs" aria-label="iPhone phone tabs">
-   {[['Calls','phone',()=>{}],['Contacts','user',onContacts],['Keypad','keypad',onKeypad],['Search','search',onSearch]].map(([title,icon,action])=>
-     <button type="button" key={title} className={title==='Calls'?'np-native-current':''} onClick={action} aria-label={'Phone '+title}>
-       <NativeIcon name={icon} size={21}/><span>{title}</span>
-     </button>)}
-  </nav>
+  {searchOpen&&<label className="np-phone-search"><NativeIcon name="search" size={17}/><input aria-label="Search call history" type="search" placeholder="Search calls" value={search} onChange={e=>setSearch(e.target.value)}/></label>}
+  <div className="np-native-list np-scroll">{filtered.map(c=><div className="np-call-row" key={c.id}>
+   <button className="np-call-main" type="button" onClick={()=>onDetail(c)}><Avatar name={label(leads,c.number)} size={43} initial={Boolean(findLead(leads,c.number))}/>
+    <span className="np-call-copy"><strong className={c.dir==='missed'?'np-missed':''}>{label(leads,c.number)}</strong><small>{c.dir==='missed'?'Missed':c.dir==='out'?'Outgoing':'Incoming'} · {telephone(c.number)}</small></span><span className="np-call-time">{formatStamp(c.at)}</span></button>
+   <div className="np-call-side"><NativeButton name="message" label={'Message '+label(leads,c.number)} onClick={()=>onDetail(c,'message')} size={19}/><NativeButton name="phone" label={'Call '+label(leads,c.number)} onClick={()=>onCall(c.number)} size={20}/></div>
+  </div>)}<p className="np-demo-disclaimer">Sample call history · provider call history not connected</p></div>
+  <nav className="np-native-phone-tabs" aria-label="iPhone phone tabs">{[['Calls','phone',()=>{}],['Contacts','user',onContacts],['Keypad','keypad',onKeypad],['Search','search',()=>{setSearchOpen(v=>!v);setSearch('')}]].map(([name,icon,action])=><button type="button" key={name} className={name==='Calls'?'np-native-current':''} onClick={action} aria-label={'Phone '+name}><NativeIcon name={icon} size={21}/><span>{name}</span></button>)}</nav>
  </div>;
 }
 function Contacts({leads,onBack,onDetail}){
@@ -45,7 +31,7 @@ function Contacts({leads,onBack,onDetail}){
 }
 function CallDetail({call,leads,onBack,onMessage,onCall,onWhatsApp}){
  const lead=findLead(leads,call.number),name=lead?.name||telephone(call.number);
- return <div className="np-screen np-detail-screen"><div className="np-simple-nav"><NativeButton name="back" label="Back" onClick={onBack}/><strong>{call.contact?'Contact':'Info'}</strong><NativeButton name="more" label="More details unavailable" onClick={()=>{}}/></div><div className="np-detail-scroll np-scroll"><div className="np-contact-hero"><Avatar name={name} size={105} initial={Boolean(lead)}/><h2>{name}</h2>{lead?.company&&<p>{lead.company}</p>}</div><div className="np-action-four">{[{icon:'message',title:'message',action:()=>onMessage(call.number)},{icon:'phone',title:'call',action:()=>onCall(call.number)},{icon:'video',title:'video',action:()=>{}},{icon:'whatsapp',title:'WhatsApp',action:()=>onWhatsApp(call.number)}].map(a=><button key={a.title} type="button" onClick={a.action}><NativeIcon name={a.icon} size={23}/><span>{a.title}</span></button>)}</div><div className="np-detail-card"><small>mobile</small><div><span>{telephone(call.number)}</span><NativeButton name="message" label="Message" onClick={()=>onMessage(call.number)}/><NativeButton name="phone" label="Call" onClick={()=>onCall(call.number)}/></div></div>{!call.contact&&<div className="np-detail-card"><small>Call History · Sample</small><p>{call.dir==='out'?'Outgoing':call.dir==='missed'?'Missed':'Incoming'} Call</p><p>{new Date(call.at).toLocaleString('en-US')}</p>{Number(call.duration)>0&&<p>{Math.floor(call.duration/60)} minutes</p>}</div>}</div></div>
+ return <div className="np-screen np-detail-screen"><div className="np-simple-nav"><NativeButton name="back" label="Back" onClick={onBack}/><strong>{call.contact?'Contact':'Info'}</strong><span className="np-nav-spacer" aria-hidden="true"/></div><div className="np-detail-scroll np-scroll"><div className="np-contact-hero"><Avatar name={name} size={105} initial={Boolean(lead)}/><h2>{name}</h2>{lead?.company&&<p>{lead.company}</p>}</div><div className="np-action-four">{[{icon:'message',title:'message',action:()=>onMessage(call.number)},{icon:'phone',title:'call',action:()=>onCall(call.number)},{icon:'whatsapp',title:'WhatsApp',action:()=>onWhatsApp(call.number)}].map(a=><button key={a.title} type="button" onClick={a.action}><NativeIcon name={a.icon} size={23}/><span>{a.title}</span></button>)}</div><div className="np-detail-card"><small>mobile</small><div><span>{telephone(call.number)}</span><NativeButton name="message" label="Message" onClick={()=>onMessage(call.number)}/><NativeButton name="phone" label="Call" onClick={()=>onCall(call.number)}/></div></div>{!call.contact&&<div className="np-detail-card"><small>Call History · Sample</small><p>{call.dir==='out'?'Outgoing':call.dir==='missed'?'Missed':'Incoming'} Call</p><p>{new Date(call.at).toLocaleString('en-US')}</p>{Number(call.duration)>0&&<p>{Math.floor(call.duration/60)} minutes</p>}</div>}</div></div>
 }
 function Keypad({phoneController,onBack}){
  const numberRef=useRef(null);
@@ -63,5 +49,5 @@ export default function Calls({view='list',call,leads,calls,phoneController,onBa
  if(view==='keypad')return <Keypad phoneController={phoneController} onBack={onBack}/>;
  if(view==='contacts')return <Contacts leads={leads} onBack={onBack} onDetail={onDetail}/>;
  if(view==='detail'&&call)return <CallDetail call={call} leads={leads} onBack={onBack} onMessage={onMessage} onCall={dial} onWhatsApp={onWhatsApp}/>;
- return <CallsList leads={leads} calls={calls} onDetail={(c,type)=>type==='message'?onMessage(c.number):onDetail(c)} onCall={dial} onContacts={onContacts} onKeypad={onKeypad} onExit={onExit} onSearch={onContacts}/>;
+ return <CallsList leads={leads} calls={calls} onDetail={(c,type)=>type==='message'?onMessage(c.number):onDetail(c)} onCall={dial} onContacts={onContacts} onKeypad={onKeypad} onExit={onExit}/>;
 }

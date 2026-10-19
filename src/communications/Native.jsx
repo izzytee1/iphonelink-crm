@@ -7,16 +7,10 @@ const art={
  filter:<><path d="M4 6h16M7 12h10M10 18h4"/></>,
  phone:<path d="M6 3c-.7-.3-1.5 0-1.8.7L2.9 6.8c-.4 1.1-.2 2.1.2 3.3a22 22 0 0 0 10.8 10.8c1.2.4 2.2.6 3.3.2l3.1-1.3c.7-.3 1-1.1.7-1.8l-1.4-3.3a1.5 1.5 0 0 0-1.9-.9l-3.2 1a1.5 1.5 0 0 0-.9 1.8l.2.5A16.7 16.7 0 0 1 7.4 10l.5-.2a1.5 1.5 0 0 0 1-1.8l-1-3.2a1.5 1.5 0 0 0-.9-.9Z"/>,
  end:<path d="M3 16.2v-3.5C4.2 10 8 9 12 9s7.8 1 9 3.7v3.5l-4.2.5-1.5-3.3a20 20 0 0 0-6.6 0l-1.5 3.3Z"/>,
- video:<><rect x="2" y="5" width="14.5" height="14" rx="3"/><path d="m17 10 5-3v10l-5-3"/></>,
  message:<path d="M20 11.6A8.2 8.2 0 0 1 11.6 20a9.3 9.3 0 0 1-4.2-.9L3 20l1.1-4.4A8.1 8.1 0 0 1 3 11.6a8.5 8.5 0 0 1 17 0Z"/>,
  paperplane:<><path d="m21 3-8.6 18-2.6-7.6L3 10.7 21 3Z"/><path d="m9.8 13.4L21 3"/></>,
  send:<><path d="M12 20V4m-6 6 6-6 6 6"/></>, plus:<path d="M12 4v16M4 12h16"/>,
- mic:<><rect x="9" y="2" width="6" height="13" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v4m-4 0h8"/></>,
- camera:<><path d="M4 7h4l1.5-2h5L16 7h4v12H4z"/><circle cx="12" cy="13" r="3.2"/></>,
  chevron:<path d="m9 5 7 7-7 7"/>, resize:<path d="m10 19 9-9m-5 9h5v-5M6 19 19 6"/>,
- more:<><circle cx="5" cy="12" r="1.25"/><circle cx="12" cy="12" r="1.25"/><circle cx="19" cy="12" r="1.25"/></>,
- updates:<><circle cx="12" cy="12" r="8"/><path d="m6 6 2-2M16 4l2 2M12 7v5l3 2"/></>,
- community:<><circle cx="8" cy="9" r="3"/><circle cx="17" cy="9" r="3"/><path d="M2 21c0-4 2-6 6-6s6 2 6 6M12 17c1-1 3-2 5-2 4 0 5 2 5 6"/></>,
  user:<><circle cx="12" cy="8" r="4"/><path d="M4.5 21c0-5 3-7.5 7.5-7.5s7.5 2.5 7.5 7.5"/></>,
  keypad:<>{[5,12,19].flatMap(x=>[5,12,19].map(y=><circle key={x+'-'+y} cx={x} cy={y} r="1.5" fill="currentColor" stroke="none"/>))}</>,
  all:<><rect x="3" y="3" width="8" height="8" rx="2"/><rect x="13" y="3" width="8" height="8" rx="2"/><rect x="3" y="13" width="8" height="8" rx="2"/><rect x="13" y="13" width="8" height="8" rx="2"/></>,
@@ -33,21 +27,17 @@ export function NativeButton({name,label,onClick,kind='',size=21}){return <butto
 export function StatusBar({telemetry}){
  const [now,setNow]=React.useState(()=>new Date());
  React.useEffect(()=>{const id=setInterval(()=>setNow(new Date()),30000);return()=>clearInterval(id)},[]);
- const known=Number.isFinite(telemetry?.percent);
- const level=known?telemetry.percent:0;
- const charging=known&&telemetry.charging;
- const color=telemetry?.lowPower?'#ffdb38':charging?'#34c759':known&&level<20?'#ff453a':'#f5f5f7';
+ const connected=Number.isFinite(telemetry?.percent);
+ const level=connected?telemetry.percent:0;
+ const charging=connected&&telemetry.charging;
+ const color=telemetry?.lowPower?'#ffdb38':charging?'#34c759':connected&&level<20?'#ff453a':'#f5f5f7';
  return <div className="np-status" aria-label="iPhone status bar">
-  <span>{now.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',hour12:true}).replace(/\s?(AM|PM)$/,'')}</span>
-  <div className="np-status-glyphs">
-    <div className={'np-battery'+(known?' np-battery-live':' np-battery-unavailable')} style={{'--np-battery-color':color}}
-       role="img" aria-label={known?'Phone battery '+level+' percent'+(charging?', charging':'')+(telemetry.lowPower?', low power mode':''):'Phone battery information unavailable'}>
-      <span className="np-battery-fill" style={{width:known?level+'%':'0%'}}/>
-      <span className="np-battery-percent">{known?level:'—'}</span>
-      {charging&&<svg className="np-battery-bolt" width="9" height="12" viewBox="0 0 10 16" aria-hidden="true">
-        <path d="M6.4 0 1.2 8.8h3.3L3.6 16 9.1 6.8H5.8z" fill="#ffffff"/></svg>}
-    </div>
-  </div>
+  <span>{now.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'}).replace(/\s?(AM|PM)$/,'')}</span>
+  <div className="np-status-glyphs"><div className={'np-battery'+(connected?' np-battery-live':' np-battery-unavailable')}
+    style={{'--np-battery-color':color}} role="img" aria-label={connected?'Phone battery '+level+' percent'+(charging?', charging':'')+(telemetry.lowPower?', low power mode':''):'Phone battery information unavailable'}>
+    <span className="np-battery-fill" style={{width:connected?level+'%':'0%'}}/><span className="np-battery-percent">{connected?level:'—'}</span>
+    {charging&&<svg className="np-battery-bolt" width="9" height="12" viewBox="0 0 10 16" aria-hidden="true"><path d="M6.4 0 1.2 8.8h3.3L3.6 16 9.1 6.8H5.8z" fill="#ffffff"/></svg>}
+  </div></div>
  </div>;
 }
 export function formatStamp(value){if(!value)return '';const d=new Date(value);if(Number.isNaN(+d))return '';const today=new Date();return d.toDateString()===today.toDateString()?d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'}):d.toLocaleDateString('en-US',{month:'short',day:'numeric'})}

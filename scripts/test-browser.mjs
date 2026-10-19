@@ -96,12 +96,12 @@ async function run(type,mobile){
   await page.getByRole('button',{name:'Messages'}).first().click();
   await page.getByRole('heading',{name:'Messages'}).waitFor();
   await page.locator('.np-root-tabs button').filter({hasText:'Calls'}).click();
-  await page.getByRole('heading',{name:'Calls'}).waitFor();
+  await page.locator('.np-phone-titlebar strong').waitFor();
   await page.getByRole('button',{name:'Filter calls'}).click();
   await page.getByRole('button',{name:'Missed',exact:true}).click();
   await page.getByRole('button',{name:'Filter calls'}).click();
-  await page.getByRole('button',{name:'All',exact:true}).first().click();
-  await page.getByRole('button',{name:'Phone Keypad',exact:true}).click();
+  await page.getByRole('button',{name:'All',exact:true}).click();
+  await page.getByRole('button',{name:'Phone Keypad'}).click();
   assert.equal(await page.locator('.np-dial-key').count(),12,'Missing DTMF digits');
   assert.equal(await page.locator('.np-in-call button').count(),6,'Call control positions moved');
   for(const d of '2225555555')await page.locator('.np-dial-key').filter({hasText:new RegExp('^'+d)}).first().click();

@@ -1,8 +1,9 @@
 # v07 Test Report
 
-Test plan: clean npm install, production build, source regression checks, Chromium desktop/mobile and WebKit mobile, and visual screenshots for dialer, keypad, Calls, Messages, WhatsApp.
-
-Unverified until connected: real iPhone battery telemetry, actual telephone provider calls, real iMessage and WhatsApp delivery.
+- Build and source regression tests
+- Desktop Chromium and mobile Chromium/WebKit interactions
+- Native status battery contract and stable list layout
+- No actual device/provider or real WhatsApp/iMessage delivery verified
 
 # v06 Test Report
 
