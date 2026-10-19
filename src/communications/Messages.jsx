@@ -18,7 +18,7 @@ function List({messages,leads,onThread,onCompose,onWhatsApp}){
  },[messages]);
  const filtered=threads.filter(m=>(nameFor(leads,m.number)+' '+m.text+' '+channelLabel(m.channel)).toLowerCase().includes(query.toLowerCase())&&(!unreadOnly||messages.some(x=>x.channel===m.channel&&digits(x.number)===digits(m.number)&&x.unread)));
  return <div className="np-screen np-messages">
-   <div className="np-top-action"><button type="button" className="np-text-action" onClick={onCompose}>New</button><div><NativeButton name="whatsapp" label="WhatsApp chats" onClick={onWhatsApp} kind="np-whatsapp-entry"/><NativeButton name="filter" label={unreadOnly?'Show all messages':'Show unread messages'} onClick={()=>setUnreadOnly(s=>!s)} kind="np-quiet-round"/><NativeButton name="compose" label="New iOS message" onClick={onCompose} kind="np-compose-entry"/></div></div>
+   <div className="np-top-action"><span className="np-messages-left-space" aria-hidden="true"/><div><NativeButton name="whatsapp" label="WhatsApp chats" onClick={onWhatsApp} kind="np-whatsapp-entry"/><NativeButton name="filter" label={unreadOnly?'Show all messages':'Show unread messages'} onClick={()=>setUnreadOnly(s=>!s)} kind="np-quiet-round"/><NativeButton name="compose" label="New iOS message" onClick={onCompose} kind="np-compose-entry"/></div></div>
    <h1 className="np-large-title">Messages</h1>
    <div className="np-native-list np-scroll">{filtered.map(m=><button className="np-list-row" type="button" key={m.channel+digits(m.number)} onClick={()=>onThread(m.channel,m.number)}>
      <Avatar name={nameFor(leads,m.number)} size={47} initial={nameFor(leads,m.number)!==formatPhone(m.number)}/>

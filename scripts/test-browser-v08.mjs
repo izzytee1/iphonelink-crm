@@ -59,7 +59,7 @@ async function run(type,mobile){
     assert.equal(await page.locator('.np-battery').getAttribute('aria-label'),'Phone battery information unavailable');
   }
   assert.deepEqual(errors,[],'No uncaught page errors');
-  console.log((type===chromium?'Chromium':'WebKit')+(mobile?' mobile':' desktop')+': v07 PASS');
+  console.log((type===chromium?'Chromium':'WebKit')+(mobile?' mobile':' desktop')+': v08 PASS');
  }finally{await browser.close();}
 }
 try{
@@ -67,5 +67,5 @@ try{
  await run(chromium,false);
  await run(chromium,true);
  await run(webkit,true);
- console.log('All v07 UI states PASS');
+ console.log('All v08 UI states PASS');
 }finally{server.kill();}

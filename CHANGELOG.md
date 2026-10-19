@@ -1,3 +1,11 @@
+# v08 — iPhone communications visual precision
+
+- Match current iPhone-style chat typography, spacing, colors and native avatar proportions.
+- WhatsApp chat list, thread header, bubbles, composer and light/dark variants updated against user screenshots.
+- iOS Messages heading adjusted and duplicate Compose action removed.
+- CSS implementation audited: one rule per selector; obsolete WhatsApp styles removed.
+- Preserve existing functional actions, phone controller, device battery adapter, drag behavior and supported data.
+
 # v07 — Compact iPhone and WhatsApp refinements
 
 - Dark 215px keypad, balanced topbar number screen and premium phone switcher.

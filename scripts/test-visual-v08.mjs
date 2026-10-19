@@ -34,6 +34,9 @@ async function run(type,mobile,theme){
   await stable(page,'.np-messages .np-list-row');
   await page.getByRole('button',{name:'WhatsApp chats'}).click();
   await stable(page,'.np-wa-list-row');
+  const avatarColors=await page.locator('.np-wa-chats .np-avatar-wa').evaluateAll(nodes=>nodes.map(node=>getComputedStyle(node).backgroundColor));
+  assert.ok(avatarColors.length>=3 && new Set(avatarColors).size>1,'WhatsApp avatars should be visually distinct and stable');
+
   assert.equal(await page.getByRole('button',{name:'Camera unavailable'}).count(),0);
   assert.equal(await page.locator('.np-wa-chips button').count(),2);
   await page.locator('.np-device').screenshot({path:'visual/'+(mobile?'mobile-':'desktop-')+theme+'-whatsapp.jpg',type:'jpeg',quality:70});
@@ -65,6 +68,6 @@ async function battery(mode){
 }
 try{
  for(let i=0;i<80;i++){try{if((await fetch(host)).ok)break}catch{}await sleep(250)}
- await run(chromium,false,'light');await run(webkit,true,'dark');
+ await run(chromium,false,'light');await run(chromium,false,'dark');await run(webkit,true,'light');await run(webkit,true,'dark');
  await battery('offline');await battery('yellow');await battery('charging');
 }finally{server.kill()}

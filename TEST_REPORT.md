@@ -1,3 +1,10 @@
+# v08 Test Report
+
+- React production build plus source assertions and duplicate-selector audit.
+- Chromium desktop and mobile/WebKit UI regression tests including drag, keypad, message and phone navigation.
+- Visual screenshots of WhatsApp and iPhone Messages in light and dark with row-tap geometry checks.
+- Real hardware, WhatsApp/iMessage delivery and carrier phone features still require connected backends.
+
 # v07 Test Report
 
 - Build and source regression tests

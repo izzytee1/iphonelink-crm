@@ -36,7 +36,7 @@ check('No old comms CSS',!css.includes('.nc-'));
 check('Apple system typography',css.includes('-apple-system'));
 check('iOS contact avatars',native.includes('np-avatar'));
 check('Local drafts labeled not delivered',comm.includes('Saved locally · not delivered'));
-check('Version 07',brand.includes('v07'));
+check('Version 08',brand.includes('v08'));
 check('No v02 source importer',!existsSync(new URL('../.github/workflows/import-v02.yml',import.meta.url)));
 check('No v04 tests',!existsSync(new URL('./test-iphonelink-v04.mjs',import.meta.url)));
 
@@ -83,4 +83,15 @@ check('Backend battery adapter',read('../src/hooks/useDeviceTelemetry.js').inclu
 check('No fake video and camera buttons',!call.includes("title:'video'")&&!msg.includes('Video call unavailable')&&!wa.includes('Video unavailable')&&!wa.includes('Camera unavailable'));
 check('Stable press geometry',!css.includes('button:active{transform:scale(.97)')&&css.includes('.np-wa-list-row:active{transform:none}'));
 
-console.log(count+' v07 regression checks passed');
+
+
+const selectors=[...css.matchAll(/^([^{}\n]+)\{/gm)].map(m=>m[1].trim()).filter(n=>n.startsWith('.'));
+check('One CSS implementation per selector',selectors.length===new Set(selectors).size);
+check('iOS WhatsApp chat alignment',css.includes('.np-wa-chats .np-list-row')&&css.includes('.np-wa-screen .np-avatar'));
+check('Message header and WhatsApp title scale',css.includes('.np-messages .np-large-title')&&css.includes('.np-wa-screen .np-large-title'));
+check('Single WhatsApp compose entry',!msg.includes('np-text-action')&&msg.includes('np-compose-entry'));
+
+
+
+check('One shared avatar with WhatsApp style',native.includes('WHATSAPP_AVATAR_COLORS')&&native.includes('variant=')&&wa.includes('variant="whatsapp"'));
+console.log(count+' v08 regression checks passed');

@@ -22,7 +22,20 @@ const art={
  list:<><path d="M9 6h12M9 12h12M9 18h12M3 6h2M3 12h2M3 18h2"/></>,
 };
 export function NativeIcon({name,size=21,className='',strokeWidth=1.8}){return <svg className={className} width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{art[name]||art.more}</svg>}
-export function Avatar({name='',size=48,initial=false}){const n=String(name||'').trim();const letter=n&&!/^\+?[\d(\s-]+$/.test(n)?n[0]?.toUpperCase():'';return <span className={'np-avatar'+(initial&&letter?' np-initial':'')} style={{width:size,height:size,fontSize:Math.round(size*.46)}} aria-hidden="true">{initial&&letter?letter:<svg viewBox="0 0 64 64" width="100%" height="100%" aria-hidden="true"><circle cx="32" cy="24" r="11" fill="#fff"/><path d="M6 57c2-12 11-18 26-18s24 6 26 18a31 31 0 0 1-52 0" fill="#fff"/></svg>}</span>}
+const WHATSAPP_AVATAR_COLORS=[
+ ['#183e2d','#61d688'],['#343047','#c3b6e5'],['#2f3d4e','#8bbbe7'],
+ ['#43312d','#e7ad96'],['#2a4042','#88d0c8'],['#3c3647','#c5b5ce']
+];
+export function Avatar({name='',size=48,initial=false,variant='default'}){
+ const n=String(name||'').trim();
+ const letter=n&&!/^\+?[\d(\s-]+$/.test(n)?n[0]?.toUpperCase():'';
+ const palette=variant==='whatsapp'?WHATSAPP_AVATAR_COLORS[[...n].reduce((value,c)=>((value*31+c.charCodeAt(0))>>>0),7)%WHATSAPP_AVATAR_COLORS.length]:null;
+ const style={width:size,height:size,fontSize:Math.round(size*.46),...(palette?{'--np-avatar-bg':palette[0],'--np-avatar-ink':palette[1]}:{})};
+ return <span className={'np-avatar'+(initial&&letter?' np-initial':'')+(palette?' np-avatar-wa':'')} style={style} aria-hidden="true">
+   {initial&&letter?letter:<svg viewBox="0 0 64 64" width="100%" height="100%" aria-hidden="true"><circle cx="32" cy="24" r="11" fill="#fff"/><path d="M6 57c2-12 11-18 26-18s24 6 26 18a31 31 0 0 1-52 0" fill="#fff"/></svg>}
+ </span>;
+}
+
 export function NativeButton({name,label,onClick,kind='',size=21}){return <button className={'np-icon-button '+kind} type="button" onClick={onClick} aria-label={label} title={label}><NativeIcon name={name} size={size}/></button>}
 export function StatusBar({telemetry}){
  const [now,setNow]=React.useState(()=>new Date());
