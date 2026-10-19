@@ -36,7 +36,7 @@ check('No old comms CSS',!css.includes('.nc-'));
 check('Apple system typography',css.includes('-apple-system'));
 check('iOS contact avatars',native.includes('np-avatar'));
 check('Local drafts labeled not delivered',comm.includes('Saved locally · not delivered'));
-check('Version 10',brand.includes('v10'));
+check('Version 11',brand.includes('v11'));
 check('No v02 source importer',!existsSync(new URL('../.github/workflows/import-v02.yml',import.meta.url)));
 check('No v04 tests',!existsSync(new URL('./test-iphonelink-v04.mjs',import.meta.url)));
 
@@ -93,7 +93,7 @@ check('Single WhatsApp compose entry',!msg.includes('np-text-action')&&msg.inclu
 
 
 
-check('One shared avatar with WhatsApp style',native.includes('WHATSAPP_AVATAR_COLORS')&&native.includes('np-avatar-solid')&&wa.includes('variant="whatsapp"'));
+check('One shared avatar with WhatsApp style',native.includes('ORIGINAL_AVATAR')&&native.includes('np-avatar-solid')&&wa.includes('variant="whatsapp"'));
 
 
 check('Compact lead 3-column company detail',read('../src/pages/leads/leads.css').includes('grid-template-columns:repeat(3,minmax(0,1fr))'));
@@ -101,4 +101,4 @@ check('Dark Gmail folder contrast',emailStyles.includes('color:var(--gm-text)'))
 check('No message demo labels',!msg.includes('iMessage · DEMO')&&!msg.includes('np-channel-tabs'));
 check('Back button in Messages list',msg.includes('Back to All'));
 check('Dark premium phone switcher',read('../src/shell/topbar/actions.css').includes('crm-phone-choice{display:flex')&&read('../src/shell/topbar/actions.css').includes('border-radius:21px'));
-console.log(count+' v10 regression checks passed');
+console.log(count+' v11 regression checks passed');

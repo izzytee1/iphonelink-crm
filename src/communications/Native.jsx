@@ -8,6 +8,7 @@ const art={
  phone:<path d="M6 3c-.7-.3-1.5 0-1.8.7L2.9 6.8c-.4 1.1-.2 2.1.2 3.3a22 22 0 0 0 10.8 10.8c1.2.4 2.2.6 3.3.2l3.1-1.3c.7-.3 1-1.1.7-1.8l-1.4-3.3a1.5 1.5 0 0 0-1.9-.9l-3.2 1a1.5 1.5 0 0 0-.9 1.8l.2.5A16.7 16.7 0 0 1 7.4 10l.5-.2a1.5 1.5 0 0 0 1-1.8l-1-3.2a1.5 1.5 0 0 0-.9-.9Z"/>,
  end:<path d="M3 16.2v-3.5C4.2 10 8 9 12 9s7.8 1 9 3.7v3.5l-4.2.5-1.5-3.3a20 20 0 0 0-6.6 0l-1.5 3.3Z"/>,
  message:<path d="M20 11.6A8.2 8.2 0 0 1 11.6 20a9.3 9.3 0 0 1-4.2-.9L3 20l1.1-4.4A8.1 8.1 0 0 1 3 11.6a8.5 8.5 0 0 1 17 0Z"/>,
+ paperclip:<path d="M21 11.5 12.8 19.7a6 6 0 0 1-8.5-8.5L13 2.5a4 4 0 0 1 5.7 5.7L9.6 17.3a2 2 0 0 1-2.8-2.8l7.8-7.8"/>,
  paperplane:<><path d="m21 3-8.6 18-2.6-7.6L3 10.7 21 3Z"/><path d="m9.8 13.4L21 3"/></>,
  send:<><path d="M12 20V4m-6 6 6-6 6 6"/></>, plus:<path d="M12 4v16M4 12h16"/>,
  chevron:<path d="m9 5 7 7-7 7"/>, resize:<path d="m10 19 9-9m-5 9h5v-5M6 19 19 6"/>,
@@ -22,14 +23,11 @@ const art={
  list:<><path d="M9 6h12M9 12h12M9 18h12M3 6h2M3 12h2M3 18h2"/></>,
 };
 export function NativeIcon({name,size=21,className='',strokeWidth=1.8}){return <svg className={className} width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{art[name]||art.more}</svg>}
-const WHATSAPP_AVATAR_COLORS=[
- ['#183e2d','#61d688'],['#343047','#c3b6e5'],['#2f3d4e','#8bbbe7'],
- ['#43312d','#e7ad96'],['#2a4042','#88d0c8'],['#3c3647','#c5b5ce']
-];
+const ORIGINAL_AVATAR=['#41445e','#c8c9e1'];
 export function Avatar({name='',size=48,initial=false,variant='default'}){
  const n=String(name||'').trim();
  const letter=n&&!/^\+?[\d(\s-]+$/.test(n)?n[0]?.toUpperCase():'';
- const palette=WHATSAPP_AVATAR_COLORS[[...n].reduce((value,c)=>((value*31+c.charCodeAt(0))>>>0),7)%WHATSAPP_AVATAR_COLORS.length];
+ const palette=ORIGINAL_AVATAR;
  const style={width:size,height:size,fontSize:Math.round(size*.46),'--np-avatar-bg':palette[0],'--np-avatar-ink':palette[1]};
  return <span className={'np-avatar'+(initial&&letter?' np-initial':'')+' np-avatar-solid'} style={style} aria-hidden="true">
    {initial&&letter?letter:<svg viewBox="0 0 64 64" width="100%" height="100%" aria-hidden="true"><circle cx="32" cy="24" r="11" fill="currentColor"/><path d="M6 57c2-12 11-18 26-18s24 6 26 18a31 31 0 0 1-52 0" fill="currentColor"/></svg>}

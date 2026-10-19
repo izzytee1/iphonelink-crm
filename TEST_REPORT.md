@@ -1,3 +1,9 @@
+# v11 Test Report
+
+- Verified React production build, icon and attachment contracts, search toggle, colored keypad and Contacts.
+- Desktop Chromium, mobile Chromium and WebKit regressions, plus v11 premium geometry, attachment and contrast checks; compact Gmail inline composer and notifications.
+- No real SMS, WhatsApp or email delivery without provider authorization.
+
 # v10 Verification Plan
 
 - React production build and static source verification.

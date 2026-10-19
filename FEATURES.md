@@ -1,4 +1,4 @@
-# iPhoneLink v10 — Features
+# iPhoneLink v11 — Features
 - Full desktop canvas on phones (1440 × 900 CSS pixels), native pan and pinch zoom.
 - Leads grid and Email/Gmail desktop layout preserved; Email sidebar remains full width.
 - Functional, persistent display settings inside the user avatar dropdown, Light mode default.

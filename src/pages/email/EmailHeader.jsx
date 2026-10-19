@@ -2,12 +2,14 @@ import { useState } from 'react';
 import MailIcon from './MailIcon.jsx';
 export default function EmailHeader({ query, setQuery, advanced, setAdvanced, compact=false }) {
   const [showSearch, setShowSearch] = useState(false);
+  const [expanded,setExpanded] = useState(false);
   return <header className={`gm-header ${compact?'gm-header-compact':''}`}>
-    <form className="gm-search-wrap" onSubmit={(e)=>e.preventDefault()} role="search">
-      <MailIcon name="search" size={20}/><input aria-label="Search mail" value={query} onChange={e=>setQuery(e.target.value)} placeholder="Search mail" />
+    {!compact&&!expanded&&!query&&<button type="button" className="gm-search-toggle" aria-label="Search mail" onClick={()=>setExpanded(true)}><MailIcon name="search" size={20}/></button>}
+    {(compact||expanded||Boolean(query))&&<form className="gm-search-wrap" onSubmit={(e)=>e.preventDefault()} role="search">
+      <MailIcon name="search" size={20}/><input autoFocus={!compact&&expanded} aria-label="Search mail" value={query} onChange={e=>setQuery(e.target.value)} placeholder="Search mail" />
       {query?<button type="button" aria-label="Clear search" onClick={()=>setQuery('')}><MailIcon name="close"/></button>:null}
       <button type="button" aria-label="Advanced search" aria-expanded={showSearch} title="Search options" onClick={()=>setShowSearch(!showSearch)}><MailIcon name="filter" size={19}/></button>
-    </form>
+    {!compact&&<button type="button" aria-label="Close mail search" onClick={()=>{setExpanded(false);setQuery("");setShowSearch(false)}}><MailIcon name="close"/></button>}</form>}
     {showSearch && <form className="gm-advanced" onSubmit={e=>{e.preventDefault();setShowSearch(false);}}>
       <label>From<input placeholder="Sender address" value={advanced.from} onChange={e=>setAdvanced(s=>({...s,from:e.target.value}))}/></label>
       <label>To<input placeholder="Recipient address" value={advanced.to} onChange={e=>setAdvanced(s=>({...s,to:e.target.value}))}/></label>

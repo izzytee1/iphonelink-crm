@@ -231,3 +231,22 @@
   border-color:var(--gm-line)
 }
 .np-gmail-embedded .gm-compact .gm-compose-head-buttons button{color:var(--gm-text)}
+
+/* v11: collapsed search icon, Gmail-like full-height mobile compose with a compact toolbar toggle. */
+.np-gmail-embedded .gm-main.gm-search-collapsed>.gm-header{display:none}
+.np-gmail-embedded .gm-compact-tools{min-height:43px;flex:0 0 43px;padding:4px 8px;gap:4px}
+.np-gmail-embedded .gm-compact-tools button{flex:0 0 32px;height:34px;min-width:32px}
+.np-gmail-embedded .gm-compact-tools .gm-compact-folders{max-width:40%;flex:0 1 auto;padding:0 6px;font-size:12px}
+.np-gmail-embedded .gm-compact-tools select{font-size:12px;height:34px}
+.np-gmail-embedded .gm-compact .gm-compose{height:min(89%,670px);max-height:calc(100% - 4px);bottom:0;left:0;right:0;z-index:62}
+.np-gmail-embedded .gm-compact .gm-compose.maximized{top:2px;height:calc(100% - 2px)}
+.np-gmail-embedded .gm-compact .gm-compose-content{display:flex;flex-direction:column;min-height:0;flex:1}
+.np-gmail-embedded .gm-compact .gm-compose-addresses{padding:0 11px}
+.np-gmail-embedded .gm-compact .gm-compose-line{min-height:37px}
+.np-gmail-embedded .gm-compact .gm-editor{min-height:55px;flex:1;padding:12px}
+.np-gmail-embedded .gm-compact .gm-compose-bottom{flex:0 0 auto;padding:4px 8px 7px;max-height:52%;overflow-y:auto;background:var(--gm-surface)}
+.np-gmail-embedded .gm-compact .gm-template-strip{padding:2px 0 5px}
+.np-gmail-embedded .gm-compact .gm-send-row{display:flex;align-items:center;flex-wrap:wrap;gap:6px;padding:4px 0}
+.np-gmail-embedded .gm-compact .gm-toolbar-toggle{display:grid;place-items:center;flex:0 0 31px;width:31px;height:30px;border-radius:7px;background:var(--gm-hover);color:var(--gm-text);font-size:16px;font-weight:650}
+.np-gmail-embedded .gm-compact .gm-format-bar{min-height:40px;flex-wrap:wrap}
+.np-gmail-embedded .gm-compact .gm-compose-head{height:40px;flex:0 0 40px}

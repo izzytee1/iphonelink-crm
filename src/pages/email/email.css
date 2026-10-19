@@ -127,3 +127,6 @@
 .gm-compact .gm-logo span {font-size:13px;letter-spacing:0;}
 
 :root[data-theme='dark'] .gm-mail-app{--gm-hover:#2b3a51;--gm-active-bg:#354765;--gm-active-text:#ecf4ff;--gm-search-bg:#2b3a50;--gm-muted:#bcc8da}
+
+.gm-search-toggle{display:grid;place-items:center;width:41px;height:41px;flex:0 0 41px;border:1px solid var(--gm-line);border-radius:11px;background:var(--gm-search-bg);color:var(--gm-muted);cursor:pointer}
+.gm-search-toggle:hover{background:var(--gm-hover)}

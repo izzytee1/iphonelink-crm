@@ -1,3 +1,13 @@
+# v11 — Communications visual correction
+
+- Updated keypad and Contacts to a colored iOS-style design, corrected light-mode contrast.
+- Restored uniform slate-lavender avatar colors and consistent avatar sizes.
+- Collapsible search icon for WhatsApp, Messages, Contacts and compact Gmail (search input opens on demand).
+- Aligned and enlarged message/WhatsApp composers, with visible Send and local attachment pickers.
+- Compact Gmail composer enlarged, formatting toolbar hidden by default with toggle, full composer controls preserved.
+- Smaller iPhone page titles; existing backend/data features retained, no false delivery indicators.
+- Regression, mobile screenshots, and visual geometry checks performed.
+
 # v10 — Instant Communications
 
 - One shared Gmail client reused inside Communications, with folder switching, account selection, inline compose and reply.

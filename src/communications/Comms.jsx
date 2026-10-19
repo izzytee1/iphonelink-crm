@@ -50,7 +50,7 @@ export default function Comms({theme='light',open,onToggle,leads,onSelectLead,ph
   if(screen.id==='calls'&&screen.view!=='list'){navigate('calls');return}
   navigate(screen.id==='whatsapp'?'messages':'all');
  }
- function saveLocal(channel,number,value){const text=String(value||'').trim();if(!text)return;setMessages(current=>[...current,createLocalMessage(channel,number,text)]);setNotice('Saved locally · not delivered');}
+ function saveLocal(channel,number,value,files=[]){const text=String(value||'').trim();if(!text&&!files.length)return;setMessages(current=>[...current,createLocalMessage(channel,number,text,files)]);setNotice('Saved locally · not delivered');}
  useEffect(()=>{
   if(!commRequest)return;
   if(['sms','text','wa','imessage'].includes(commRequest.type)){const c=commRequest.type==='wa'?'wa':commRequest.type==='imessage'?'imessage':'text',n=commRequest.number;if(n){setScreen({id:c==='wa'?'whatsapp':'messages',view:'thread',number:n,channel:c});setMessages(current=>current.map(m=>m.channel===c&&digits(m.number)===digits(n)&&m.unread?{...m,unread:false,read:true}:m));}}

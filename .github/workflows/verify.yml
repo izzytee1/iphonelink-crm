@@ -1,7 +1,7 @@
 name: Verify React Build
 on:
   push:
-    branches: [main, v05-desktop-mobile, v06-dark-call-banner, v07-iphone-polish, v08-native-visuals, v09-compact-ui]
+    branches: [main, v05-desktop-mobile, v06-dark-call-banner, v07-iphone-polish, v08-native-visuals, v09-compact-ui, v10-instant-communications, v11-native-premium]
   pull_request:
 
 permissions:

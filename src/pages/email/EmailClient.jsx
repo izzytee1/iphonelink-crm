@@ -18,6 +18,7 @@ export default function EmailClient({ leads=[], mailbox, setMailbox, composeRequ
   const [folder,setFolder]=useState('inbox');
   const [accountFilter,setAccountFilter]=useState('all');
   const [folderOpen,setFolderOpen]=useState(false);
+  const [compactSearchOpen,setCompactSearchOpen]=useState(false);
   const [query,setQuery]=useState('');
   const [advanced,setAdvanced]=useState(emptyAdvanced);
   const [threadId,setThreadId]=useState(null);
@@ -101,8 +102,8 @@ export default function EmailClient({ leads=[], mailbox, setMailbox, composeRequ
   async function refresh() {try{const saved=await loadMailbox();if(Array.isArray(saved)){setMailbox(saved);toastMessage('Mailbox refreshed');}else toastMessage('Local mailbox is up to date');}catch{toastMessage('Could not refresh local mailbox');}}
   return <section className={`gm-mail-app ${compact?'gm-compact':''}`} aria-label="Email client">
     {(!compact||folderOpen)&&<><EmailSidebar folder={folder} setFolder={v=>{setFolder(v);setFolderOpen(false)}} setThreadId={setThreadId} startCompose={startCompose} unreadCount={unreadCount} draftCount={draftCount} compact={compact}/>{compact&&<button type="button" className="gm-compact-scrim" aria-label="Close mail folders" onClick={()=>setFolderOpen(false)}/>}</>}
-    <div id={compact?"gmCompactPanes":"gmPanes"} className="gm-main">
-      {compact&&<div className="gm-compact-tools"><button type="button" className="gm-compact-folders" onClick={()=>setFolderOpen(v=>!v)} aria-label="Switch mail folder"><MailIcon name="inbox" size={16}/>{folder==="all"?"All Mail":folder[0].toUpperCase()+folder.slice(1)}<span aria-hidden="true">⌄</span></button><select aria-label="Switch email account" value={accountFilter} onChange={e=>setAccountFilter(e.target.value)}><option value="all">All accounts</option>{mailAccounts.map((a,i)=><option key={a.id} value={i}>{a.email}</option>)}</select><button type="button" aria-label="Compose mail inline" onClick={()=>startCompose()}><MailIcon name="compose" size={18}/></button></div>}
+    <div id={compact?"gmCompactPanes":"gmPanes"} className={"gm-main"+(compact&&!compactSearchOpen?" gm-search-collapsed":"")}>
+      {compact&&<div className="gm-compact-tools"><button type="button" className="gm-compact-folders" onClick={()=>setFolderOpen(v=>!v)} aria-label="Switch mail folder"><MailIcon name="inbox" size={16}/>{folder==="all"?"All Mail":folder[0].toUpperCase()+folder.slice(1)}<span aria-hidden="true">⌄</span></button><select aria-label="Switch email account" value={accountFilter} onChange={e=>setAccountFilter(e.target.value)}><option value="all">All accounts</option>{mailAccounts.map((a,i)=><option key={a.id} value={i}>{a.email}</option>)}</select><button type="button" aria-label="Search compact mail" onClick={()=>setCompactSearchOpen(v=>!v)}><MailIcon name="search" size={17}/></button><button type="button" aria-label="Compose mail inline" onClick={()=>startCompose()}><MailIcon name="compose" size={18}/></button></div>}
       <EmailHeader query={query} setQuery={setQuery} advanced={advanced} setAdvanced={setAdvanced} compact={compact}/>
       {!currentThread?<><div className="gm-list-toolbar">
         {!compact&&<label className="gm-select-all" title="Select all visible messages"><input type="checkbox" checked={visibleThreads.length>0&&visibleThreads.every(t=>selectedIds.includes(t.id))} onChange={e=>setSelectedIds(e.target.checked?visibleThreads.map(t=>t.id):[])} /></label>}

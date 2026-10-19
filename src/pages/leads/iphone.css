@@ -51,3 +51,8 @@
 .il-brand>span:first-child {color:#0f172a;}
 .il-brand>span:nth-child(2) {color:#2563eb;}
 .il-brand .crm-version {font-size:12px;font-weight:400;letter-spacing:0;margin-left:7px;color:#8692a0;}
+
+.il-lead-search.collapsed{display:flex;align-items:center;justify-content:center;min-width:35px!important;width:35px!important;max-width:35px!important;padding:0;border-radius:10px}
+.il-lead-search.collapsed .il-search-open{display:grid;place-items:center;width:34px;height:34px;padding:0;background:transparent;color:inherit;border:0}
+.il-lead-search.expanded{display:flex;align-items:center;min-width:185px;max-width:245px;gap:7px}
+.il-lead-search .il-search-close{border:0;background:transparent;color:var(--crm-muted);width:23px;height:28px;flex:0 0 23px;padding:0;font-size:18px}

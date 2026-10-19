@@ -25,7 +25,7 @@
 .np-text-action{border:0;background:none;color:var(--np-blue);font-size:15px}
 .np-top-action,.np-wa-top-actions{height:42px;display:flex;align-items:center;justify-content:space-between;gap:6px;padding:2px 18px}
 .np-top-action>div{display:flex;align-items:center;gap:8px}
-.np-large-title{font-size:22px;font-weight:600;letter-spacing:-.45px;line-height:1.2;margin:9px 19px 12px}
+.np-large-title{font-size:24px;font-weight:650;letter-spacing:-.7px;line-height:1.13;margin:9px 17px 10px}
 .np-native-list{flex:1;min-height:0}
 .np-list-row{position:relative;width:100%;min-height:62px;display:flex;align-items:center;gap:10px;padding:7px 15px;border:0;background:transparent;color:var(--np-text);text-align:left}
 .np-list-row:after{content:'';position:absolute;bottom:0;left:79px;right:0;border-bottom:1px solid var(--np-line)}
@@ -68,7 +68,7 @@
 .np-compose-field{display:flex;align-items:center;gap:8px;border:1px solid var(--np-line);border-radius:20px;min-width:0;flex:1;padding:5px 9px;color:var(--np-sub);font-size:13px}
 .np-compose-field input{min-width:0;flex:1;width:100%;border:0;background:none;outline:0;color:var(--np-text);font-size:14px}
 .np-compose-field input::placeholder{color:var(--np-sub)}
-.np-send-button{display:grid;place-items:center;width:31px;height:31px;flex:0 0 31px;border:0;border-radius:50%;background:var(--np-blue);color:white}
+.np-send-button{display:grid;place-items:center;width:35px;height:35px;flex:0 0 35px;border:0;border-radius:50%;background:var(--np-blue);color:white;min-height:35px}
 .np-to-field{min-height:48px;display:flex;align-items:center;gap:10px;padding:0 21px;border-bottom:1px solid var(--np-line)}
 .np-to-field>span{color:var(--np-sub);font-size:15px}
 .np-contact-results{flex:1;min-height:0}
@@ -87,22 +87,22 @@
 .np-call-side{display:flex;flex:0 0 auto;align-items:center;gap:0;padding:0 10px 0 2px}
 .np-call-side .np-icon-button{min-width:31px;min-height:40px;background:transparent;border:0;color:#0a84ff}
 .np-demo-disclaimer{font-size:12px;text-align:center;color:var(--np-sub);padding:12px 20px}
-.np-contact-search{margin:10px 15px}
-.np-detail-screen{background:linear-gradient(180deg,#8992a0 0%,#626880 32%,#272449 63%,#15162f 100%)}
+.np-contact-search{margin:4px 13px 8px;height:36px;flex:0 0 auto}
+.np-detail-screen{background:var(--np-bg)}
 .np-detail-screen .np-simple-nav{background:transparent;border-color:#ffffff24}
 .np-detail-screen .np-icon-button{color:#fff}
 .np-detail-scroll{flex:1;padding:10px 16px 25px}
-.np-contact-hero{display:flex;flex-direction:column;align-items:center;padding:22px 8px 12px}
-.np-contact-hero h2{font-size:25px;font-weight:650;margin:9px 0 1px;text-align:center;line-height:1.15}
-.np-contact-hero p{font-size:13px;color:#e0dce9;margin:5px 0}
-.np-action-four{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin:5px 0 18px}
-.np-action-four button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;min-height:61px;border:0;border-radius:14px;background:#c5b5e52d;color:white;font-size:12px}
-.np-detail-card{margin:9px 0;padding:12px 14px;border-radius:14px;background:#63598466;font-size:13px}
+.np-contact-hero{display:flex;flex-direction:column;align-items:center;padding:15px 10px 9px}
+.np-contact-hero h2{font-size:22px;font-weight:650;margin:9px 0 1px;text-align:center;line-height:1.15;letter-spacing:-.4px}
+.np-contact-hero p{font-size:13px;color:var(--np-sub);margin:5px 0}
+.np-action-four{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin:6px 0 14px}
+.np-action-four button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;min-height:58px;border:1px solid #a7bfd123;border-radius:14px;background:#314461;color:#dfeaff;font-size:12px}
+.np-detail-card{margin:9px 0;padding:12px 14px;border-radius:14px;background:#293c57;font-size:13px;color:#eef3ff;border:1px solid #ffffff1a}
 .np-detail-card>small{color:#e8deffb3;font-size:12px}
 .np-detail-card>div{display:flex;align-items:center;gap:8px;padding-top:8px}
 .np-detail-card>div>span{flex:1;font-size:14px}
-.np-detail-card p{margin:7px 0;color:#fff}
-.np-keypad-screen{background:var(--np-bg);overflow:auto;padding:0 10px}
+.np-detail-card p{margin:7px 0;color:#f4f7ff}
+.np-keypad-screen{background:linear-gradient(180deg,#121e31 0%,#1b293f 68%,#243650 100%);overflow:auto;padding:0 10px;color:#e4edf9}
 .np-keypad-back{height:45px;display:flex;align-items:center}
 .np-keypad-number{min-height:64px;display:flex;align-items:center;justify-content:center;gap:8px;max-width:290px;margin:9px auto 0;padding:0 9px;border:1px solid #53627455;border-radius:13px;background:linear-gradient(160deg,#222d3f,#1b2536);color:#cbd5e1}
 .np-keypad-number input{flex:1;width:210px;max-width:calc(100% - 40px);min-width:0;text-align:center;border:0;background:transparent;color:#f8fafc;font-family:'Share Tech Mono',monospace;font-size:19px;font-weight:400;outline:none;font-variant-numeric:tabular-nums;letter-spacing:-.65px}
@@ -121,11 +121,11 @@
 .np-in-call .np-dial-red{background:#ff453a}
 .np-wa-screen{--np-blue:#54c66c;--np-bubble-in:#202023;--np-bubble-out:#06483b;--np-sub:#949498;--np-line:#252527;background:#080809;color:#f5f5f7}
 .np-wa-screen .np-large-title{font-size:27px;line-height:1.12;font-weight:700;letter-spacing:-.7px;margin:10px 16px 11px}
-.np-wa-search{height:43px;flex:0 0 43px;margin:2px 16px 12px;border-radius:24px;background:#242426;border:0;color:#8e8e93;padding:0 12px}
+.np-wa-search{height:38px;flex:0 0 38px;margin:3px 15px 8px;border-radius:24px;background:#242426;border:0;color:#8e8e93;padding:0 12px}
 .np-wa-screen .np-list-row:after{border-color:#29292c;left:79px;right:16px}
 .np-wa-unread{width:7px;height:7px;flex:0 0 7px;border-radius:50%;background:#54c66c;margin-right:1px}
-.np-wa-compose{display:grid;place-items:center;color:#101916!important;background:#56c672!important;width:38px!important;height:38px!important;flex:0 0 38px;border-radius:50%!important;box-shadow:none}
-.np-wa-top-actions{height:51px;display:flex;align-items:center;gap:9px;padding:4px 18px 0}
+.np-wa-compose{display:grid;place-items:center;color:#101916!important;background:#62c77f!important;width:35px!important;height:35px!important;flex:0 0 35px!important;border-radius:50%!important;box-shadow:none}
+.np-wa-top-actions{height:39px;display:flex;align-items:center;gap:9px;padding:3px 15px 0;justify-content:flex-start}
 .np-wa-top-actions>span{flex:1}
 .np-wa-section-caption{padding:10px 18px;color:var(--np-sub);font-size:12px}
 .np-wa-thread-header{height:56px;flex:0 0 56px;display:flex;align-items:center;gap:7px;padding:0 11px;background:#171719;border-bottom:1px solid #ffffff0c}
@@ -142,7 +142,7 @@
 .np-wa-input .np-icon-button{color:#a6b5bd}
 .np-wa-input label{display:flex;align-items:center;flex:1;min-width:0;min-height:35px;border-radius:23px;padding:8px 12px;background:#292a2e;color:#8d9095;border:1px solid #ffffff12;box-shadow:none}
 .np-wa-input input{flex:1;min-width:0;border:0;background:transparent;color:#f2f3f4;outline:0;font-size:14px;letter-spacing:-.1px}
-.np-wa-submit{display:grid;place-items:center;width:34px;height:34px;flex:0 0 34px;border:0;border-radius:50%;background:#25d366;color:#fff;padding:0}
+.np-wa-submit{display:grid!important;place-items:center;width:35px;height:35px;flex:0 0 35px;border:0;border-radius:50%;background:#46be6e;color:#fff;padding:0;min-height:35px;opacity:1}
 .np-workspace-heading{padding:17px 20px 13px;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
 .np-workspace-heading h1{margin:0;font-size:22px;font-weight:600}
 .np-workspace-heading small{font-size:12px;color:var(--np-sub)}
@@ -197,7 +197,7 @@
 .np-root .np-call-row .np-call-main{align-self:stretch}
 .np-root .np-call-copy,.np-root .np-list-copy{flex:1;min-width:0;overflow:hidden}
 .np-root .np-wa-list-row:active{transform:none}
-.np-wa-chips{display:flex;gap:7px;padding:1px 16px 9px;overflow-x:auto;scrollbar-width:none;flex:0 0 auto}
+.np-wa-chips{display:flex;gap:7px;padding:4px 15px 9px;overflow-x:auto;scrollbar-width:none;flex:0 0 auto}
 .np-wa-chips button{flex:0 0 auto;min-width:36px;border:0;border-radius:15px;padding:6px 12px;background:#29292c;color:#adadb1;font-size:12px}
 .np-wa-chips button.np-wa-selected{background:#123e2b;color:#65d58c}
 .np-wa-send-placeholder{width:34px;flex:0 0 34px}
@@ -205,10 +205,10 @@
 .np-root[data-theme="light"] .np-wa-chips button{background:#efeff1;color:#77777c}
 .np-root[data-theme="light"] .np-wa-chips button.np-wa-selected{background:#dcf3e5;color:#179454}
 .np-root[data-theme="light"] .np-wa-thread-header{background:#f2f3f5;border-bottom:1px solid #dedfe266}
-.np-root[data-theme="light"] .np-wa-input label{background:#ffffff;border:1px solid #d9dde1;box-shadow:none}
+.np-root[data-theme="light"] .np-wa-input label{background:#f1f3f6;border:1px solid #d9dfe7;box-shadow:none;color:#222}
 
-.np-root[data-theme="light"] .np-keypad-number{background:linear-gradient(165deg,#e9eef6,#e1e8f1);border-color:#aebccc}
-.np-root[data-theme="light"] .np-keypad-number input{color:#243044}
+.np-root[data-theme="light"] .np-keypad-number{background:linear-gradient(145deg,#e5ecf8,#d6e3f3);border-color:#a6b9d4;box-shadow:inset 0 1px #fff}
+.np-root[data-theme="light"] .np-keypad-number input{color:#1d304a}
 .np-root[data-theme="light"] .np-keypad-number>svg{color:#66788d}
 
 .np-messages .np-large-title{font-size:27px;line-height:1.14;letter-spacing:-.7px;font-weight:700;margin:10px 16px 12px}
@@ -247,6 +247,48 @@
 
 .np-root[data-theme="light"] .np-wa-date{background:#f6f8f9cc;color:#6e7b80}
 
-.np-root[data-theme="light"] .np-wa-input{background:#f3f3f5;border-top:1px solid #e4e5e7}
+.np-root[data-theme="light"] .np-wa-input{background:#fff;border-top:1px solid #e6e9ed}
 
 .np-root[data-theme="light"] .np-wa-input input{color:#24282e}
+
+/* v11 iPhone visual refinement: shared standard avatar, richer keypad and contact contrast. */
+.np-messages .np-large-title,.np-wa-screen .np-large-title{font-size:24px;line-height:1.15;margin:9px 16px 9px}
+.np-root .np-avatar,.np-root .np-avatar.np-initial{background:#41445e;color:#c8c9e1;box-shadow:inset 0 0 0 1px #ffffff18}
+.np-root .np-avatar svg{color:#c8c9e1}
+.np-wa-screen .np-avatar-solid,.np-root[data-theme="light"] .np-wa-screen .np-avatar-solid{background:#41445e;color:#c8c9e1}
+.np-root[data-theme="light"] .np-keypad-screen{background:linear-gradient(180deg,#f8fafc 0%,#f0f4fa 65%,#e7edf6 100%);color:#17263b}
+.np-root .np-dial-key{background:linear-gradient(160deg,#3b4f6e,#273a55);color:#f3f7ff;border:1px solid #7189ae4a;box-shadow:inset 0 1px 0 #ffffff18}
+.np-root[data-theme="light"] .np-dial-key{background:linear-gradient(160deg,#e3ecfb,#d6e4f7);color:#243956;border:1px solid #b4c8e264;box-shadow:0 2px 5px #283c6410}
+.np-root .np-in-call button{background:#394d6d;color:#e5efff}
+.np-root[data-theme="light"] .np-in-call button{background:#d7e5f6;color:#243d61}
+.np-root .np-in-call button.np-dial-green{background:#2ab969;color:#fff}
+.np-root .np-in-call button.np-dial-red{background:#db4758;color:#fff}
+.np-root .np-keypad-number{border-color:#658bb660;background:linear-gradient(160deg,#2b3d59,#1d2c45);box-shadow:inset 0 1px #ffffff18}
+.np-root[data-theme="light"] .np-action-four button{background:#e0e9f8;border:1px solid #c4d4ee;color:#2d4d7b}
+.np-action-four button svg{color:currentColor}
+.np-detail-card small,.np-detail-card span{color:#c5d5ea}
+.np-root[data-theme="light"] .np-detail-card{background:#e4eaf6;color:#243d5b;border:1px solid #d3deed}
+.np-root[data-theme="light"] .np-detail-card p{color:#223b60}
+.np-root[data-theme="light"] .np-detail-card small,.np-root[data-theme="light"] .np-detail-card span{color:#5c708d}
+.np-wa-search-toggle{color:#4cbd72}
+.np-compact-search{display:flex;align-items:center;gap:5px;padding:6px 12px;background:var(--np-bg);flex:0 0 auto}
+.np-compact-search input{height:34px;min-width:0;flex:1;background:var(--np-raised);border:0;border-radius:12px;padding:0 12px;color:var(--np-text);outline:none;font-size:13px}
+.np-attachment-picker{display:none!important}
+.np-attach-button{display:grid;place-items:center;width:32px;height:34px;flex:0 0 32px;padding:0;background:transparent;border:0;color:var(--np-sub)}
+.np-attachment-chips{display:flex;align-items:center;gap:5px;max-height:48px;padding:3px 9px 6px;overflow-x:auto;scrollbar-width:thin;background:var(--np-bg)}
+.np-attachment-chips button{background:var(--np-raised);color:var(--np-text);border:1px solid var(--np-line);border-radius:9px;padding:4px 7px;font-size:12px;white-space:nowrap}
+.np-composebar,.np-wa-input{display:flex;align-items:center;gap:7px;min-height:58px;padding:7px 10px;background:var(--np-bg);flex:0 0 auto}
+.np-compose-field,.np-wa-input label{display:flex;align-items:center;min-height:39px;height:39px;padding:0 13px;border:1px solid var(--np-line);border-radius:22px;flex:1;min-width:0;background:var(--np-raised)}
+.np-compose-field input,.np-wa-input label input{height:35px;min-height:35px;line-height:35px;font-size:14px;padding:0;margin:0;display:block;min-width:0;flex:1;background:transparent;color:var(--np-text);box-shadow:none;outline:none}
+.np-root[data-theme="light"] .np-wa-input label input{color:#17212e}
+
+.np-message-files{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}.np-message-files small{display:inline-flex;align-items:center;padding:3px 6px;border-radius:6px;background:#8391a02a;color:inherit;font-size:12px}
+/* Contact detail contrast — explicitly scoped to match light and dark phone themes. */
+.np-root .np-detail-screen .np-simple-nav .np-icon-button{color:#85baff}
+.np-root[data-theme="light"] .np-detail-screen .np-simple-nav .np-icon-button{color:#2664be}
+.np-root .np-detail-card>div>span{color:#edf4ff;font-weight:500}
+.np-root .np-detail-card .np-icon-button{color:#e0ecff}
+.np-root .np-detail-card>small{color:#bfcfe6}
+.np-root[data-theme="light"] .np-detail-card>div>span{color:#233b61}
+.np-root[data-theme="light"] .np-detail-card .np-icon-button{color:#315f9d}
+.np-root[data-theme="light"] .np-detail-card>small{color:#687d99}

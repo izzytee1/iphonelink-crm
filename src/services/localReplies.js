@@ -8,7 +8,7 @@ export function createLocalEmailThread({to,subject='',body,account=0,cc=[],bcc=[
     msgs:[{id:'sent-message-'+now,out:true,peer,to:recipients,cc,bcc,subject,body,at:now,opens:[],tracked:track,
       by:mailAccounts[account]?.name,attachments:attachments.map(f=>({name:f.name,size:f.size,type:f.type,data:f.data||f})),status:'local'}]};
 }
-export function createLocalMessage(channel,number,value,now=Date.now()){
+export function createLocalMessage(channel,number,value,files=[],now=Date.now()){
  return {id:'local-'+now+'-'+Math.random().toString(36).slice(2,6),channel,number:String(number||'').replace(/\D/g,''),dir:'out',
-    text:String(value).trim(),at:now,status:'local',unread:false,files:[]};
+    text:String(value).trim(),at:now,status:'local',unread:false,files:files.map(f=>({name:f.name,size:f.size,type:f.type}))};
 }

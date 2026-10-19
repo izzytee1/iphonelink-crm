@@ -8,6 +8,7 @@ function bodyHtml(value) { return /<\/?(?:div|p|b|i|strong|em|u|br|a|ul|li|img)\
 export default function EmailComposer({ compose, setCompose, send, applyTemplate, onClose, onDiscard, compact=false }) {
   const [minimized,setMinimized]=useState(false);
   const [maximized,setMaximized]=useState(false);
+  const [toolbarOpen,setToolbarOpen]=useState(!compact);
   const editor=useRef(null);
   const attachRef=useRef(null);
   const imgRef=useRef(null);
@@ -41,7 +42,7 @@ export default function EmailComposer({ compose, setCompose, send, applyTemplate
       <div className="gm-compose-bottom">
         <div className="gm-template-strip" aria-label="Email templates">{templates.map(t=><button type="button" key={t.id} onClick={()=>{applyTemplate(t);}}>{t.name}</button>)}</div>
         {compose.attachments.length>0&&<div className="gm-attachments">{compose.attachments.map((f,i)=><span key={`${f.name}-${i}`}><MailIcon name="attachment" size={13}/>{f.name}<button type="button" aria-label={`Remove ${f.name}`} onClick={()=>update('attachments',compose.attachments.filter((_,j)=>i!==j))}>×</button></span>)}</div>}
-        <div className="gm-format-bar" aria-label="Formatting tools">
+        {(!compact||toolbarOpen)&&<div className="gm-format-bar" aria-label="Formatting tools">
           <button type="button" aria-label="Bold" title="Bold" onMouseDown={e=>e.preventDefault()} onClick={()=>rich('bold')}><b>B</b></button>
           <button type="button" aria-label="Italic" title="Italic" onMouseDown={e=>e.preventDefault()} onClick={()=>rich('italic')}><i>I</i></button>
           <button type="button" aria-label="Underline" title="Underline" onMouseDown={e=>e.preventDefault()} onClick={()=>rich('underline')}><u>U</u></button>
@@ -52,8 +53,8 @@ export default function EmailComposer({ compose, setCompose, send, applyTemplate
           <button type="button" title="Insert emoji" aria-label="Insert emoji" onMouseDown={e=>e.preventDefault()} onClick={()=>rich('insertText','🙂')}><MailIcon name="emoji"/></button>
           <button type="button" title="Insert image" aria-label="Insert image" onClick={()=>imgRef.current?.click()}><MailIcon name="image"/></button>
           <input ref={imgRef} type="file" accept="image/*" hidden onChange={e=>{addImage(e.target.files?.[0]);e.target.value='';}}/>
-        </div>
-        <div className="gm-send-row"><button type="button" className="gm-send" onClick={send}>Send</button>
+        </div>}
+        <div className="gm-send-row">{compact&&<button className="gm-toolbar-toggle" type="button" onClick={()=>setToolbarOpen(v=>!v)} aria-label={toolbarOpen?"Hide formatting tools":"Show formatting tools"}><span aria-hidden="true">A</span></button>}<button type="button" className="gm-send" onClick={send}>Send</button>
           <button type="button" title="Attach files" aria-label="Attach files" onClick={()=>attachRef.current?.click()}><MailIcon name="attachment"/></button><input type="file" ref={attachRef} hidden multiple onChange={e=>{attach(e.target.files);e.target.value='';}} />
           <label className="gm-track"><input type="checkbox" checked={compose.track} onChange={e=>update('track',e.target.checked)} /> Track opens</label>
           <button type="button" className="gm-discard" title="Discard draft" aria-label="Discard draft" onClick={onDiscard}><MailIcon name="trash"/></button>
