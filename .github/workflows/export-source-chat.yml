@@ -1,0 +1,23 @@
+name: Export v11 source ZIP
+on:
+  push:
+    branches: [export-v11-chat-zip]
+permissions:
+  contents: read
+jobs:
+  archive:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - name: Package exact v11 commit
+        run: |
+          mkdir -p source
+          git archive --format=tar HEAD^ | tar -xf - -C source
+      - uses: actions/upload-artifact@v4
+        with:
+          name: iPhoneLink-CRM-v11
+          path: source/
+          include-hidden-files: true
+          retention-days: 7
