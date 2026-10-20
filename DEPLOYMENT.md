@@ -1,11 +1,13 @@
-# iPhoneLink deployment — no token setup
+# iPhoneLink: Deploy from inside CRM
 
-Use the avatar menu > **Deploy to Vercel** > **Open ChatGPT to deploy**. The button opens ChatGPT with the complete deployment request in the composer. Press **Send**; the connected GitHub and Vercel apps carry out the deployment and verify its status.
+Click **Avatar → Deploy to Vercel**. The CRM deploys the latest commit from \`izzytee1/iphonelink-crm\` branch \`main\` to the existing Vercel production project. The permanent site remains https://iphonelink-crm-gamma.vercel.app.
 
-Alternatively, in an existing ChatGPT conversation with GitHub and Vercel connected, send **Deploy iPhoneLink**. The request is to deploy the most recent GitHub commit from `izzytee1/iphonelink-crm` branch `main` to the existing Vercel project `iphonelink-crm` in production, verify it reports `READY`, and check that the production alias continues to point to the completed build.
+## One-time connection
 
-Permanent production URL: https://iphonelink-crm-gamma.vercel.app
+Vercel must authorize the CRM to trigger builds. Go to https://vercel.com/izzy-bb13/iphonelink-crm/settings/git → **Deploy Hooks**. Create **one** hook for branch **main**, and copy its URL. In the CRM's deployment panel paste the URL and click **Connect & deploy**. On later visits in the **same browser**, simply press **Deploy now**.
 
-The shortcut is **not** a background API caller. Opening ChatGPT does not itself cause a deployment; sending the request starts the assistant workflow, which needs connected-account access. Code changed only in an unsaved or local ZIP is not committed to `main` and will not deploy. The site also already deploys automatically when `main` receives a new Git commit and the build succeeds.
+The hook URL is a bearer secret saved only in browser local storage, not uploaded to a project file or GitHub and not saved on our backend. Treat anyone with access to this browser as able to trigger builds. You can revoke the hook in Vercel and use **Change connection** to set up a new one.
 
-The former `api/deploy.js` and unused access-key/token setup have been removed. The CRM does not store credentials, expose API tokens, or show an unusable setup warning. The existing permanent URL remains unchanged on successful production releases.
+\`api/deploy.js\` checks the HTTPS hostname and exact CRM project ID before sending a POST to Vercel. The response reports \`queued\` only if Vercel supplies a real job ID. **Queued does not mean deployment is ready**. Follow **View deployment status** to watch for \`READY\` and the updated production alias. Build errors leave the existing production version live.
+
+No token is needed. The button deploys committed GitHub content; local files not pushed to \`main\` are not included. It cannot upload a ZIP, commit file edits, or deploy uncommitted source. Moving code to \`main\` already triggers a production deployment automatically via Git integration.
