@@ -1,14 +1,14 @@
 /* Leads workspace and table */
-.leads-workspace { display: flex; height: 100%; min-height: 0; min-width: 0; gap: 0; padding: 10px; transition: gap 380ms var(--crm-spring); }
+.leads-workspace { display: flex; height: 100%; min-height: 0; min-width: 0; gap: 0; padding: 0; transition: none; }
 .leads-workspace.communications-open { gap: 10px; }
 .lead-panel-shell, .comm-panel-shell {
   height: 100%;
   min-height: 0;
   overflow: hidden;
   border: 1px solid var(--crm-border);
-  border-radius: 11px;
+  border-radius: 0;
   background: var(--crm-surface);
-  box-shadow: var(--crm-shadow);
+  box-shadow: none;
 }
 .lead-panel-shell { flex: 1 1 auto; }
 .communications-morph { width: 0; min-width: 0; height: 100%; overflow: hidden; opacity: 0; pointer-events: none; transition: width 420ms var(--crm-spring), opacity 160ms ease; }

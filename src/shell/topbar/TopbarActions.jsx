@@ -5,7 +5,7 @@ import CrmIcon from '../../components/CrmIcons.jsx';
 import {mailAccounts} from '../../data/mail.js';
 import DeploymentPanel from '../deployment/DeploymentPanel.jsx';
 
-export default function TopbarActions({setWorkspace,messages,setMessages,mailbox,setMailbox,onSettings,phoneController}){
+export default function TopbarActions({setWorkspace,messages,setMessages,mailbox,setMailbox,onSettings,phoneController,communicationsOpen,onToggleCommunications}){
  const [menuOpen,setMenuOpen]=useState(false);
  const [deployOpen,setDeployOpen]=useState(false);
  const user=mailAccounts[0]?.name||"";
@@ -14,6 +14,7 @@ export default function TopbarActions({setWorkspace,messages,setMessages,mailbox
  useEffect(()=>{const close=e=>{if(!menu.current?.contains(e.target))setMenuOpen(false)};document.addEventListener('pointerdown',close);return()=>document.removeEventListener('pointerdown',close)},[]);
  return <div className="crm-topbar-tools">
    <PhoneToolbar phoneController={phoneController}/>
+   <button type="button" className={'crm-comms-toggle '+(communicationsOpen?'is-active':'')} aria-label="Communications" aria-expanded={communicationsOpen} onClick={onToggleCommunications}><CrmIcon name="message" size={17}/><span>Comms</span></button>
    <Notifications messages={messages} setMessages={setMessages} mailbox={mailbox} setMailbox={setMailbox}/>
    <div className="crm-account" ref={menu}>
      <button type="button" className="crm-avatar-button" aria-expanded={menuOpen} aria-label="User menu" onClick={()=>setMenuOpen(s=>!s)}>

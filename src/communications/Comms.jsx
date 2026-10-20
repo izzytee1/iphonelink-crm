@@ -1,5 +1,4 @@
 import React,{useEffect,useMemo,useRef,useState} from 'react';
-import {createPortal} from 'react-dom';
 import {Avatar,NativeIcon,NativeButton,StatusBar,formatStamp,digits} from './Native.jsx';
 import Messages from './Messages.jsx';
 import Calls from './Calls.jsx';
@@ -26,10 +25,8 @@ export default function Comms({theme='light',open,onToggle,leads,onSelectLead,ph
  const [screen,setScreen]=useState({id:'all',view:'list'});
  const [notice,setNotice]=useState('');
  const [mailRequest,setMailRequest]=useState(null);
- const [position,setPosition]=useState(()=>{try{return Math.max(8,Number(localStorage.getItem('iphonelink.comms.x'))||18)}catch{return 18}});
- const [size,setSize]=useState(()=>{try{const v=JSON.parse(localStorage.getItem('iphonelink.comms.size'));return v&&Number(v.width)>=255&&Number(v.height)>=380?v:null}catch{return null}});
+ const [width,setWidth]=useState(()=>{try{const stored=Number(localStorage.getItem('iphonelink.comms.panelWidth'));return Number.isFinite(stored)&&stored>=320?stored:480}catch{return 480}});
  const resizing=useRef(null);
- const drag=useRef(null),cancelClick=useRef(false);
  const root=screen.view==='list'&&rootPages.some(([id])=>id===screen.id);
  const showNav=root&&screen.id!=='calls';
  const navigate=id=>{setScreen({id,view:'list'});setNotice('')};
@@ -58,13 +55,11 @@ export default function Comms({theme='light',open,onToggle,leads,onSelectLead,ph
   else if(commRequest.type==='email')setScreen({id:'email',view:'list'});
   onConsumeCommRequest?.();
  },[commRequest]);
- function resizeStart(e){if(e.button!==undefined&&e.button!==0)return;const rect=e.currentTarget.closest('.np-device').getBoundingClientRect();resizing.current={x:e.clientX,y:e.clientY,width:rect.width,height:rect.height};e.currentTarget.setPointerCapture?.(e.pointerId);e.preventDefault()}
- function resizeMove(e){if(!resizing.current)return;const r=resizing.current;const width=Math.round(Math.max(255,Math.min(window.innerWidth-12,r.width+e.clientX-r.x)));const height=Math.round(Math.max(380,Math.min(window.innerHeight-60,r.height+e.clientY-r.y)));setSize({width,height})}
- function resizeEnd(){if(!resizing.current)return;resizing.current=null;setSize(current=>{if(current)try{localStorage.setItem('iphonelink.comms.size',JSON.stringify(current))}catch{}return current})}
- function pointerDown(e){if(e.button!==undefined&&e.button!==0)return;drag.current={x:e.clientX,old:position,moved:false};e.currentTarget.setPointerCapture?.(e.pointerId)}
- function pointerMove(e){if(!drag.current)return;const dx=e.clientX-drag.current.x;if(Math.abs(dx)>5)drag.current.moved=true;if(drag.current.moved)setPosition(Math.max(8,Math.min(window.innerWidth-110,drag.current.old+dx)))}
- function pointerUp(){if(!drag.current)return;cancelClick.current=drag.current.moved;if(drag.current.moved)try{localStorage.setItem('iphonelink.comms.x',String(Math.round(position)))}catch{}drag.current=null}
- return createPortal(<div className="np-root" data-theme={theme} style={{'--np-close-x':position+'px',...(size?{'--np-width':size.width+'px','--np-height':size.height+'px'}:{})}}>
+ function resizeStart(e){if(e.button!==undefined&&e.button!==0)return;resizing.current={id:e.pointerId,x:e.clientX,width:e.currentTarget.parentElement.getBoundingClientRect().width};e.currentTarget.setPointerCapture(e.pointerId);e.preventDefault()}
+ function resizeMove(e){const d=resizing.current;if(!d||d.id!==e.pointerId)return;const app=e.currentTarget.closest('.crm-app');const available=app?.getBoundingClientRect().width||window.innerWidth;setWidth(Math.round(Math.max(320,Math.min(available-360,d.width+d.x-e.clientX))))}
+ function resizeEnd(e){const d=resizing.current;if(!d||d.id!==e.pointerId)return;resizing.current=null;setWidth(current=>{try{localStorage.setItem('iphonelink.comms.panelWidth',String(current))}catch{}return current})}
+ return <div className={'np-root '+(open?'np-panel-open':'')} data-theme={theme} style={{'--crm-comms-width':width+'px'}}>
+  <div className="np-panel-resize" role="separator" aria-label="Resize Communications panel" aria-orientation="vertical" tabIndex={open?0:-1} onPointerDown={resizeStart} onPointerMove={resizeMove} onPointerUp={resizeEnd} onPointerCancel={resizeEnd} onKeyDown={e=>{if(e.key==='ArrowLeft'||e.key==='ArrowRight'){e.preventDefault();setWidth(w=>{const next=Math.max(320,Math.min(960,w+(e.key==='ArrowLeft'?20:-20)));try{localStorage.setItem('iphonelink.comms.panelWidth',String(next))}catch{}return next})}}}/>
   <section className={'np-device '+(open?'np-is-open':'')}  aria-label="iPhone Communications" aria-hidden={!open}>
    <StatusBar telemetry={phoneController.deviceTelemetry}/>
    <main className="np-device-main">
@@ -76,10 +71,7 @@ export default function Comms({theme='light',open,onToggle,leads,onSelectLead,ph
    </main>
    {notice&&<div className="np-status-note" role="status">{notice}<NativeButton name="close" label="Dismiss" onClick={()=>setNotice('')} size={16}/></div>}
    {showNav&&<nav className="np-root-tabs" aria-label="Communications sections">{rootPages.map(([id,title,icon])=><button type="button" key={id} className={screen.id===id?'np-active':''} onClick={()=>navigate(id)}><NativeIcon name={icon} size={22}/><span>{title}</span></button>)}</nav>}
-   <div className="np-home-indicator" aria-hidden="true"/>
-   <button className="np-resize-handle" type="button" aria-label="Resize Communications" title="Drag to resize Communications" onPointerDown={resizeStart} onPointerMove={resizeMove} onPointerUp={resizeEnd} onPointerCancel={resizeEnd}><NativeIcon name="resize" size={18}/></button>
   </section>
   {open&&<button className="np-device-close" type="button" onClick={()=>onToggle(false)} aria-label="Close Communications"><NativeIcon name="close" size={19}/></button>}
-  <button type="button" className="np-launch" style={{left:'clamp(8px, '+position+'px, calc(100vw - 140px))'}} onPointerDown={pointerDown} onPointerMove={pointerMove} onPointerUp={pointerUp} onPointerCancel={pointerUp} onClick={()=>{if(cancelClick.current){cancelClick.current=false;return}onToggle(!open)}} aria-expanded={open}><NativeIcon name="message" size={18}/> Comms</button>
- </div>,document.body);
+ </div>;
 }

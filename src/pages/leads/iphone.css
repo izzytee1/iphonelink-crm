@@ -1,5 +1,5 @@
 /* iPhoneLink.01 lead grid visual baseline, adapted into React components. */
-.il-leads { display:flex; flex:1;flex-direction:column;min-width:0;min-height:0;border-radius:8px;background:var(--crm-surface);font-family:Inter,sans-serif;}
+.il-leads { display:flex; flex:1;flex-direction:column;min-width:0;min-height:0;border-radius:0;background:var(--crm-surface);font-family:Inter,sans-serif;}
 .il-lead-toolbar {flex:0 0 auto;min-height:48px;padding:7px 11px;display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--crm-surface);border-bottom:1px solid var(--crm-border);}
 .il-stats {display:flex;align-items:center;min-width:0;flex-wrap:wrap;row-gap:7px;color:#858d97;}
 .il-stats>span {display:flex;gap:6px;align-items:center;padding:0 9px;border-left:1px solid #e4e8ee;white-space:nowrap;}
@@ -46,7 +46,7 @@
 .il-add-modal footer button[type=submit] {background:#2563eb;color:white;border-color:#2563eb;}
 
 
-.il-leads-workspace {padding-bottom:51px;}
+.il-leads-workspace {padding-bottom:0;}
 .il-brand {font-size:22px;font-weight:700;letter-spacing:-.03em;gap:0;white-space:nowrap;}
 .il-brand>span:first-child {color:#0f172a;}
 .il-brand>span:nth-child(2) {color:#2563eb;}

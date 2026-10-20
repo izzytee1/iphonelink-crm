@@ -1,6 +1,6 @@
 import Brand from './Brand.jsx';
 import TopNavigation from './TopNavigation.jsx';
 import TopbarActions from './TopbarActions.jsx';
-export default function Topbar({workspace,setWorkspace,unreadMail,messages,setMessages,mailbox,setMailbox,onSettings,phoneController}){
- return <header className="crm-topbar"><Brand onLeads={()=>setWorkspace('leads')}/><TopNavigation workspace={workspace} setWorkspace={setWorkspace}/><TopbarActions setWorkspace={setWorkspace} messages={messages} setMessages={setMessages} mailbox={mailbox} setMailbox={setMailbox} onSettings={onSettings} phoneController={phoneController}/></header>;
+export default function Topbar({workspace,setWorkspace,unreadMail,messages,setMessages,mailbox,setMailbox,onSettings,phoneController,communicationsOpen,onToggleCommunications}){
+ return <header className="crm-topbar"><Brand onLeads={()=>setWorkspace('leads')}/><TopNavigation workspace={workspace} setWorkspace={setWorkspace}/><TopbarActions setWorkspace={setWorkspace} messages={messages} setMessages={setMessages} mailbox={mailbox} setMailbox={setMailbox} onSettings={onSettings} phoneController={phoneController} communicationsOpen={communicationsOpen} onToggleCommunications={onToggleCommunications}/></header>;
 }

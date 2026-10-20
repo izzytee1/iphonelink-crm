@@ -13,8 +13,10 @@ export default function PhoneToolbar({phoneController}){
   const [switchOpen,setSwitchOpen]=useState(false);
   const [keysOpen,setKeysOpen]=useState(false);
   const [panelOpen,setPanelOpen]=useState(false);
+  const [dockVisible,setDockVisible]=useState(false);
   const {position,dragHandlers,reset}=useDraggablePosition('crm.iphonelink.topbar.call.position');
   const wrap=useRef(null);
+  useEffect(()=>{if(!position){setDockVisible(false);return}setDockVisible(true);const id=setTimeout(()=>setDockVisible(false),3000);return()=>clearTimeout(id)},[position]);
   const active=phoneController.activeCall.phase!=='idle';
   const call=phoneController.activeCall;
   const number=active?formatPhone(call.number):phoneController.dialInput;
@@ -50,7 +52,7 @@ export default function PhoneToolbar({phoneController}){
           onClick={active?endClick:callClick} aria-label={active?'End or decline call':'Start call'} title={active?'End call':'Call'}>
           <CrmIcon name={active?'endcall':'phone'} size={18}/>
         </button>
-        {position&&<button type="button" className="crm-call-redock" onClick={reset} aria-label="Return phone bar to topbar" title="Dock in topbar"><CrmIcon name="resize" size={13}/></button>}
+        {position&&<div className="crm-call-return-hotspot" onPointerEnter={()=>setDockVisible(true)} onPointerLeave={()=>setDockVisible(false)}><button type="button" className={'crm-call-redock '+(dockVisible?'is-visible':'')} onClick={reset} aria-label="Return phone bar to topbar" title="Dock in topbar"><CrmIcon name="resize" size={13}/></button></div>}
         {keysOpen&&<div className="crm-topbar-keypad" aria-label="Topbar keypad">
           {KEYS.map(([key,letters])=><button key={key} type="button" data-dtmf="true" onClick={()=>phoneController.sendTone(key)}>{key}<small>{letters}</small></button>)}
           <div className="crm-keypad-in-call">

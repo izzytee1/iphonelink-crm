@@ -8,6 +8,7 @@ import { leadExtrasSeed, readSavedLeadNotes } from './pages/leads/LeadDetails.js
 import { crmPhones, initialMessages } from './data/communications.js';
 import { initialMailbox } from './data/mail.js';
 import DisplaySettings from './shell/settings/DisplaySettings.jsx';
+import ScrollTracks from './components/ScrollTracks.jsx';
 import usePersistentState from './hooks/usePersistentState.js';
 import usePhoneController from './hooks/usePhoneController.js';
 import useViewportScale from './hooks/useViewportScale.js';
@@ -36,6 +37,7 @@ export default function App() {
   const [callRequest, setCallRequest] = useState(null);
   const [commRequest, setCommRequest] = useState(null);
   const [communicationsOpen, setCommunicationsOpen] = useState(false);
+  useEffect(() => { const close = e => { if (e.key === 'Escape' && communicationsOpen && !document.querySelector('[role="dialog"]')) setCommunicationsOpen(false); }; document.addEventListener('keydown', close); return () => document.removeEventListener('keydown', close); }, [communicationsOpen]);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [settings, setSettings] = usePersistentState('crm.react.display', defaultDisplaySettings);
   const { autoScale, effectiveScale } = useViewportScale(settings.scale ?? 1);
@@ -150,10 +152,12 @@ export default function App() {
         onToggleCommunications={toggleCommunications}
         phoneController={phoneController}
       />
-      <main className="crm-main">
+      <main className="crm-workspace-row" data-comms-open={communicationsOpen}><div className="crm-main">
         <Workspace leads={leads} onAddLead={lead => setLeads(current => [...current, {...lead, id:Math.max(0,...current.map(l=>Number(l.id)||0))+1}])} workspace={workspace} mailbox={mailbox} setMailbox={setMailbox} composeRequest={composeRequest} setComposeRequest={setComposeRequest} selectLead={selectLead} communicationsOpen={communicationsOpen} selectedLeadId={selectedLeadId} expandedLeadId={expandedLeadId} toggleLeadDetails={toggleLeadDetails} globalSearch={globalSearch} leadNotes={leadNotes} saveLeadNotes={saveLeadNotes} setCallRequest={setCallRequest} openMessage={openMessage} requestEmail={requestEmail} phoneController={phoneController} messages={messages} setMessages={setMessages} commRequest={commRequest} setCommRequest={setCommRequest} setCommunicationsOpen={setCommunicationsOpen} setWorkspace={setWorkspace} />
-      </main>
+      </div>
       <Comms theme={settings.theme === 'dark' ? 'dark' : 'light'} open={communicationsOpen} onToggle={setCommunicationsOpen} leads={leads} selectedLeadId={selectedLeadId} onSelectLead={selectLead} phones={crmPhones} phoneController={phoneController} messages={messages} setMessages={setMessages} onEmail={requestEmail} onOpenEmail={() => setWorkspace('email')} commRequest={commRequest} onConsumeCommRequest={() => setCommRequest(null)} mailbox={mailbox} setMailbox={setMailbox} />
+      </main>
+      <ScrollTracks />
       {settingsOpen ? <DisplaySettings settings={settings} setSettings={setSettings} autoScale={autoScale} effectiveScale={effectiveScale} onClose={() => setSettingsOpen(false)} /> : null}
     </div>
   );

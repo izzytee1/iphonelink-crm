@@ -1,4 +1,4 @@
-import {useCallback,useRef,useState} from 'react';
+import {useCallback,useEffect,useRef,useState} from 'react';
 
 // One shared pointer-drag implementation for phone surfaces. Null position means docked.
 export default function useDraggablePosition(key, initial = null) {
@@ -35,6 +35,7 @@ export default function useDraggablePosition(key, initial = null) {
       try{localStorage.setItem(key,JSON.stringify(next));}catch{}
     }
   },[key,clamp]);
+  useEffect(()=>{const keepVisible=()=>setPosition(current=>{if(!current)return current;const next=clamp(current.x,current.y,280,40);if(next.x===current.x&&next.y===current.y)return current;try{localStorage.setItem(key,JSON.stringify(next))}catch{}return next});window.addEventListener('resize',keepVisible);return()=>window.removeEventListener('resize',keepVisible)},[clamp,key]);
   const reset=useCallback(()=>{setPosition(initial);try{localStorage.removeItem(key)}catch{}},[initial,key]);
   return {position,reset,dragHandlers:{onPointerDown,onPointerMove,onPointerUp,onPointerCancel:onPointerUp}};
 }

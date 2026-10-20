@@ -14,7 +14,7 @@
   --crm-row-height: 42px;
   --crm-row-pad-y: 6px;
   --crm-bg: #F3F5F8;
-  --crm-topbar: #F8FAFC;
+  --crm-topbar: #F7F9FC;
   --crm-surface: #FFFFFF;
   --crm-border: #DDE3EB;
   --crm-border-soft: #E9EDF2;
@@ -53,12 +53,12 @@ button { touch-action: manipulation; }
   font-family: Inter, sans-serif;
 }
 
-.crm-main { min-height: 0; min-width: 0; flex: 1; overflow: hidden; }
+.crm-workspace-row{display:flex;flex:1;min-height:0;min-width:0;overflow:hidden;background:var(--crm-surface)}
+.crm-main{min-height:0;min-width:0;flex:1;overflow:hidden}
+.crm-workspace-row[data-comms-open="true"] .crm-main{border-right:1px solid var(--crm-border)}
+.crm-app *{scrollbar-width:none!important}
+.crm-app *::-webkit-scrollbar{display:none!important;width:0!important;height:0!important}
 
-.crm-scroll { scrollbar-width: thin; scrollbar-color: #C8D0DA transparent; }
-.crm-scroll::-webkit-scrollbar { width: 7px; height: 7px; }
-.crm-scroll::-webkit-scrollbar-thumb { background: #C8D0DA; border: 2px solid transparent; border-radius: 8px; background-clip: padding-box; }
-.crm-scroll::-webkit-scrollbar-track { background: transparent; }
 
 .crm-density-compact { --crm-density: .82; --crm-row-height: 34px; --crm-row-pad-y: 4px; }
 .crm-density-comfortable { --crm-density: 1; --crm-row-height: 42px; --crm-row-pad-y: 6px; }
