@@ -1,23 +1,11 @@
-# iPhoneLink v11: one-click production publishing
+# iPhoneLink deployment — no token setup
 
-The top-right account menu contains **Deploy to Vercel**. It publishes the newest commit on GitHub `main` to the existing `iphonelink-crm` Vercel project and keeps the same production domain: https://iphonelink-crm-gamma.vercel.app.
+Use the avatar menu > **Deploy to Vercel** > **Open ChatGPT to deploy**. The button opens ChatGPT with the complete deployment request in the composer. Press **Send**; the connected GitHub and Vercel apps carry out the deployment and verify its status.
 
-## Required one-time owner setup
+Alternatively, in an existing ChatGPT conversation with GitHub and Vercel connected, send **Deploy iPhoneLink**. The request is to deploy the most recent GitHub commit from `izzytee1/iphonelink-crm` branch `main` to the existing Vercel project `iphonelink-crm` in production, verify it reports `READY`, and check that the production alias continues to point to the completed build.
 
-In Vercel project `iphonelink-crm` -> Settings -> Environment Variables, set BOTH keys for **Production** (encrypted):
+Permanent production URL: https://iphonelink-crm-gamma.vercel.app
 
-- `IPHONELINK_DEPLOY_ADMIN_KEY`: a long, unique random owner access key; never put it in a client source file.
-- `IPHONELINK_VERCEL_TOKEN`: a Vercel API access token with access to the `izzy-bb13` team and deployment permissions; create in Vercel account settings. Keep it private.
+The shortcut is **not** a background API caller. Opening ChatGPT does not itself cause a deployment; sending the request starts the assistant workflow, which needs connected-account access. Code changed only in an unsaved or local ZIP is not committed to `main` and will not deploy. The site also already deploys automatically when `main` receives a new Git commit and the build succeeds.
 
-Redeploy the project after setting Production variables to make them available to its serverless function. Open the live app, click the top-right avatar, choose **Deploy to Vercel**, and sign in once on that browser with the owner key. An HTTP-only, Secure, SameSite=Strict session cookie keeps that browser authenticated for 30 days. Later clicks require only one button.
-
-The button deploys the **latest committed GitHub main branch**, not local/uncommitted files or files on an older version branch. Commit changes to main before clicking. The backend requests a production deployment from Vercel. The UI checks the specific deployment ID every seven seconds until READY/ERROR/etc.; it never treats a queued build as success. If a deployment fails, the existing live site stays online.
-
-Do not publish either secret in git, browser JS, or chat screenshots. The admin key is only accepted server-side. If compromised, rotate the value in Vercel and redeploy.
-
-## Smoke test
-
-- `npm run build` validates the source.
-- `npm run verify` includes credential handling, cookies, origin checks, request parameters and state checks against a mocked Vercel API.
-- `npm run test:ui` includes desktop Chromium and mobile WebKit interaction tests for the deployment panel.
-- To confirm production publishing, verify the Vercel deployment reaches READY and the stable hostname serves its new commit. That requires both Production environment keys to be configured.
+The former `api/deploy.js` and unused access-key/token setup have been removed. The CRM does not store credentials, expose API tokens, or show an unusable setup warning. The existing permanent URL remains unchanged on successful production releases.
