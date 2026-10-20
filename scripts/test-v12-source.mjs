@@ -17,5 +17,5 @@ assert.match(css,/np-panel-open/);
 assert.match(top,/DeploymentPanel/);
 assert.match(top,/onToggleCommunications/);
 assert.match(bar,/Share Tech Mono/);
-assert.match(version,/v12/);
+assert.match(version,/v13/);
 console.log('v13 focused source checks passed');
