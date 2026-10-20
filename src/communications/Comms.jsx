@@ -1,5 +1,5 @@
 import React,{useEffect,useMemo,useRef,useState} from 'react';
-import {Avatar,NativeIcon,NativeButton,StatusBar,formatStamp,digits} from './Native.jsx';
+import {NativeIcon,NativeButton,formatStamp,digits} from './Native.jsx';
 import Messages from './Messages.jsx';
 import Calls from './Calls.jsx';
 import WhatsApp from './WhatsApp.jsx';
@@ -19,7 +19,7 @@ function AllActivity({messages,mailbox,leads,onMessage,onCall,onMail}){
   return [...[...latest.values()].map(m=>({type:'message',id:m.channel+':'+digits(m.number),channel:m.channel,number:m.number,at:m.at,preview:m.text})),...calls.map(c=>({type:'call',id:c.id,number:c.number,at:c.at,call:c,preview:c.dir==='missed'?'Missed call':'Phone call'})),...mailbox.filter(t=>t.folder==='inbox').map(t=>({type:'mail',id:t.id,at:last(t).at||0,preview:last(t).subject||'No subject',peer:last(t).peer}))].sort((a,b)=>b.at-a.at);
  },[messages,mailbox]);
  const nameFor=n=>leads.find(l=>leadPhones(l).some(p=>digits(p)===digits(n)))?.name||formatPhone(n);
- return <div className="np-screen np-all"><ScreenHeader title="All" subtitle="Recent activity"/><div className="np-scroll np-native-list">{feed.map(item=><button type="button" key={item.type+item.id} className="np-list-row" onClick={()=>item.type==='call'?onCall(item.call):item.type==='mail'?onMail(item.id):onMessage(item.channel,item.number)}><Avatar name={item.type==='mail'?item.peer:nameFor(item.number)} size={42} initial={item.type==='mail'||Boolean(leads.find(l=>leadPhones(l).some(p=>digits(p)===digits(item.number))))}/><span className="np-list-copy"><span className="np-list-top"><strong>{item.type==='mail'?item.peer||'Email':nameFor(item.number)}</strong><span className="np-meta">{formatStamp(item.at)}</span></span><span className="np-preview">{item.type==='message'?(item.channel==='wa'?'WhatsApp · ':item.channel==='imessage'?'iMessage · ':'Text · '):item.type==='call'?'Call · ':'Email · '}{item.preview}</span></span><NativeIcon name="chevron" size={13}/></button>)}{!feed.length&&<p className="np-empty">No recent activity</p>}</div></div>;
+ return <div className="np-screen np-all"><ScreenHeader title="All" subtitle="Recent activity"/><div className="np-scroll np-native-list">{feed.map(item=><button type="button" key={item.type+item.id} className="np-list-row" onClick={()=>item.type==='call'?onCall(item.call):item.type==='mail'?onMail(item.id):onMessage(item.channel,item.number)}><span className="np-list-copy"><span className="np-list-top"><strong>{item.type==='mail'?item.peer||'Email':nameFor(item.number)}</strong><span className="np-meta">{formatStamp(item.at)}</span></span><span className="np-preview">{item.type==='message'?(item.channel==='wa'?'WhatsApp · ':item.channel==='imessage'?'iMessage · ':'Text · '):item.type==='call'?'Call · ':'Email · '}{item.preview}</span></span><NativeIcon name="chevron" size={13}/></button>)}{!feed.length&&<p className="np-empty">No recent activity</p>}</div></div>;
 }
 export default function Comms({theme='light',open,onToggle,leads,onSelectLead,phoneController,messages,setMessages,mailbox,setMailbox,onEmail,commRequest,onConsumeCommRequest}){
  const [screen,setScreen]=useState({id:'all',view:'list'});
@@ -28,7 +28,7 @@ export default function Comms({theme='light',open,onToggle,leads,onSelectLead,ph
  const [width,setWidth]=useState(()=>{try{const stored=Number(localStorage.getItem('iphonelink.comms.panelWidth'));return Number.isFinite(stored)&&stored>=320?stored:480}catch{return 480}});
  const resizing=useRef(null);
  const root=screen.view==='list'&&rootPages.some(([id])=>id===screen.id);
- const showNav=root&&screen.id!=='calls';
+ const showNav=true;
  const navigate=id=>{setScreen({id,view:'list'});setNotice('')};
  const identify=n=>{const lead=leads.find(l=>leadPhones(l).some(p=>digits(p)===digits(n)));if(lead)onSelectLead?.(lead.id)};
  const thread=(channel,number)=>{
@@ -60,8 +60,9 @@ export default function Comms({theme='light',open,onToggle,leads,onSelectLead,ph
  function resizeEnd(e){const d=resizing.current;if(!d||d.id!==e.pointerId)return;resizing.current=null;setWidth(current=>{try{localStorage.setItem('iphonelink.comms.panelWidth',String(current))}catch{}return current})}
  return <div className={'np-root '+(open?'np-panel-open':'')} data-theme={theme} style={{'--crm-comms-width':width+'px'}}>
   <div className="np-panel-resize" role="separator" aria-label="Resize Communications panel" aria-orientation="vertical" tabIndex={open?0:-1} onPointerDown={resizeStart} onPointerMove={resizeMove} onPointerUp={resizeEnd} onPointerCancel={resizeEnd} onKeyDown={e=>{if(e.key==='ArrowLeft'||e.key==='ArrowRight'){e.preventDefault();setWidth(w=>{const next=Math.max(320,Math.min(960,w+(e.key==='ArrowLeft'?20:-20)));try{localStorage.setItem('iphonelink.comms.panelWidth',String(next))}catch{}return next})}}}/>
-  <section className={'np-device '+(open?'np-is-open':'')}  aria-label="iPhone Communications" aria-hidden={!open}>
-   <StatusBar telemetry={phoneController.deviceTelemetry}/>
+  <section className={'np-device '+(open?'np-is-open':'')}  aria-label="Communications" aria-hidden={!open}>
+   <div className="cp-header"><strong>Communications</strong><button type="button" className="cp-close" aria-label="Close Communications" onClick={()=>onToggle(false)}><NativeIcon name="close" size={16}/></button></div>
+   {showNav&&<nav className="np-root-tabs" aria-label="Communications sections">{rootPages.map(([id,title,icon])=><button type="button" key={id} className={screen.id===id||id==='messages'&&screen.id==='whatsapp'?'np-active':''} onClick={()=>navigate(id)}><NativeIcon name={icon} size={16}/><span>{title}</span></button>)}</nav>}
    <main className="np-device-main">
     {screen.id==='all'&&<AllActivity messages={messages} mailbox={mailbox} leads={leads} onMessage={thread} onCall={callDetail} onMail={emailDetail}/>}
     {screen.id==='messages'&&<Messages page={screen.view} number={screen.number} channel={screen.channel||'text'} messages={messages} leads={leads} onBack={back} onThread={thread} onCompose={()=>setScreen({id:'messages',view:'new'})} onWhatsApp={()=>setScreen({id:'whatsapp',view:'list'})} onSave={saveLocal} onCall={keypad}/>}
@@ -70,8 +71,6 @@ export default function Comms({theme='light',open,onToggle,leads,onSelectLead,ph
     {screen.id==='email'&&<div className="np-screen np-gmail-embedded"><EmailClient compact leads={leads} mailbox={mailbox} setMailbox={setMailbox} openThreadRequest={mailRequest} onSelectLead={onSelectLead}/></div>}
    </main>
    {notice&&<div className="np-status-note" role="status">{notice}<NativeButton name="close" label="Dismiss" onClick={()=>setNotice('')} size={16}/></div>}
-   {showNav&&<nav className="np-root-tabs" aria-label="Communications sections">{rootPages.map(([id,title,icon])=><button type="button" key={id} className={screen.id===id?'np-active':''} onClick={()=>navigate(id)}><NativeIcon name={icon} size={22}/><span>{title}</span></button>)}</nav>}
   </section>
-  {open&&<button className="np-device-close" type="button" onClick={()=>onToggle(false)} aria-label="Close Communications"><NativeIcon name="close" size={19}/></button>}
  </div>;
 }

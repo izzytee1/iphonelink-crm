@@ -3,14 +3,14 @@
 /* Single dark phone control: docked by default, detachable with the drag grip. */
 .crm-phone-toolbar{display:flex;align-items:center;gap:23px;position:relative;min-width:0;flex:0 0 auto}
 .crm-call-dock-slot{flex:0 0 280px;width:280px;height:40px;position:relative}
-.crm-call-surface{position:relative;display:flex;align-items:center;width:280px;height:40px;padding:3px 7px;gap:0;border:1px solid #d3dce8;border-radius:10px;background:linear-gradient(160deg,#f9fbfe,#e9eff7);box-shadow:inset 0 1px #fff,0 1px 3px #21304413;color:#263548;white-space:nowrap}
+.crm-call-surface{position:relative;display:flex;align-items:center;width:280px;height:40px;padding:3px 7px;gap:0;border:1px solid var(--crm-border);border-radius:8px;background:var(--crm-surface);box-shadow:none;color:var(--crm-text);white-space:nowrap}
 .crm-call-surface.is-floating{position:fixed;z-index:150;box-shadow:0 12px 30px #172a4330,inset 0 1px #fff}
 .crm-call-grip{width:7px;height:30px;flex:0 0 7px;padding:0;border:0;background:transparent;cursor:grab;touch-action:none;display:grid;place-items:center}
 .crm-call-grip:active,.crm-call-grab:active{cursor:grabbing}
 .crm-call-grip span{display:block;width:3px;height:13px;border-left:1px solid #8b9bb17a;border-right:1px solid #8b9bb17a}
 .crm-call-keypad-trigger{width:29px;height:30px;flex:0 0 29px;margin-left:6px;display:grid;place-items:center;background:transparent;border:0;border-radius:5px;color:#425875}
 .crm-call-keypad-trigger:hover{background:#dae4f2}
-.crm-call-input-wrap{display:flex;align-items:center;flex:1;min-width:0;height:29px;margin:0 10px;border-radius:5px;background:linear-gradient(180deg,#dce5ef 0%,#e7eef5 36%,#f0f4f9 68%,#e0e8f1 100%);border:1px solid #b7c5d6;box-shadow:inset 0 2px 4px #637c9d24,inset 0 1px 1px #7388a512,0 1px 0 #fff}
+.crm-call-input-wrap{display:flex;align-items:center;flex:1;min-width:0;height:29px;margin:0 10px;border-radius:5px;background:#f3f6fa;border:1px solid var(--crm-border)}
 .crm-call-input-wrap:focus-within{border-color:#a4b4c6}
 .crm-call-input-wrap input{display:block;width:100%;min-width:0;padding:0 1px;border:0;outline:0;background:transparent;color:#263548;font-family:'Share Tech Mono',monospace;font-size:14px;font-variant-numeric:tabular-nums;letter-spacing:-.55px;font-weight:400;text-align:center;box-shadow:none}
 .crm-call-input-wrap input::placeholder{font-size:12px;color:#708097;letter-spacing:-.45px}
@@ -25,7 +25,7 @@
 .crm-call-main-action:hover{filter:brightness(1.1)}
 .crm-call-redock{position:absolute;top:-14px;right:3px;width:22px;height:22px;border:0;border-radius:5px;background:#e1e9f2;color:#33445e;display:grid;place-items:center;opacity:0;pointer-events:none;transition:opacity 170ms ease}
 .crm-phone-select{position:relative;flex:0 0 auto}
-.crm-phone-choice{display:flex;align-items:center;gap:9px;height:40px;max-width:165px;min-width:109px;padding:0 13px;border-radius:10px;border:1px solid #d3dce8;background:linear-gradient(160deg,#f9fbfe,#e9eff7);box-shadow:inset 0 1px #fff,0 1px 3px #21304413;color:#34465c;font-size:12px;letter-spacing:-.1px}
+.crm-phone-choice{display:flex;align-items:center;gap:9px;height:40px;max-width:165px;min-width:109px;padding:0 13px;border-radius:8px;border:1px solid var(--crm-border);background:var(--crm-surface);box-shadow:none;color:var(--crm-text);font-size:12px;letter-spacing:-.1px}
 .crm-phone-name{max-width:112px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .crm-phone-dot{display:inline-block;width:7px;height:7px;flex:0 0 7px;border-radius:50%;background:#aeb9c7}
 .crm-phone-online{background:#30a46c}
