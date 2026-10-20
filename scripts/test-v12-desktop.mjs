@@ -6,11 +6,12 @@ try{
  await page.goto(base,{waitUntil:'domcontentloaded'});
  await page.locator('.crm-topbar').waitFor();
  const top=await page.locator('.crm-topbar').boundingBox();
- if(Math.abs(top.x)>1||Math.abs(top.y)>1||Math.abs(top.height-64)>1)throw Error('topbar not flush 64px');
+ const cssHeight=await page.locator('.crm-topbar').evaluate(e=>parseFloat(getComputedStyle(e).height));
+ if(Math.abs(top.x)>1||Math.abs(top.y)>1||Math.abs(cssHeight-64)>1)throw Error('topbar not flush 64 CSS px');
  const toggle=page.getByRole('button',{name:'Communications'});
  await toggle.click();
  await page.locator('.np-panel-open').waitFor();
- const width=await page.locator('.np-root').evaluate(e=>e.getBoundingClientRect().width);
+ const width=await page.locator('.np-root').evaluate(e=>parseFloat(getComputedStyle(e).width));
  if(Math.abs(width-480)>2)throw Error('Comms default width wrong: '+width);
  if((await page.locator('.np-device').boundingBox()).width<320)throw Error('Comms not usable');
  await page.locator('.np-panel-resize').focus();
