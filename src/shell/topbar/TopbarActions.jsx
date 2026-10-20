@@ -3,9 +3,11 @@ import PhoneToolbar from './PhoneToolbar.jsx';
 import Notifications from '../notifications/Notifications.jsx';
 import CrmIcon from '../../components/CrmIcons.jsx';
 import {mailAccounts} from '../../data/mail.js';
+import DeploymentPanel from '../deployment/DeploymentPanel.jsx';
 
 export default function TopbarActions({setWorkspace,messages,setMessages,mailbox,setMailbox,onSettings,phoneController}){
  const [menuOpen,setMenuOpen]=useState(false);
+ const [deployOpen,setDeployOpen]=useState(false);
  const user=mailAccounts[0]?.name||"";
  const initials=user.split(/\s+/).filter(Boolean).slice(0,2).map(n=>n[0]?.toUpperCase()).join("")||"U";
  const menu=useRef(null);
@@ -19,7 +21,9 @@ export default function TopbarActions({setWorkspace,messages,setMessages,mailbox
      </button>
      {menuOpen&&<div className="crm-user-menu" role="menu">
        <button type="button" role="menuitem" aria-label="Display settings" onClick={()=>{setMenuOpen(false);onSettings()}}><CrmIcon name="settings" size={17}/> Display settings</button>
+       <button type="button" role="menuitem" onClick={()=>{setMenuOpen(false);setDeployOpen(true)}}><CrmIcon name="send" size={17}/> Deploy to Vercel</button>
      </div>}
    </div>
+   {deployOpen&&<DeploymentPanel onClose={()=>setDeployOpen(false)}/>}
  </div>;
 }
