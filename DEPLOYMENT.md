@@ -18,5 +18,6 @@ Do not publish either secret in git, browser JS, or chat screenshots. The admin 
 ## Smoke test
 
 - `npm run build` validates the source.
-- `node scripts/test-deploy.mjs` validates credential handling, cookies, origin checks, call parameters, and state reporting with a simulated Vercel API (it does not assert a real external deployment).
+- `npm run verify` includes credential handling, cookies, origin checks, request parameters and state checks against a mocked Vercel API.
+- `npm run test:ui` includes desktop Chromium and mobile WebKit interaction tests for the deployment panel.
 - To confirm production publishing, verify the Vercel deployment reaches READY and the stable hostname serves its new commit. That requires both Production environment keys to be configured.
