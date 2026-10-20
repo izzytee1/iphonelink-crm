@@ -11,6 +11,7 @@ try{
  const toggle=page.getByRole('button',{name:'Communications'});
  await toggle.click();
  await page.locator('.np-panel-open').waitFor();
+ await page.waitForTimeout(250); // Let the intended 200ms opening transition finish before measuring.
  const width=await page.locator('.np-root').evaluate(e=>parseFloat(getComputedStyle(e).width));
  if(Math.abs(width-480)>2)throw Error('Comms default width wrong: '+width);
  if((await page.locator('.np-device').boundingBox()).width<320)throw Error('Comms not usable');
